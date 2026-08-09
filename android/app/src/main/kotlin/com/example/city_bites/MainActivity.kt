@@ -1,4 +1,4 @@
-package com.example.city_bites
+package com.innovexa.citybites
 
 import io.flutter.embedding.android.FlutterActivity
 
