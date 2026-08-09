@@ -16,8 +16,12 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: const Text(
+          'My Profile',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         automaticallyImplyLeading: false,
+        elevation: 0,
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
@@ -25,20 +29,22 @@ class ProfileScreen extends StatelessWidget {
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
                 // User Info Card
                 CustomCard(
+                  padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
                       Container(
-                        width: 70,
-                        height: 70,
+                        width: 80,
+                        height: 80,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: theme.colorScheme.primary,
-                            width: 2,
+                            width: 3,
                           ),
                         ),
                         child: const ClipOval(
@@ -55,30 +61,50 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               authState.userName ?? 'Ali Raza',
-                              style: theme.textTheme.headlineMedium?.copyWith(
+                              style: theme.textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            const SizedBox(height: 5),
                             Text(
                               authState.userEmail ?? 'ali.raza@sahiwal.pk',
-                              style: theme.textTheme.bodyMedium,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.textTheme.bodySmall?.color
+                                    ?.withAlpha(160),
+                              ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 10),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withAlpha(25),
-                                borderRadius: BorderRadius.circular(12),
+                                horizontal: 12,
+                                vertical: 5,
                               ),
-                              child: Text(
-                                isCustomer ? 'Customer Role' : 'Restaurant Owner',
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withAlpha(20),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    isCustomer
+                                        ? Icons.person_outline
+                                        : Icons.storefront_outlined,
+                                    size: 16,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    isCustomer
+                                        ? 'Customer Role'
+                                        : 'Restaurant Owner',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.primary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -87,7 +113,17 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 28),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Settings & Preferences',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
 
                 // Settings & Preferences Section
                 CustomCard(
@@ -99,12 +135,27 @@ class ProfileScreen extends StatelessWidget {
                         builder: (context, themeMode) {
                           final isDark = themeMode == ThemeMode.dark;
                           return SwitchListTile(
-                            secondary: Icon(
-                              isDark ? Icons.dark_mode : Icons.light_mode,
-                              color: theme.colorScheme.primary,
+                            secondary: Container(
+                              width: 42,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withAlpha(20),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                isDark ? Icons.dark_mode : Icons.light_mode,
+                                color: theme.colorScheme.primary,
+                              ),
                             ),
-                            title: const Text('Dark Mode Theme'),
-                            subtitle: Text(isDark ? 'Dark Theme Active' : 'Light Theme Active'),
+                            title: const Text(
+                              'Dark Mode',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              isDark
+                                  ? 'Dark Theme Active'
+                                  : 'Light Theme Active',
+                            ),
                             value: isDark,
                             onChanged: (val) {
                               context.read<ThemeCubit>().toggleTheme();
@@ -116,10 +167,24 @@ class ProfileScreen extends StatelessWidget {
 
                       // Order History Tile
                       ListTile(
-                        leading: Icon(Icons.history, color: theme.colorScheme.primary),
-                        title: const Text('Order History'),
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.history,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        title: const Text(
+                          'Order History',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
                         subtitle: const Text('Past 14 orders in Sahiwal'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: const Icon(Icons.chevron_right, size: 22),
                         onTap: () {
                           _showOrderHistorySheet(context);
                         },
@@ -128,33 +193,65 @@ class ProfileScreen extends StatelessWidget {
 
                       // Saved Addresses Tile
                       ListTile(
-                        leading:
-                            Icon(Icons.location_on_outlined, color: theme.colorScheme.primary),
-                        title: const Text('Saved Delivery Addresses'),
-                        subtitle: const Text('Scheme 3, College Road, High Street'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.location_on_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        title: const Text(
+                          'Saved Delivery Addresses',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: const Text(
+                          'Scheme 3, College Road, High Street',
+                        ),
+                        trailing: const Icon(Icons.chevron_right, size: 22),
                         onTap: () {},
                       ),
                       const Divider(height: 1),
 
                       // Switch Role Quick Button
                       ListTile(
-                        leading: Icon(
-                          isCustomer ? Icons.storefront : Icons.person_outline,
-                          color: theme.colorScheme.primary,
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            isCustomer
+                                ? Icons.storefront
+                                : Icons.person_outline,
+                            color: theme.colorScheme.primary,
+                          ),
                         ),
                         title: Text(
                           isCustomer
                               ? 'Switch to Restaurant Owner Portal'
                               : 'Switch to Customer View',
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         trailing: const Icon(Icons.swap_horiz, size: 20),
                         onTap: () {
                           if (isCustomer) {
-                            context.read<AuthCubit>().setRole(UserRole.restaurantOwner);
-                            Navigator.of(context).pushReplacementNamed('/owner_dashboard');
+                            context.read<AuthCubit>().setRole(
+                              UserRole.restaurantOwner,
+                            );
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/owner_dashboard');
                           } else {
-                            context.read<AuthCubit>().setRole(UserRole.customer);
+                            context.read<AuthCubit>().setRole(
+                              UserRole.customer,
+                            );
                             Navigator.of(context).pushReplacementNamed('/main');
                           }
                         },
@@ -162,7 +259,17 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 28),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Support & Information',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
 
                 // Support & Information Card
                 CustomCard(
@@ -170,25 +277,60 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.headset_mic_outlined,
-                            color: theme.colorScheme.primary),
-                        title: const Text('Help & Support'),
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.headset_mic_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        title: const Text(
+                          'Help & Support',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
                         subtitle: const Text('Sahiwal Helpline & FAQs'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: const Icon(Icons.chevron_right, size: 22),
                         onTap: () {},
                       ),
                       const Divider(height: 1),
                       ListTile(
-                        leading: Icon(Icons.privacy_tip_outlined,
-                            color: theme.colorScheme.primary),
-                        title: const Text('Privacy & Terms'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.privacy_tip_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        title: const Text(
+                          'Privacy & Terms',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        trailing: const Icon(Icons.chevron_right, size: 22),
                         onTap: () {},
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 28),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Account Actions',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
 
                 // Logout Button
                 OutlinedButton.icon(
@@ -197,11 +339,16 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.of(context).pushReplacementNamed('/auth');
                   },
                   icon: const Icon(Icons.logout, color: Colors.red),
-                  label: const Text('Logout Account', style: TextStyle(color: Colors.red)),
+                  label: const Text(
+                    'Logout Account',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.red),
+                    side:  BorderSide(color:Colors.red.withAlpha(150)),
                     minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -227,9 +374,8 @@ class ProfileScreen extends StatelessWidget {
             children: [
               Text(
                 'Recent Orders',
-                style: Theme.of(sheetContext).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(sheetContext).textTheme.headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               Expanded(
