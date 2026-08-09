@@ -471,7 +471,7 @@ class _CartScreenState extends State<CartScreen> {
                 onPressed: () {
                   Navigator.pop(dialogContext);
                   context.read<CartCubit>().resetOrderPlaced();
-                  Navigator.pushNamed(context, '/main');
+                  Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),

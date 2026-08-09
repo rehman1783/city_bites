@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     return BlocListener<SplashCubit, SplashStatus>(
       listener: (context, status) {
-        if (status == SplashStatus.completed) {
+        if (status == SplashStatus.completed && context.mounted) {
           Navigator.of(context).pushReplacementNamed('/onboarding');
         }
       },

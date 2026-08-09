@@ -50,7 +50,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state.isAuthenticated) {
+        if (state.isAuthenticated && context.mounted) {
           if (state.role == UserRole.customer) {
             Navigator.of(context).pushReplacementNamed('/main');
           } else {
