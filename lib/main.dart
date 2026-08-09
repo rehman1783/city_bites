@@ -22,6 +22,7 @@ void main() {
   runApp(const CityBitesApp());
 }
 
+<<<<<<< HEAD
 class CityBitesApp extends StatelessWidget {
   const CityBitesApp({super.key});
 
@@ -66,6 +67,22 @@ class CityBitesApp extends StatelessWidget {
             },
           );
         },
+=======
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('My App'),
+        ),
+        body: const Center(
+          child: Text('Hello Flutter'),
+        ),
+>>>>>>> origin/quratulain-food-project
       ),
     );
   }
