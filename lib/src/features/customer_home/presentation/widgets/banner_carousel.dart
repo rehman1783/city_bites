@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../../../core/constants/asset_paths.dart';
 import '../../../../core/widgets/image_loader.dart';
@@ -11,6 +13,7 @@ class BannerCarousel extends StatefulWidget {
 
 class _BannerCarouselState extends State<BannerCarousel> {
   final PageController _pageController = PageController(viewportFraction: 0.9);
+  Timer? _timer;
   int _currentPage = 0;
 
   final List<Map<String, String>> _banners = [
@@ -30,6 +33,30 @@ class _BannerCarouselState extends State<BannerCarousel> {
       'image': AssetPaths.promoBanners[2],
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_currentPage < _banners.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      _pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +130,9 @@ class _BannerCarouselState extends State<BannerCarousel> {
                           children: [
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 4),
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.primary,
                                 borderRadius: BorderRadius.circular(20),
