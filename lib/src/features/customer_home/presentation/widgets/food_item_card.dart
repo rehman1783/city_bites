@@ -18,6 +18,124 @@ class FoodItemCard extends StatelessWidget {
     required this.onTap,
     this.isHorizontal = false,
   });
+  void _showAddedToCartSnackBar(BuildContext context, FoodItem item) {
+    final cartCubit = context.read<CartCubit>();
+
+    // Cart mein is product ko find karo
+    final cartItem = cartCubit.state.items.firstWhere(
+      (cartItem) => cartItem.foodItem.id == item.id,
+      orElse: () => CartItem(foodItem: item, quantity: 1),
+    );
+
+    final quantity = cartItem.quantity;
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(12),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+
+        content: SizedBox(
+          height: 100,
+          child: Row(
+            children: [
+              // Food Image
+              ImageLoader(
+                imageUrl: item.imageUrl,
+                height: 70,
+                width: 70,
+                fit: BoxFit.cover,
+                borderRadius: 12,
+              ),
+
+              const SizedBox(width: 12),
+
+              // Product Details
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Added to Cart
+                    Text(
+                      'Added to Cart',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    // Product Name
+                    Text(
+                      item.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withAlpha(180),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 3),
+
+                    // Restaurant
+                    Text(
+                      item.restaurantName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withAlpha(180),
+                        fontSize: 11,
+                      ),
+                    ),
+
+                    const SizedBox(height: 3),
+
+                    // Time + Price + Quantity
+                    Text(
+                      '${item.deliveryTime} • '
+                      '${AppConstants.currency} ${item.price.toInt()} • '
+                      'Qty: $quantity',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withAlpha(180),
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(width: 8),
+
+              // Cart Icon
+              Icon(
+                Icons.shopping_cart_rounded,
+                color: Theme.of(context).colorScheme.primary,
+                size: 26,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +163,10 @@ class FoodItemCard extends StatelessWidget {
                     top: 8,
                     right: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withAlpha(180),
                         borderRadius: BorderRadius.circular(12),
@@ -53,8 +174,11 @@ class FoodItemCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: AppColors.ratingGold, size: 14),
+                          const Icon(
+                            Icons.star_rounded,
+                            color: AppColors.ratingGold,
+                            size: 14,
+                          ),
                           const SizedBox(width: 2),
                           Text(
                             '${item.rating}',
@@ -155,15 +279,21 @@ class FoodItemCard extends StatelessWidget {
                 bottom: 4,
                 left: 4,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withAlpha(180),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.star_rounded,
-                          color: AppColors.ratingGold, size: 12),
+                      const Icon(
+                        Icons.star_rounded,
+                        color: AppColors.ratingGold,
+                        size: 12,
+                      ),
                       const SizedBox(width: 2),
                       Text(
                         '${item.rating}',
@@ -227,23 +357,38 @@ class FoodItemCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        context.read<CartCubit>().addItem(item);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${item.title} added to cart!'),
-                            duration: const Duration(seconds: 1),
+                    SizedBox(
+                      width: 125,
+                      height: 40,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // Product cart mein add hoga
+                          context.read<CartCubit>().addItem(item);
+
+                          // Custom bara SnackBar show hoga
+                          _showAddedToCartSnackBar(context, item);
+                        },
+
+                        icon: const Icon(Icons.add_shopping_cart, size: 17),
+
+                        label: const Text(
+                          'Add',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      },
-                      icon: const Icon(Icons.add_shopping_cart, size: 14),
-                      label: const Text('Add'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          foregroundColor: Colors.white,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                     ),
                   ],
