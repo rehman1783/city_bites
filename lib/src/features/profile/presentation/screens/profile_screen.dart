@@ -345,7 +345,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   style: OutlinedButton.styleFrom(
                     side:  BorderSide(color:Colors.red.withAlpha(150)),
-                    minimumSize: const Size(double.infinity, 50),
+                    minimumSize: const Size(double.infinity, 52),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -363,6 +363,7 @@ class ProfileScreen extends StatelessWidget {
   void _showOrderHistorySheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -372,10 +373,17 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Icon(Icons.receipt_long_outlined,
+                  color: Theme.of(sheetContext).colorScheme.primary),
+                  const SizedBox(width: 10),
               Text(
                 'Recent Orders',
                 style: Theme.of(sheetContext).textTheme.headlineMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+                ],
               ),
               const SizedBox(height: 16),
               Expanded(
