@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/asset_paths.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../bloc/splash_cubit.dart';
 
@@ -30,7 +31,7 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
       duration: const Duration(milliseconds: 1200),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
     );
 
@@ -66,64 +67,75 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
         body: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            gradient: isDark
-                ? AppColors.splashGradientDark
-                : AppColors.splashGradient,
+            color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              // Centered Brand Logo Vector in Soft Glow Container
+              // Centered Brand Logo Image in Soft Glow Container
               ScaleTransition(
                 scale: _scaleAnimation,
                 child: FadeTransition(
                   opacity: _fadeAnimation,
                   child: Container(
-                    padding: const EdgeInsets.all(24),
+                    width: 200,
+                    height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(isDark ? 25 : 220),
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(40),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryDark.withAlpha(100),
-                          blurRadius: 30,
-                          spreadRadius: 5,
+                          color: AppColors.primary.withAlpha(60),
+                          blurRadius: 36,
+                          spreadRadius: 8,
+                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
-                    child: Icon(
-                      Icons.two_wheeler_rounded,
-                      size: 72,
-                      color: isDark ? AppColors.primaryDark : AppColors.primaryLight,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Image.asset(
+                        AssetPaths.logoAsset,
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: AppColors.primaryContainer,
+                          child: const Icon(
+                            Icons.restaurant_menu_rounded,
+                            size: 80,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
               // App Title (Display Large)
               Text(
                 AppConstants.appName,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.displayLarge?.copyWith(
-                  color: isDark ? AppColors.textPrimaryDark : Colors.white,
+                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
+                  letterSpacing: 1.0,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               // Tagline (Body Medium, Italicized)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Text(
                   AppConstants.appTagline,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     color: isDark
-                        ? AppColors.textSecondaryDark
-                        : Colors.white.withAlpha(220),
-                    fontStyle: FontStyle.italic,
-                    height: 1.4,
+                        ? AppColors.darkTextSecondary
+                        : AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),
@@ -132,12 +144,12 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
               Padding(
                 padding: const EdgeInsets.only(bottom: 48),
                 child: SizedBox(
-                  width: 32,
-                  height: 32,
+                  width: 36,
+                  height: 36,
                   child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      isDark ? AppColors.primaryDark : Colors.white,
+                    strokeWidth: 3.5,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      AppColors.primary,
                     ),
                   ),
                 ),

@@ -4,7 +4,6 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/asset_paths.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_textfield.dart';
-import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/widgets/role_toggle_button.dart';
 import '../bloc/auth_cubit.dart';
 
@@ -63,17 +62,32 @@ class _AuthScreenState extends State<AuthScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 12),
-                    // Sahiwal Delivery Illustration Header
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: const NetworkImageLoader(
-                        imageUrl: AssetPaths.splashBanner,
-                        height: 140,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                    Center(
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.colorScheme.primary.withAlpha(40),
+                              blurRadius: 16,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            AssetPaths.logoAsset,
+                            width: 90,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     Text(
                       'Welcome to ${AppConstants.appName}',
                       style: theme.textTheme.headlineLarge?.copyWith(

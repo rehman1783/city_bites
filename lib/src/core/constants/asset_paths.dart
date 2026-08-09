@@ -1,7 +1,7 @@
 class AssetPaths {
-  // High quality Unsplash URLs for food items & restaurants
+  static const String logoAsset = 'assets/images/city_bites_logo.jpeg';
   static const String logoPlaceholder =
-      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&auto=format&fit=crop&q=60';
+      'assets/images/city_bites_logo.jpeg';
   
   static const String splashBanner =
       'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=60';

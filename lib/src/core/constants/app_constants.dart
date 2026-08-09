@@ -1,6 +1,6 @@
 class AppConstants {
   static const String appName = 'City Bites';
-  static const String appTagline = "Sahiwal's Fresh Meals at Your Doorstep";
+  static const String appTagline = "One Destination, Unlimited Flavours";
 
   // City & Location
   static const String cityName = 'Sahiwal';
