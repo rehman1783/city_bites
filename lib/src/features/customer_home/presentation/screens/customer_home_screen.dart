@@ -119,7 +119,7 @@ class CustomerHomeScreen extends StatelessWidget {
               BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
                   return SizedBox(
-                    height: 220,
+                    height: 222,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
