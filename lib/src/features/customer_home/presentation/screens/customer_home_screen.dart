@@ -231,8 +231,8 @@ class CustomerHomeScreen extends StatelessWidget {
               Text(
                 'Filter Meals & Restaurants',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 16),
               const CheckboxListTile(
