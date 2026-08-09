@@ -1,82 +1,59 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/widgets/role_toggle_button.dart';
 
-enum UserRole { customer, restaurantOwner }
-enum AuthMode { login, signup }
-
-class AuthState extends Equatable {
-  final UserRole role;
-  final AuthMode mode;
-  final bool isLoading;
-  final bool isAuthenticated;
-  final String? userEmail;
-  final String? userName;
-
-  const AuthState({
-    this.role = UserRole.customer,
-    this.mode = AuthMode.login,
-    this.isLoading = false,
-    this.isAuthenticated = false,
-    this.userEmail,
-    this.userName,
-  });
-
-  AuthState copyWith({
-    UserRole? role,
-    AuthMode? mode,
-    bool? isLoading,
-    bool? isAuthenticated,
-    String? userEmail,
-    String? userName,
-  }) {
-    return AuthState(
-      role: role ?? this.role,
-      mode: mode ?? this.mode,
-      isLoading: isLoading ?? this.isLoading,
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      userEmail: userEmail ?? this.userEmail,
-      userName: userName ?? this.userName,
-    );
-  }
-
+abstract class AuthState extends Equatable {
+  final UserRole selectedRole;
+  const AuthState({this.selectedRole = UserRole.customer});
   @override
-  List<Object?> get props => [role, mode, isLoading, isAuthenticated, userEmail, userName];
+  List<Object?> get props => [selectedRole];
+}
+
+class AuthInitial extends AuthState {
+  const AuthInitial({super.selectedRole});
+}
+
+class AuthLoading extends AuthState {
+  const AuthLoading({super.selectedRole});
+}
+
+class Authenticated extends AuthState {
+  final String email;
+  final UserRole role;
+  const Authenticated({required this.email, required this.role, super.selectedRole});
+  @override
+  List<Object?> get props => [email, role, selectedRole];
+}
+
+class AuthFailure extends AuthState {
+  final String message;
+  const AuthFailure({required this.message, super.selectedRole});
+  @override
+  List<Object?> get props => [message, selectedRole];
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(const AuthState());
+  AuthCubit() : super(const AuthInitial());
 
-  void setRole(UserRole role) {
-    emit(state.copyWith(role: role));
+  void roleToggled(UserRole role) {
+    emit(AuthInitial(selectedRole: role));
   }
 
-  void setMode(AuthMode mode) {
-    emit(state.copyWith(mode: mode));
-  }
-
-  void login({required String email, required String password}) async {
-    emit(state.copyWith(isLoading: true));
+  Future<void> loginSubmitted({
+    required String email,
+    required String password,
+  }) async {
+    final currentRole = state.selectedRole;
+    emit(AuthLoading(selectedRole: currentRole));
     await Future.delayed(const Duration(milliseconds: 1000));
-    emit(state.copyWith(
-      isLoading: false,
-      isAuthenticated: true,
-      userEmail: email,
-      userName: state.role == UserRole.customer ? 'Ali Raza' : 'Royal Taj Restaurant Owner',
-    ));
-  }
-
-  void signup({required String name, required String email, required String password}) async {
-    emit(state.copyWith(isLoading: true));
-    await Future.delayed(const Duration(milliseconds: 1000));
-    emit(state.copyWith(
-      isLoading: false,
-      isAuthenticated: true,
-      userEmail: email,
-      userName: name,
+    emit(Authenticated(
+      email: email,
+      role: currentRole,
+      selectedRole: currentRole,
     ));
   }
 
   void logout() {
-    emit(const AuthState());
+    emit(const AuthInitial());
   }
 }

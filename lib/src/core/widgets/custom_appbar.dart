@@ -4,23 +4,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
   final VoidCallback? onBackPressed;
+  final VoidCallback? onBack;
   final List<Widget>? actions;
   final Widget? titleWidget;
   final Color? backgroundColor;
+  final PreferredSizeWidget? bottom;
 
   const CustomAppBar({
     super.key,
     this.title = '',
     this.showBackButton = true,
     this.onBackPressed,
+    this.onBack,
     this.actions,
     this.titleWidget,
     this.backgroundColor,
+    this.bottom,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final backCallback = onBack ?? onBackPressed;
 
     return AppBar(
       backgroundColor: backgroundColor ?? theme.appBarTheme.backgroundColor,
@@ -41,7 +46,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              onPressed: onBackPressed ?? () => Navigator.of(context).maybePop(),
+              onPressed: backCallback ?? () => Navigator.of(context).maybePop(),
             )
           : null,
       title: titleWidget ??
@@ -52,9 +57,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
       actions: actions,
+      bottom: bottom,
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>
+      Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
 }
