@@ -9,10 +9,12 @@ import '../bloc/owner_menu_bloc.dart';
 
 class OwnerAddFoodScreen extends StatefulWidget {
   final VoidCallback onSaved;
+  final VoidCallback? onBack;
 
   const OwnerAddFoodScreen({
     super.key,
     required this.onSaved,
+    this.onBack,
   });
 
   @override
@@ -40,8 +42,9 @@ class _OwnerAddFoodScreenState extends State<OwnerAddFoodScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Add New Food Item',
+        onBack: widget.onBack,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

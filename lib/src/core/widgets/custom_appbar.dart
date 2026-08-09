@@ -46,7 +46,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              onPressed: backCallback ?? () => Navigator.of(context).maybePop(),
+              onPressed: () {
+                if (backCallback != null) {
+                  backCallback();
+                } else if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                } else {
+                  // Fallback: If canPop is false and no callback was passed, navigate back to main route
+                  Navigator.of(context).maybePop();
+                }
+              },
             )
           : null,
       title: titleWidget ??

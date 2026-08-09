@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/asset_paths.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_logo.dart';
 import '../bloc/splash_cubit.dart';
 
 class CustomerSplashScreen extends StatefulWidget {
@@ -22,25 +22,35 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
+  bool _isPrecached = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 900),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.85, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0.2, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
     _controller.forward();
     context.read<SplashCubit>().checkAuthStatusAndConfig();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isPrecached) {
+      precacheImage(const AssetImage(AssetPaths.logoAsset), context);
+      _isPrecached = true;
+    }
   }
 
   @override
@@ -66,95 +76,112 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
       child: Scaffold(
         body: Container(
           width: double.infinity,
+          height: double.infinity,
           decoration: BoxDecoration(
-            color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+            gradient: LinearGradient(
+              colors: isDark
+                  ? const [Color(0xFF0F0A1C), Color(0xFF1E1038)]
+                  : const [Color(0xFF2E1065), Color(0xFF6D28D9)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              // Centered Brand Logo Image in Soft Glow Container
-              ScaleTransition(
-                scale: _scaleAnimation,
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withAlpha(60),
-                          blurRadius: 36,
-                          spreadRadius: 8,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: Image.asset(
-                        AssetPaths.logoAsset,
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: AppColors.primaryContainer,
-                          child: const Icon(
-                            Icons.restaurant_menu_rounded,
-                            size: 80,
-                            color: AppColors.primary,
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                // Centered Premium Logo Card with contrast white background
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(80),
+                            blurRadius: 32,
+                            spreadRadius: 4,
+                            offset: const Offset(0, 12),
                           ),
-                        ),
+                        ],
+                      ),
+                      child: const AppLogo(
+                        size: 220,
+                        borderRadius: 36,
+                        showShadow: false,
+                        showBorder: true,
+                        backgroundColor: Colors.white,
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              // App Title (Display Large)
-              Text(
-                AppConstants.appName,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.displayLarge?.copyWith(
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0,
-                ),
-              ),
-              const SizedBox(height: 8),
-              // Tagline (Body Medium, Italicized)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  AppConstants.appTagline,
+                const SizedBox(height: 36),
+                // App Title
+                Text(
+                  AppConstants.appName.toUpperCase(),
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: isDark
-                        ? AppColors.darkTextSecondary
-                        : AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
+                  style: theme.textTheme.displayLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 2.0,
+                    fontSize: 34,
                   ),
                 ),
-              ),
-              const Spacer(),
-              // Bottom Progress Indicator
-              Padding(
-                padding: const EdgeInsets.only(bottom: 48),
-                child: SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3.5,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.primary,
+                const SizedBox(height: 10),
+                // Tagline Pill Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withAlpha(30),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withAlpha(60),
+                    ),
+                  ),
+                  child: Text(
+                    AppConstants.appTagline,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-              ),
-            ],
+                const Spacer(),
+                // Location Footer Badge & Spinner
+                Column(
+                  children: [
+                    Text(
+                      'Sahiwal Food Delivery Portal',
+                      style: TextStyle(
+                        color: Colors.white.withAlpha(200),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),

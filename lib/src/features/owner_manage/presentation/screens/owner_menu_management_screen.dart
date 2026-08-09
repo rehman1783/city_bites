@@ -8,10 +8,12 @@ import '../bloc/owner_menu_bloc.dart';
 
 class OwnerMenuManagementScreen extends StatefulWidget {
   final VoidCallback onAddNewItem;
+  final VoidCallback? onBack;
 
   const OwnerMenuManagementScreen({
     super.key,
     required this.onAddNewItem,
+    this.onBack,
   });
 
   @override
@@ -32,8 +34,9 @@ class _OwnerMenuManagementScreenState
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Menu Management',
+        onBack: widget.onBack,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: widget.onAddNewItem,

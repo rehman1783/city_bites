@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:city_bites/src/core/theme/theme_cubit.dart';
+import 'package:city_bites/src/core/widgets/app_logo.dart';
 import 'package:city_bites/src/core/widgets/custom_appbar.dart';
 import 'package:city_bites/src/core/widgets/custom_card.dart';
-import 'package:city_bites/src/core/widgets/image_loader.dart';
 import 'package:city_bites/src/features/auth/presentation/bloc/auth_cubit.dart';
 import '../bloc/profile_bloc.dart';
 
@@ -38,14 +38,11 @@ class CustomerProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: NetworkImageLoader(
-                            imageUrl: state.avatarUrl,
-                            width: 70,
-                            height: 70,
-                            fit: BoxFit.cover,
-                          ),
+                        const AppLogo(
+                          size: 64,
+                          borderRadius: 16,
+                          showShadow: false,
+                          showBorder: true,
                         ),
                         const SizedBox(width: 16),
                         Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/custom_textfield.dart';
 import '../../../../core/widgets/image_loader.dart';
@@ -70,12 +71,19 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       // Top Location & Header
                       Row(
                         children: [
+                          const AppLogo(
+                            size: 44,
+                            borderRadius: 12,
+                            showShadow: false,
+                            showBorder: true,
+                          ),
+                          const SizedBox(width: 10),
                           Icon(
                             Icons.location_on,
                             color: theme.colorScheme.primary,
-                            size: 24,
+                            size: 20,
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 4),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

@@ -19,7 +19,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> checkAuthStatusAndConfig() async {
     emit(SplashLoading());
-    await Future.delayed(const Duration(milliseconds: 1800));
+    await Future.delayed(const Duration(milliseconds: 2500));
     // Default to Unauthenticated for fresh onboarding
     emit(Unauthenticated());
   }

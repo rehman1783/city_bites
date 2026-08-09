@@ -45,6 +45,11 @@ class _MainScreenState extends State<MainScreen> {
 
     if (_isCheckingOut) {
       return CustomerCheckoutScreen(
+        onBack: () {
+          setState(() {
+            _isCheckingOut = false;
+          });
+        },
         onOrderPlaced: () {
           setState(() {
             _isCheckingOut = false;

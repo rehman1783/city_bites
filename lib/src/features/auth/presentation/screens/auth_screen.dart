@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/constants/asset_paths.dart';
+import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_textfield.dart';
 import '../../../../core/widgets/role_toggle_button.dart';
@@ -62,29 +62,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 12),
-                    Center(
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme.colorScheme.primary.withAlpha(40),
-                              blurRadius: 16,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            AssetPaths.logoAsset,
-                            width: 90,
-                            height: 90,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                    const Center(
+                      child: AppLogo(
+                        size: 96,
+                        borderRadius: 20,
+                        showShadow: true,
+                        showBorder: true,
                       ),
                     ),
                     const SizedBox(height: 16),

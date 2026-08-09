@@ -7,10 +7,12 @@ import '../bloc/checkout_bloc.dart';
 
 class CustomerCheckoutScreen extends StatelessWidget {
   final VoidCallback onOrderPlaced;
+  final VoidCallback? onBack;
 
   const CustomerCheckoutScreen({
     super.key,
     required this.onOrderPlaced,
+    this.onBack,
   });
 
   @override
@@ -20,8 +22,9 @@ class CustomerCheckoutScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => CheckoutBloc(),
       child: Scaffold(
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           title: 'Checkout',
+          onBack: onBack,
         ),
         body: BlocConsumer<CheckoutBloc, CheckoutState>(
           listener: (context, state) {
