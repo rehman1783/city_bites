@@ -1,31 +1,44 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Unified Saffron Flame Primary & Accent Palette Tokens
-  static const Color lightPrimary = Color(0xFFFF5722); // Saffron Flame Main CTAs
-  static const Color lightPrimaryContainer = Color(0xFFFBE9E7); // Selection Tints
-  static const Color lightSecondary = Color(0xFFFF6F00); // Saffron Accent Badges & Highlights
-  static const Color lightBackground = Color(0xFFF8F9FA); // Soft Off-White
+  // Light Mode Color Tokens Extracted directly from CITY BYTES Logo (Royal Violet & Lavender)
+  static const Color lightPrimary = Color(0xFF4C1D95); // Deep Royal Violet ("CITY BYTES" text & cloche)
+  static const Color lightPrimaryContainer = Color(0xFFEDE9FE); // Soft Lavender Selection Tint
+  static const Color lightSecondary = Color(0xFF7C3AED); // Vibrant Lavender Steam Highlight
+  static const Color lightBackground = Color(0xFFF8F5FF); // Soft Lavender Off-White Scaffold
   static const Color lightSurface = Color(0xFFFFFFFF); // Pure White Cards/AppBars
-  static const Color lightSurfaceVariant = Color(0xFFF1F3F4); // Input Fills
-  static const Color lightTextPrimary = Color(0xFF1A1A1A); // Headings & Titles
-  static const Color lightTextSecondary = Color(0xFF757575); // Subtitles & Captions
-  static const Color lightOutline = Color(0xFFE0E0E0); // Borders & Dividers
+  static const Color lightSurfaceVariant = Color(0xFFF3E8FF); // Lavender Input Fills
+  static const Color lightTextPrimary = Color(0xFF2E1065); // Deep Royal Purple Headings
+  static const Color lightTextSecondary = Color(0xFF6B7280); // Muted Secondary Text
+  static const Color lightOutline = Color(0xFFDDD6FE); // Soft Lavender Borders & Dividers
 
-  // Dark Mode Unified Palette Tokens
-  static const Color darkPrimary = Color(0xFFFF7043); // Saffron Flame Dark
-  static const Color darkPrimaryContainer = Color(0xFF3E2723); // Dark Selection Tints
-  static const Color darkSecondary = Color(0xFFFF8F00); // Saffron Accent Dark
-  static const Color darkBackground = Color(0xFF121212); // Deep Charcoal
-  static const Color darkSurface = Color(0xFF1E1E1E); // Elevated Grey Cards
-  static const Color darkSurfaceVariant = Color(0xFF2C2C2C); // Dark Input Fills
-  static const Color darkTextPrimary = Color(0xFFF5F5F5); // Dark Headings
-  static const Color darkTextSecondary = Color(0xFFB0B0B0); // Dark Subtitles
-  static const Color darkOutline = Color(0xFF333333); // Dark Borders & Dividers
+  // Dark Mode Color Tokens Extracted from Logo Night Tones
+  static const Color darkPrimary = Color(0xFFA78BFA); // Light Vibrant Lavender
+  static const Color darkPrimaryContainer = Color(0xFF2E1B4E); // Deep Midnight Lavender Tint
+  static const Color darkSecondary = Color(0xFFC4B5FD); // Bright Lavender Accent
+  static const Color darkBackground = Color(0xFF0F0A1C); // Deep Midnight Purple
+  static const Color darkSurface = Color(0xFF180E29); // Elevated Midnight Violet Cards
+  static const Color darkSurfaceVariant = Color(0xFF25173E); // Dark Input Fills
+  static const Color darkTextPrimary = Color(0xFFF5F3FF); // Soft Lavender White Headings
+  static const Color darkTextSecondary = Color(0xFF9CA3AF); // Muted Secondary Text
+  static const Color darkOutline = Color(0xFF3B2563); // Dark Violet Borders & Dividers
 
   // Functional Utility Tokens
   static const Color ratingGold = Color(0xFFFFB800);
-  static const Color success = Color(0xFFFF5722); // Unified Primary Action
+  static const Color success = Color(0xFF10B981);
   static const Color warning = Color(0xFFF59E0B);
   static const Color error = Color(0xFFEF4444);
+
+  // Logo Theme Gradients
+  static const LinearGradient logoGradientLight = LinearGradient(
+    colors: [Color(0xFF2E1065), Color(0xFF6D28D9)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient logoGradientDark = LinearGradient(
+    colors: [Color(0xFF0F0A1C), Color(0xFF2E1B4E)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

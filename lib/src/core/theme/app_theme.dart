@@ -33,7 +33,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: AppColors.lightSurface,
         elevation: 2,
-        shadowColor: Colors.black.withAlpha(12),
+        shadowColor: AppColors.lightPrimary.withAlpha(20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
           side: const BorderSide(color: AppColors.lightOutline, width: 0.8),
@@ -77,7 +77,7 @@ class AppTheme {
           backgroundColor: AppColors.lightPrimary,
           foregroundColor: Colors.white,
           elevation: 2,
-          shadowColor: AppColors.lightPrimary.withAlpha(70),
+          shadowColor: AppColors.lightPrimary.withAlpha(80),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14.0),
@@ -116,11 +116,11 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.darkBackground,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.darkPrimary,
-        onPrimary: Colors.white,
+        onPrimary: AppColors.darkBackground,
         primaryContainer: AppColors.darkPrimaryContainer,
         onPrimaryContainer: AppColors.darkPrimary,
         secondary: AppColors.darkSecondary,
-        onSecondary: Colors.black,
+        onSecondary: AppColors.darkBackground,
         surface: AppColors.darkSurface,
         onSurface: AppColors.darkTextPrimary,
         surfaceContainerHighest: AppColors.darkSurfaceVariant,
@@ -175,7 +175,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.darkPrimary,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.darkBackground,
           elevation: 2,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           shape: RoundedRectangleBorder(
@@ -183,13 +183,13 @@ class AppTheme {
           ),
           textStyle: textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: AppColors.darkBackground,
           ),
         ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: AppColors.darkPrimary,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.darkBackground,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkSurface,

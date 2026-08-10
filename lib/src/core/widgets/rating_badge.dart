@@ -17,7 +17,7 @@ class RatingBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary, // Saffron Flame Primary Accent
+        color: theme.colorScheme.primary, // Logo Royal Violet Brand Accent
         borderRadius: BorderRadius.circular(50.0), // Radius.pill
       ),
       child: Row(
