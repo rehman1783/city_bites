@@ -58,6 +58,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
