@@ -5,15 +5,21 @@ import '../../../../core/widgets/custom_card.dart';
 import '../bloc/owner_analytics_bloc.dart';
 
 class OwnerAnalyticsScreen extends StatelessWidget {
-  const OwnerAnalyticsScreen({super.key});
+  final VoidCallback? onBack;
+
+  const OwnerAnalyticsScreen({
+    super.key,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Restaurant Analytics',
+        onBack: onBack,
       ),
       body: BlocBuilder<OwnerAnalyticsBloc, OwnerAnalyticsState>(
         builder: (context, state) {

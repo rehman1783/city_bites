@@ -6,7 +6,12 @@ import '../../../../core/widgets/custom_card.dart';
 import '../bloc/owner_orders_bloc.dart';
 
 class OwnerOrdersScreen extends StatefulWidget {
-  const OwnerOrdersScreen({super.key});
+  final VoidCallback? onBack;
+
+  const OwnerOrdersScreen({
+    super.key,
+    this.onBack,
+  });
 
   @override
   State<OwnerOrdersScreen> createState() => _OwnerOrdersScreenState();
@@ -36,6 +41,7 @@ class _OwnerOrdersScreenState extends State<OwnerOrdersScreen>
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Order Management',
+        onBack: widget.onBack,
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,

@@ -131,6 +131,11 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
                       _ownerSubRoute = 'add_food';
                     });
                   },
+                  onBack: () {
+                    setState(() {
+                      _ownerSubRoute = 'dashboard';
+                    });
+                  },
                 );
               case 'add_food':
                 return OwnerAddFoodScreen(
@@ -139,11 +144,28 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
                       _ownerSubRoute = 'menu';
                     });
                   },
+                  onBack: () {
+                    setState(() {
+                      _ownerSubRoute = 'menu';
+                    });
+                  },
                 );
               case 'orders':
-                return const OwnerOrdersScreen();
+                return OwnerOrdersScreen(
+                  onBack: () {
+                    setState(() {
+                      _ownerSubRoute = 'dashboard';
+                    });
+                  },
+                );
               case 'analytics':
-                return const OwnerAnalyticsScreen();
+                return OwnerAnalyticsScreen(
+                  onBack: () {
+                    setState(() {
+                      _ownerSubRoute = 'dashboard';
+                    });
+                  },
+                );
               case 'dashboard':
               default:
                 return OwnerDashboardScreen(
@@ -169,13 +191,37 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
           if (role == UserRole.admin) {
             switch (_adminSubRoute) {
               case 'users':
-                return const AdminUsersScreen();
+                return AdminUsersScreen(
+                  onBack: () {
+                    setState(() {
+                      _adminSubRoute = 'dashboard';
+                    });
+                  },
+                );
               case 'approvals':
-                return const AdminRestaurantApprovalsScreen();
+                return AdminRestaurantApprovalsScreen(
+                  onBack: () {
+                    setState(() {
+                      _adminSubRoute = 'dashboard';
+                    });
+                  },
+                );
               case 'orders':
-                return const AdminGlobalOrdersScreen();
+                return AdminGlobalOrdersScreen(
+                  onBack: () {
+                    setState(() {
+                      _adminSubRoute = 'dashboard';
+                    });
+                  },
+                );
               case 'analytics':
-                return const AdminAnalyticsHeatmapScreen();
+                return AdminAnalyticsHeatmapScreen(
+                  onBack: () {
+                    setState(() {
+                      _adminSubRoute = 'dashboard';
+                    });
+                  },
+                );
               case 'dashboard':
               default:
                 return AdminDashboardScreen(

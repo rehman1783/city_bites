@@ -6,15 +6,21 @@ import '../../../../core/widgets/custom_textfield.dart';
 import '../bloc/admin_orders_bloc.dart';
 
 class AdminGlobalOrdersScreen extends StatelessWidget {
-  const AdminGlobalOrdersScreen({super.key});
+  final VoidCallback? onBack;
+
+  const AdminGlobalOrdersScreen({
+    super.key,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Global Order Audit',
+        onBack: onBack,
       ),
       body: BlocBuilder<AdminOrdersBloc, AdminOrdersState>(
         builder: (context, state) {

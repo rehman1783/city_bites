@@ -5,7 +5,12 @@ import '../../../../core/widgets/custom_card.dart';
 import '../bloc/admin_approvals_bloc.dart';
 
 class AdminRestaurantApprovalsScreen extends StatefulWidget {
-  const AdminRestaurantApprovalsScreen({super.key});
+  final VoidCallback? onBack;
+
+  const AdminRestaurantApprovalsScreen({
+    super.key,
+    this.onBack,
+  });
 
   @override
   State<AdminRestaurantApprovalsScreen> createState() =>
@@ -36,6 +41,7 @@ class _AdminRestaurantApprovalsScreenState
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Vendor Approvals',
+        onBack: widget.onBack,
         bottom: TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.primary,

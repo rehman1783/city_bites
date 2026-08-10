@@ -6,15 +6,21 @@ import '../../../../core/widgets/custom_textfield.dart';
 import '../bloc/admin_users_bloc.dart';
 
 class AdminUsersScreen extends StatelessWidget {
-  const AdminUsersScreen({super.key});
+  final VoidCallback? onBack;
+
+  const AdminUsersScreen({
+    super.key,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'User Management',
+        onBack: onBack,
       ),
       body: BlocBuilder<AdminUsersBloc, AdminUsersState>(
         builder: (context, state) {

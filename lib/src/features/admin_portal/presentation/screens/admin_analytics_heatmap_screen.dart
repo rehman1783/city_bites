@@ -5,15 +5,21 @@ import '../../../../core/widgets/custom_card.dart';
 import '../bloc/admin_heatmap_bloc.dart';
 
 class AdminAnalyticsHeatmapScreen extends StatelessWidget {
-  const AdminAnalyticsHeatmapScreen({super.key});
+  final VoidCallback? onBack;
+
+  const AdminAnalyticsHeatmapScreen({
+    super.key,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Platform Analytics & Heatmap',
+        onBack: onBack,
       ),
       body: BlocBuilder<AdminHeatmapBloc, AdminHeatmapState>(
         builder: (context, state) {
