@@ -25,7 +25,7 @@ class AppLogo extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final containerColor = backgroundColor ??
-        (isDark ? const Color(0xFF201636) : const Color(0xFFF3E8FF));
+        (isDark ? theme.colorScheme.surfaceContainerHighest : theme.colorScheme.primaryContainer);
 
     return Container(
       width: size,

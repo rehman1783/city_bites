@@ -78,10 +78,12 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
             gradient: LinearGradient(
-              colors: isDark
-                  ? const [Color(0xFF0F0A1C), Color(0xFF1E1038)]
-                  : const [Color(0xFF2E1065), Color(0xFF6D28D9)],
+              colors: [
+                theme.colorScheme.primary,
+                theme.colorScheme.primary.withAlpha(isDark ? 160 : 210),
+              ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -91,7 +93,7 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Spacer(),
-                // Centered Premium Logo Card with contrast white background
+                // Centered Premium Logo Card with contrast background
                 ScaleTransition(
                   scale: _scaleAnimation,
                   child: FadeTransition(
@@ -102,19 +104,19 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
                         borderRadius: BorderRadius.circular(40),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withAlpha(80),
+                            color: theme.colorScheme.shadow.withAlpha(80),
                             blurRadius: 32,
                             spreadRadius: 4,
                             offset: const Offset(0, 12),
                           ),
                         ],
                       ),
-                      child: const AppLogo(
+                      child: AppLogo(
                         size: 220,
                         borderRadius: 36,
                         showShadow: false,
                         showBorder: true,
-                        backgroundColor: Colors.white,
+                        backgroundColor: theme.colorScheme.surface,
                       ),
                     ),
                   ),

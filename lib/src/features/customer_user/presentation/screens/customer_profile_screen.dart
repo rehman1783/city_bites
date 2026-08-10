@@ -148,7 +148,7 @@ class CustomerProfileScreen extends StatelessWidget {
                               subtitle: Text(
                                 isDark
                                     ? 'Switch to Light soft-white theme'
-                                    : 'Switch to Deep Navy dark theme',
+                                    : 'Switch to Deep Charcoal dark theme',
                               ),
                               value: isDark,
                               onChanged: (val) {

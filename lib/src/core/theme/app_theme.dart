@@ -12,31 +12,31 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: AppColors.primary,
+      primaryColor: AppColors.lightPrimary,
       scaffoldBackgroundColor: AppColors.lightBackground,
       colorScheme: const ColorScheme.light(
-        primary: AppColors.primary,
+        primary: AppColors.lightPrimary,
         onPrimary: Colors.white,
-        primaryContainer: AppColors.primaryContainer,
-        onPrimaryContainer: AppColors.primary,
-        secondary: AppColors.accentOrange,
+        primaryContainer: AppColors.lightPrimaryContainer,
+        onPrimaryContainer: AppColors.lightPrimary,
+        secondary: AppColors.lightSecondary,
         onSecondary: Colors.white,
         surface: AppColors.lightSurface,
         onSurface: AppColors.lightTextPrimary,
-        surfaceContainerHighest: AppColors.primaryContainer,
+        surfaceContainerHighest: AppColors.lightSurfaceVariant,
         onSurfaceVariant: AppColors.lightTextSecondary,
-        outline: AppColors.lightBorder,
+        outline: AppColors.lightOutline,
         error: AppColors.error,
         onError: Colors.white,
       ),
       textTheme: textTheme,
       cardTheme: CardThemeData(
-        color: AppColors.lightCard,
+        color: AppColors.lightSurface,
         elevation: 2,
-        shadowColor: AppColors.primary.withAlpha(20),
+        shadowColor: Colors.black.withAlpha(12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
-          side: const BorderSide(color: AppColors.lightBorder, width: 0.8),
+          side: const BorderSide(color: AppColors.lightOutline, width: 0.8),
         ),
       ),
       appBarTheme: AppBarTheme(
@@ -52,19 +52,19 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.lightSurface,
+        fillColor: AppColors.lightSurfaceVariant,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.lightBorder),
+          borderSide: const BorderSide(color: AppColors.lightOutline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.lightBorder),
+          borderSide: const BorderSide(color: AppColors.lightOutline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.accentOrange, width: 1.8),
+          borderSide: const BorderSide(color: AppColors.lightPrimary, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
@@ -74,10 +74,10 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.accentOrange,
+          backgroundColor: AppColors.lightPrimary,
           foregroundColor: Colors.white,
           elevation: 2,
-          shadowColor: AppColors.accentOrange.withAlpha(80),
+          shadowColor: AppColors.lightPrimary.withAlpha(70),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14.0),
@@ -89,17 +89,17 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.accentOrange,
+        backgroundColor: AppColors.lightPrimary,
         foregroundColor: Colors.white,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.lightSurface,
-        selectedItemColor: AppColors.accentOrange,
+        selectedItemColor: AppColors.lightPrimary,
         unselectedItemColor: AppColors.lightTextSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      dividerColor: AppColors.lightBorder,
+      dividerColor: AppColors.lightOutline,
     );
   }
 
@@ -112,31 +112,31 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      primaryColor: AppColors.primaryLight,
+      primaryColor: AppColors.darkPrimary,
       scaffoldBackgroundColor: AppColors.darkBackground,
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.accentOrange,
+        primary: AppColors.darkPrimary,
         onPrimary: Colors.white,
-        primaryContainer: AppColors.darkCard,
-        onPrimaryContainer: AppColors.accentOrange,
-        secondary: AppColors.accentOrange,
-        onSecondary: Colors.white,
+        primaryContainer: AppColors.darkPrimaryContainer,
+        onPrimaryContainer: AppColors.darkPrimary,
+        secondary: AppColors.darkSecondary,
+        onSecondary: Colors.black,
         surface: AppColors.darkSurface,
         onSurface: AppColors.darkTextPrimary,
-        surfaceContainerHighest: AppColors.darkCard,
+        surfaceContainerHighest: AppColors.darkSurfaceVariant,
         onSurfaceVariant: AppColors.darkTextSecondary,
-        outline: AppColors.darkBorder,
+        outline: AppColors.darkOutline,
         error: AppColors.error,
         onError: Colors.white,
       ),
       textTheme: textTheme,
       cardTheme: CardThemeData(
-        color: AppColors.darkCard,
+        color: AppColors.darkSurface,
         elevation: 4,
-        shadowColor: Colors.black.withAlpha(100),
+        shadowColor: Colors.black.withAlpha(120),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
-          side: const BorderSide(color: AppColors.darkBorder, width: 0.8),
+          side: const BorderSide(color: AppColors.darkOutline, width: 0.8),
         ),
       ),
       appBarTheme: AppBarTheme(
@@ -145,23 +145,26 @@ class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: AppColors.darkTextPrimary),
-        titleTextStyle: textTheme.headlineMedium,
+        titleTextStyle: textTheme.headlineMedium?.copyWith(
+          color: AppColors.darkTextPrimary,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.darkSurface,
+        fillColor: AppColors.darkSurfaceVariant,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.darkBorder),
+          borderSide: const BorderSide(color: AppColors.darkOutline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.darkBorder),
+          borderSide: const BorderSide(color: AppColors.darkOutline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.accentOrange, width: 1.8),
+          borderSide: const BorderSide(color: AppColors.darkPrimary, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
@@ -171,7 +174,7 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.accentOrange,
+          backgroundColor: AppColors.darkPrimary,
           foregroundColor: Colors.white,
           elevation: 2,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
@@ -185,17 +188,17 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.accentOrange,
+        backgroundColor: AppColors.darkPrimary,
         foregroundColor: Colors.white,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkSurface,
-        selectedItemColor: AppColors.accentOrange,
+        selectedItemColor: AppColors.darkPrimary,
         unselectedItemColor: AppColors.darkTextSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      dividerColor: AppColors.darkBorder,
+      dividerColor: AppColors.darkOutline,
     );
   }
 }

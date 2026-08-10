@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/asset_paths.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/image_loader.dart';
 
 class BannerCarousel extends StatefulWidget {
@@ -138,7 +137,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: AppColors.accentOrange,
+                                color: theme.colorScheme.primary,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -195,7 +194,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
               width: _currentPage == index ? 22 : 6,
               decoration: BoxDecoration(
                 color: _currentPage == index
-                    ? AppColors.accentOrange
+                    ? theme.colorScheme.primary
                     : theme.colorScheme.outline.withAlpha(80),
                 borderRadius: BorderRadius.circular(3),
               ),

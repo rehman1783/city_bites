@@ -73,9 +73,9 @@ class FeaturedRestaurantsSection extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.stars_rounded,
-                    color: AppColors.accentOrange,
+                    color: theme.colorScheme.primary,
                     size: 22,
                   ),
                   const SizedBox(width: 6),
@@ -90,13 +90,13 @@ class FeaturedRestaurantsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.accentOrange.withAlpha(25),
+                  color: theme.colorScheme.primary.withAlpha(25),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
+                child: Text(
                   'TOP PICKS',
                   style: TextStyle(
-                    color: AppColors.accentOrange,
+                    color: theme.colorScheme.primary,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),
