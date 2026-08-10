@@ -321,7 +321,7 @@ class _CustomerOrderTrackingScreenState
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: isDone
-                ? theme.colorScheme.secondary
+                ? theme.colorScheme.primary
                 : theme.colorScheme.outline.withAlpha(50),
           ),
           child: Icon(
@@ -365,7 +365,7 @@ class _CustomerOrderTrackingScreenState
         width: 2,
         height: 20,
         color: isDone
-            ? theme.colorScheme.secondary
+            ? theme.colorScheme.primary
             : theme.colorScheme.outline.withAlpha(50),
       ),
     );

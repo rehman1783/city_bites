@@ -79,7 +79,7 @@ class CustomerProfileScreen extends StatelessWidget {
                     'Account Information',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.secondary,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -126,7 +126,7 @@ class CustomerProfileScreen extends StatelessWidget {
                     'Preferences',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.secondary,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -138,6 +138,7 @@ class CustomerProfileScreen extends StatelessWidget {
                           builder: (context, mode) {
                             final isDark = mode == ThemeMode.dark;
                             return SwitchListTile(
+                              activeTrackColor: theme.colorScheme.primary,
                               secondary: _buildIconContainer(
                                 theme,
                                 icon: isDark
@@ -167,7 +168,7 @@ class CustomerProfileScreen extends StatelessWidget {
                     'Support & Info',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.secondary,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -240,12 +241,12 @@ class CustomerProfileScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.secondary.withAlpha(25),
+        color: theme.colorScheme.primary.withAlpha(25),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Icon(
         icon,
-        color: theme.colorScheme.secondary,
+        color: theme.colorScheme.primary,
         size: 20,
       ),
     );
