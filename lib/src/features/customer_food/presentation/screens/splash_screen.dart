@@ -48,7 +48,7 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isPrecached) {
-      precacheImage(const AssetImage(AssetPaths.logoAsset), context);
+      precacheImage(const AssetImage(AssetPaths.logoAssetLarge), context);
       _isPrecached = true;
     }
   }
