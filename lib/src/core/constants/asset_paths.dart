@@ -1,8 +1,14 @@
 class AssetPaths {
-  static const String logoAsset = 'assets/images/city_bites_logo.jpeg';
-  static const String logoPlaceholder =
-      'assets/images/city_bites_logo.jpeg';
-  
+  // Original Logo (used exclusively in Splash Screen for full hero impact)
+  static const String logoAssetOriginal = 'assets/images/city_bites_logo.jpeg';
+
+  // Compact Resized Logo (used everywhere else across Auth, Profile, AppBars, Cards for high performance)
+  static const String logoAssetSmall = 'assets/images/city_bites_logo_small.jpeg';
+
+  // Default Logo pointer for app widgets
+  static const String logoAsset = 'assets/images/city_bites_logo_small.jpeg';
+  static const String logoPlaceholder = 'assets/images/city_bites_logo_small.jpeg';
+
   static const String splashBanner =
       'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=60';
 

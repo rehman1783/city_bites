@@ -116,6 +116,7 @@ class _CustomerSplashScreenState extends State<CustomerSplashScreen>
                         borderRadius: 36,
                         showShadow: false,
                         showBorder: true,
+                        isOriginal: true,
                         backgroundColor: theme.colorScheme.surface,
                       ),
                     ),

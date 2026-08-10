@@ -8,6 +8,7 @@ class AppLogo extends StatelessWidget {
   final bool showBorder;
   final Color? backgroundColor;
   final BoxFit fit;
+  final bool isOriginal;
 
   const AppLogo({
     super.key,
@@ -17,6 +18,7 @@ class AppLogo extends StatelessWidget {
     this.showBorder = false,
     this.backgroundColor,
     this.fit = BoxFit.contain,
+    this.isOriginal = false,
   });
 
   @override
@@ -27,10 +29,12 @@ class AppLogo extends StatelessWidget {
     final containerColor = backgroundColor ??
         (isDark ? theme.colorScheme.surfaceContainerHighest : theme.colorScheme.primaryContainer);
 
+    final logoPath = isOriginal ? AssetPaths.logoAssetOriginal : AssetPaths.logoAssetSmall;
+
     return Container(
       width: size,
       height: size,
-      padding: EdgeInsets.all(size * 0.05), // Proportional padding ensuring text & icon readability
+      padding: EdgeInsets.all(size * 0.02), // Minimal padding ensuring maximum text legibility & emblem size
       decoration: BoxDecoration(
         color: containerColor,
         borderRadius: BorderRadius.circular(borderRadius),
@@ -54,7 +58,7 @@ class AppLogo extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius * 0.65),
         child: Image.asset(
-          AssetPaths.logoAsset,
+          logoPath,
           width: size,
           height: size,
           fit: fit,
