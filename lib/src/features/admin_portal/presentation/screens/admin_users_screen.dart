@@ -78,7 +78,7 @@ class AdminUsersScreen extends StatelessWidget {
                             children: [
                               CircleAvatar(
                                 backgroundColor: isBlocked
-                                    ? Colors.red.withAlpha(40)
+                                    ? theme.colorScheme.error.withAlpha(40)
                                     : theme.colorScheme.primary.withAlpha(40),
                                 child: Icon(
                                   user['role'] == 'Owner'
@@ -87,7 +87,7 @@ class AdminUsersScreen extends StatelessWidget {
                                           ? Icons.two_wheeler
                                           : Icons.person,
                                   color: isBlocked
-                                      ? Colors.red
+                                      ? theme.colorScheme.error
                                       : theme.colorScheme.primary,
                                 ),
                               ),
@@ -141,8 +141,10 @@ class AdminUsersScreen extends StatelessWidget {
                                       .toggleBlockUser(user['id']);
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      isBlocked ? Colors.green : Colors.red,
+                                  backgroundColor: isBlocked
+                                      ? theme.colorScheme.primary
+                                      : theme.colorScheme.error,
+                                  foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
                                 ),

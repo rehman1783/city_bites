@@ -127,7 +127,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         title: 'Platform GMV',
                         value: 'PKR 4.2M',
                         icon: Icons.account_balance_wallet,
-                        color: Colors.green,
+                        color: theme.colorScheme.primary,
                       ),
                       _buildMetricTile(
                         theme,
@@ -148,7 +148,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         title: 'Registered Users',
                         value: '18.5k',
                         icon: Icons.group,
-                        color: Colors.purple,
+                        color: theme.colorScheme.primary,
                       ),
                     ],
                   ),
@@ -172,8 +172,8 @@ class AdminDashboardScreen extends StatelessWidget {
                             const Text('Active Live Orders'),
                             Text(
                               '${state.activeLiveOrders} Active',
-                              style: const TextStyle(
-                                color: Colors.green,
+                              style: TextStyle(
+                                color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

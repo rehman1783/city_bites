@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/custom_appbar.dart';
+import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../bloc/owner_orders_bloc.dart';
 
@@ -199,16 +200,13 @@ class _OwnerOrdersScreenState extends State<OwnerOrdersScreen>
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: ElevatedButton(
+                        child: CustomButton(
+                          text: 'Accept Order',
                           onPressed: () {
                             context
                                 .read<OwnerOrdersBloc>()
                                 .updateOrderStatus(order['id'], 'Preparing');
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          child: const Text('Accept Order'),
                         ),
                       ),
                     ],

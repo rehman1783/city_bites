@@ -103,7 +103,7 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                         title: "Today's Sales",
                         value: 'PKR ${state.todaySales.toInt()}',
                         icon: Icons.payments_outlined,
-                        color: Colors.green,
+                        color: theme.colorScheme.primary,
                       ),
                       _buildMetricCard(
                         theme,
@@ -124,7 +124,7 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                         title: 'Pending Alerts',
                         value: '${state.pendingAlerts}',
                         icon: Icons.notifications_active_outlined,
-                        color: Colors.orange,
+                        color: theme.colorScheme.primary,
                       ),
                     ],
                   ),
@@ -183,13 +183,13 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.orange.withAlpha(40),
+                          color: theme.colorScheme.primary.withAlpha(40),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '${state.pendingOrders.length} New',
-                          style: const TextStyle(
-                            color: Colors.orange,
+                          style: TextStyle(
+                            color: theme.colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),

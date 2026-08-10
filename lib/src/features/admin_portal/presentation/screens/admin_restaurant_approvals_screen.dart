@@ -128,13 +128,13 @@ class _AdminRestaurantApprovalsScreenState
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    const Icon(Icons.verified_outlined,
-                        size: 16, color: Colors.blue),
+                    Icon(Icons.verified_outlined,
+                        size: 16, color: theme.colorScheme.primary),
                     const SizedBox(width: 4),
                     Text(
                       'License Document Verified',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.blue,
+                        color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -152,8 +152,8 @@ class _AdminRestaurantApprovalsScreenState
                                 .rejectVendor(v['id']);
                           },
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.red,
-                            side: const BorderSide(color: Colors.red),
+                            foregroundColor: theme.colorScheme.error,
+                            side: BorderSide(color: theme.colorScheme.error),
                           ),
                           child: const Text('Reject Application'),
                         ),
@@ -167,7 +167,8 @@ class _AdminRestaurantApprovalsScreenState
                                 .approveVendor(v['id']);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: Colors.white,
                           ),
                           child: const Text('Approve Restaurant'),
                         ),

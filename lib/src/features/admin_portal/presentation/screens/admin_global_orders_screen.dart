@@ -61,7 +61,7 @@ class AdminGlobalOrdersScreen extends StatelessWidget {
                                         horizontal: 8, vertical: 2),
                                     decoration: BoxDecoration(
                                       color: isCancelled
-                                          ? Colors.red.withAlpha(40)
+                                          ? theme.colorScheme.error.withAlpha(40)
                                           : theme.colorScheme.secondary
                                               .withAlpha(40),
                                       borderRadius: BorderRadius.circular(6),
@@ -72,7 +72,7 @@ class AdminGlobalOrdersScreen extends StatelessWidget {
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                         color: isCancelled
-                                            ? Colors.red
+                                            ? theme.colorScheme.error
                                             : theme.colorScheme.secondary,
                                       ),
                                     ),
@@ -109,9 +109,10 @@ class AdminGlobalOrdersScreen extends StatelessWidget {
                                             .forceCancelOrder(order['id']);
                                       },
                                       style: OutlinedButton.styleFrom(
-                                        foregroundColor: Colors.red,
-                                        side:
-                                            const BorderSide(color: Colors.red),
+                                        foregroundColor:
+                                            theme.colorScheme.error,
+                                        side: BorderSide(
+                                            color: theme.colorScheme.error),
                                       ),
                                       child: const Text('Force Cancel'),
                                     ),

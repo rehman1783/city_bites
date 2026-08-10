@@ -94,13 +94,13 @@ class AdminAnalyticsHeatmapScreen extends StatelessWidget {
                         return ListTile(
                           leading: CircleAvatar(
                             backgroundColor: item['rank'] == 1
-                                ? Colors.amber
+                                ? theme.colorScheme.primaryContainer
                                 : theme.colorScheme.surfaceContainerHighest,
                             child: Text(
                               '#${item['rank']}',
                               style: TextStyle(
                                 color: item['rank'] == 1
-                                    ? Colors.black
+                                    ? theme.colorScheme.primary
                                     : theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.bold,
                               ),
