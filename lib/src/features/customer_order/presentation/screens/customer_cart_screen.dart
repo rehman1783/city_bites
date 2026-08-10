@@ -4,6 +4,7 @@ import '../../../../core/widgets/custom_appbar.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/custom_textfield.dart';
+import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/widgets/quantity_stepper.dart';
 import '../bloc/cart_bloc.dart';
@@ -41,27 +42,11 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 80,
-                    color: theme.colorScheme.outline,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Your cart is empty',
-                    style: theme.textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Explore Sahiwal restaurants and add delicious meals!',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ],
-              ),
+            return const EmptyStateWidget(
+              icon: Icons.shopping_basket_outlined,
+              title: 'Your Basket is Empty',
+              description:
+                  'Explore top Sahiwal restaurants and add delicious Karahi, Biryani, or Burgers to your cart!',
             );
           }
 

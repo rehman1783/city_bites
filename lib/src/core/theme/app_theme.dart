@@ -19,7 +19,7 @@ class AppTheme {
         onPrimary: Colors.white,
         primaryContainer: AppColors.primaryContainer,
         onPrimaryContainer: AppColors.primary,
-        secondary: AppColors.secondary,
+        secondary: AppColors.accentOrange,
         onSecondary: Colors.white,
         surface: AppColors.lightSurface,
         onSurface: AppColors.lightTextPrimary,
@@ -47,6 +47,7 @@ class AppTheme {
         iconTheme: const IconThemeData(color: AppColors.lightTextPrimary),
         titleTextStyle: textTheme.headlineMedium?.copyWith(
           color: AppColors.lightTextPrimary,
+          fontWeight: FontWeight.bold,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -63,7 +64,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.accentOrange, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
@@ -73,10 +74,10 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.accentOrange,
           foregroundColor: Colors.white,
           elevation: 2,
-          shadowColor: AppColors.primary.withAlpha(80),
+          shadowColor: AppColors.accentOrange.withAlpha(80),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14.0),
@@ -87,9 +88,13 @@ class AppTheme {
           ),
         ),
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.accentOrange,
+        foregroundColor: Colors.white,
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.lightSurface,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: AppColors.accentOrange,
         unselectedItemColor: AppColors.lightTextSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
@@ -110,11 +115,11 @@ class AppTheme {
       primaryColor: AppColors.primaryLight,
       scaffoldBackgroundColor: AppColors.darkBackground,
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.primaryLight,
+        primary: AppColors.accentOrange,
         onPrimary: Colors.white,
         primaryContainer: AppColors.darkCard,
-        onPrimaryContainer: AppColors.primaryLight,
-        secondary: AppColors.secondaryLight,
+        onPrimaryContainer: AppColors.accentOrange,
+        secondary: AppColors.accentOrange,
         onSecondary: Colors.white,
         surface: AppColors.darkSurface,
         onSurface: AppColors.darkTextPrimary,
@@ -156,7 +161,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
-          borderSide: const BorderSide(color: AppColors.primaryLight, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.accentOrange, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.0),
@@ -166,7 +171,7 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryLight,
+          backgroundColor: AppColors.accentOrange,
           foregroundColor: Colors.white,
           elevation: 2,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
@@ -179,9 +184,13 @@ class AppTheme {
           ),
         ),
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.accentOrange,
+        foregroundColor: Colors.white,
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkSurface,
-        selectedItemColor: AppColors.primaryLight,
+        selectedItemColor: AppColors.accentOrange,
         unselectedItemColor: AppColors.darkTextSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 8,

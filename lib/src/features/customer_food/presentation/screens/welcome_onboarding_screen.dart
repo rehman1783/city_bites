@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/asset_paths.dart';
+import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../bloc/onboarding_cubit.dart';
@@ -23,21 +24,21 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
 
   final List<Map<String, String>> _slides = [
     {
-      'title': "Browse Sahiwal's Top Restaurants",
+      'title': 'Desi Karahi & Fast Food Variety',
       'subtitle':
-          "Discover authentic Karahi, famous Biryani, local fast food joints, and popular cafes near you.",
+          'Explore top Sahiwali eateries, traditional Shinwari Karahi, authentic Biryani, and fresh fast food.',
       'image': AssetPaths.onboarding1,
     },
     {
-      'title': 'Fast Local Delivery via Riders',
+      'title': 'Rapid Doorstep Delivery Fleet',
       'subtitle':
-          'Get hot, fresh food delivered rapidly straight from kitchen counters to your doorstep.',
+          'Our swift local riders ensure your meals arrive piping hot from kitchen counters directly to your home.',
       'image': AssetPaths.onboarding2,
     },
     {
-      'title': 'Compare Prices & Save Commission',
+      'title': 'Best Deals & Wallet Savings',
       'subtitle':
-          'Enjoy transparent local pricing, zero hidden charges, and direct vendor savings in Sahiwal.',
+          'Enjoy transparent local pricing, special discount vouchers, and zero hidden platform charges.',
       'image': AssetPaths.onboarding3,
     },
   ];
@@ -50,21 +51,29 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Top Bar with Skip Button
+            // Top Bar with Brand Badge and Skip Button
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: widget.onFinishOnboarding,
-                  child: Text(
-                    'Skip',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w600,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const AppLogo(
+                    size: 40,
+                    borderRadius: 12,
+                    showShadow: false,
+                    showBorder: true,
+                  ),
+                  TextButton(
+                    onPressed: widget.onFinishOnboarding,
+                    child: Text(
+                      'Skip',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.secondary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
             // PageView Content
@@ -83,15 +92,15 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: NetworkImageLoader(
+                          borderRadius: BorderRadius.circular(24),
+                          child: ImageLoader(
                             imageUrl: slide['image']!,
                             height: 280,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
                         ),
-                        const SizedBox(height: 36),
+                        const SizedBox(height: 32),
                         Text(
                           slide['title']!,
                           textAlign: TextAlign.center,
@@ -105,6 +114,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                           textAlign: TextAlign.center,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
+                            height: 1.5,
                           ),
                         ),
                       ],
@@ -113,7 +123,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                 },
               ),
             ),
-            // Smooth Page Indicator Dots
+            // Page Indicator Dots
             BlocBuilder<OnboardingCubit, OnboardingState>(
               builder: (context, state) {
                 return Row(
@@ -127,7 +137,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                       width: state.currentPage == index ? 24 : 8,
                       decoration: BoxDecoration(
                         color: state.currentPage == index
-                            ? theme.colorScheme.primary
+                            ? theme.colorScheme.secondary
                             : theme.colorScheme.outline.withAlpha(80),
                         borderRadius: BorderRadius.circular(4),
                       ),

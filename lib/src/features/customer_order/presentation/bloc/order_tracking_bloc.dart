@@ -11,7 +11,7 @@ class TrackingLoading extends OrderTrackingState {}
 
 class TrackingUpdated extends OrderTrackingState {
   final String orderId;
-  final int currentStep; // 0: Placed, 1: Accepted, 2: Out for Delivery, 3: Delivered
+  final int currentStep; // 0: Pending, 1: Accepted, 2: Preparing, 3: Out for Delivery, 4: Delivered
   final String restaurantName;
   final String riderName;
   final String riderPhone;

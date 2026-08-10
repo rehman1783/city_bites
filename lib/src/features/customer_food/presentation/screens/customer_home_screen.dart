@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/custom_textfield.dart';
+import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/widgets/rating_badge.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/home_feed_bloc.dart';
+import '../widgets/banner_carousel.dart';
+import '../widgets/featured_restaurants_section.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
@@ -37,7 +41,23 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         child: BlocBuilder<HomeFeedBloc, HomeFeedState>(
           builder: (context, state) {
             if (state is HomeFeedLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: 4,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SkeletonLoader(width: double.infinity, height: 140, borderRadius: 16),
+                      SizedBox(height: 8),
+                      SkeletonLoader(width: 180, height: 20, borderRadius: 8),
+                      SizedBox(height: 4),
+                      SkeletonLoader(width: 120, height: 14, borderRadius: 6),
+                    ],
+                  ),
+                ),
+              );
             }
 
             if (state is HomeFeedError) {
@@ -156,57 +176,17 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Promotional Carousel
-                      SizedBox(
-                        height: 150,
-                        child: PageView.builder(
-                          itemCount: state.banners.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.only(right: 12),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Stack(
-                                  children: [
-                                    NetworkImageLoader(
-                                      imageUrl: state.banners[index],
-                                      height: 150,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.black.withAlpha(160),
-                                            Colors.transparent,
-                                          ],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 12,
-                                      left: 16,
-                                      right: 16,
-                                      child: Text(
-                                        'Flat 20% OFF on Local Sahiwal Kitchens! 🚀',
-                                        style: theme.textTheme.titleLarge
-                                            ?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      // Auto-Scrolling Promotional Carousel
+                      const BannerCarousel(),
                       const SizedBox(height: 24),
+
+                      // Featured Restaurants Horizontal Section (When not searching)
+                      if (state.searchQuery.isEmpty) ...[
+                        FeaturedRestaurantsSection(
+                          onSelectRestaurant: widget.onSelectRestaurant,
+                        ),
+                        const SizedBox(height: 24),
+                      ],
 
                       // Categories Horizontal List
                       Text(
@@ -286,13 +266,25 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
                       // Top Rated Section Header
                       Text(
-                        'Top Rated Near You in Sahiwal',
+                        'All Restaurants in Sahiwal',
                         style: theme.textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 14),
 
-                      // Restaurant Cards List
-                      ListView.builder(
+                      // Restaurant Cards List or Empty State
+                      if (filteredRestaurants.isEmpty)
+                        EmptyStateWidget(
+                          icon: Icons.search_off_rounded,
+                          title: 'No Restaurants Found',
+                          description:
+                              'We could not find any restaurant or dish matching "${state.searchQuery}" in Sahiwal.',
+                          buttonText: 'Clear Search',
+                          onRetry: () {
+                            context.read<HomeFeedBloc>().updateSearchQuery('');
+                          },
+                        )
+                      else
+                        ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: filteredRestaurants.length,
