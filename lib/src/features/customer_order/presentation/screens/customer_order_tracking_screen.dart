@@ -41,7 +41,8 @@ class _CustomerOrderTrackingScreenState
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                  'Thank you for rating $rating Stars! Feedback recorded.'),
+                'Thank you for rating $rating Stars! Feedback recorded.',
+              ),
               backgroundColor: Theme.of(context).colorScheme.secondary,
             ),
           );
@@ -74,243 +75,264 @@ class _CustomerOrderTrackingScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  // Simulated Live Map Route Container Header
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Stack(
-                      children: [
-                        const NetworkImageLoader(
-                          imageUrl: AssetPaths.splashBanner,
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.black.withAlpha(200),
-                                Colors.black.withAlpha(90),
-                              ],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                            ),
+                    // Simulated Live Map Route Container Header
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Stack(
+                        children: [
+                          const NetworkImageLoader(
+                            imageUrl: AssetPaths.splashBanner,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
-                        ),
-                        Positioned(
-                          top: 12,
-                          left: 12,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
+                          Container(
+                            height: 200,
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.primary,
-                              borderRadius: BorderRadius.circular(14),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black.withAlpha(200),
+                                  Colors.black.withAlpha(90),
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
                             ),
-                            child: Row(
-                              children: const [
-                                Icon(Icons.my_location_rounded,
-                                    color: Colors.white, size: 14),
-                                SizedBox(width: 6),
-                                Text(
-                                  'LIVE Sahiwal Route Tracker',
-                                  style: TextStyle(
+                          ),
+                          Positioned(
+                            top: 12,
+                            left: 12,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.my_location_rounded,
                                     color: Colors.white,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
+                                    size: 14,
+                                  ),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'LIVE Sahiwal Route Tracker',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 16,
+                            left: 16,
+                            right: 16,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 36,
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Order #${state.orderId}',
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            overflow: TextOverflow.visible,
+                                            style: theme.textTheme.titleLarge
+                                                ?.copyWith(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Destination: ${state.destination}',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.white.withAlpha(200),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.secondary,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Text(
+                                    'ETA: ${state.eta}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 16,
-                          left: 16,
-                          right: 16,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Order #${state.orderId}',
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                      style: theme.textTheme.titleLarge
-                                          ?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Destination: ${state.destination}',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.white.withAlpha(200),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.secondary,
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Text(
-                                  'ETA: ${state.eta}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // 5 Order Stages Timeline (Pending -> Accepted -> Preparing -> Out for Delivery -> Delivered)
-                  Text(
-                    'Order Journey Stages',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  CustomCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        _buildStepItem(
-                          theme,
-                          title: 'Pending Confirmation',
-                          subtitle: 'Order received & sent to restaurant',
-                          isDone: state.currentStep >= 0,
-                          isActive: state.currentStep == 0,
-                        ),
-                        _buildStepLine(theme, isDone: state.currentStep >= 1),
-                        _buildStepItem(
-                          theme,
-                          title: 'Accepted by Kitchen',
-                          subtitle: 'Vendor has accepted order request',
-                          isDone: state.currentStep >= 1,
-                          isActive: state.currentStep == 1,
-                        ),
-                        _buildStepLine(theme, isDone: state.currentStep >= 2),
-                        _buildStepItem(
-                          theme,
-                          title: 'Preparing Food',
-                          subtitle: 'Chef is cooking your fresh meal',
-                          isDone: state.currentStep >= 2,
-                          isActive: state.currentStep == 2,
-                        ),
-                        _buildStepLine(theme, isDone: state.currentStep >= 3),
-                        _buildStepItem(
-                          theme,
-                          title: 'Out for Delivery',
-                          subtitle: 'Sahiwal rider is heading to your door',
-                          isDone: state.currentStep >= 3,
-                          isActive: state.currentStep == 3,
-                        ),
-                        _buildStepLine(theme, isDone: state.currentStep >= 4),
-                        _buildStepItem(
-                          theme,
-                          title: 'Delivered',
-                          subtitle: 'Meal successfully handed over!',
-                          isDone: state.currentStep >= 4,
-                          isActive: state.currentStep == 4,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Post-Delivery Rating Prompt Button
-                  if (state.currentStep >= 4) ...[
-                    CustomButton(
-                      text: 'Rate Your Meal & Delivery',
-                      icon: Icons.star_rounded,
-                      onPressed: () => _showRatingDialog(context),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 24),
-                  ],
 
-                  // Rider & Vendor Contact Card
-                  Text(
-                    'Assigned Delivery Fleet',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    // 5 Order Stages Timeline (Pending -> Accepted -> Preparing -> Out for Delivery -> Delivered)
+                    Text(
+                      'Order Journey Stages',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  CustomCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 24,
-                          backgroundColor: theme.colorScheme.secondary,
-                          child: const Icon(Icons.two_wheeler_rounded,
-                              color: Colors.white),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                state.riderName,
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                    const SizedBox(height: 12),
+                    CustomCard(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          _buildStepItem(
+                            theme,
+                            title: 'Pending Confirmation',
+                            subtitle: 'Order received & sent to restaurant',
+                            isDone: state.currentStep >= 0,
+                            isActive: state.currentStep == 0,
+                          ),
+                          _buildStepLine(theme, isDone: state.currentStep >= 1),
+                          _buildStepItem(
+                            theme,
+                            title: 'Accepted by Kitchen',
+                            subtitle: 'Vendor has accepted order request',
+                            isDone: state.currentStep >= 1,
+                            isActive: state.currentStep == 1,
+                          ),
+                          _buildStepLine(theme, isDone: state.currentStep >= 2),
+                          _buildStepItem(
+                            theme,
+                            title: 'Preparing Food',
+                            subtitle: 'Chef is cooking your fresh meal',
+                            isDone: state.currentStep >= 2,
+                            isActive: state.currentStep == 2,
+                          ),
+                          _buildStepLine(theme, isDone: state.currentStep >= 3),
+                          _buildStepItem(
+                            theme,
+                            title: 'Out for Delivery',
+                            subtitle: 'Sahiwal rider is heading to your door',
+                            isDone: state.currentStep >= 3,
+                            isActive: state.currentStep == 3,
+                          ),
+                          _buildStepLine(theme, isDone: state.currentStep >= 4),
+                          _buildStepItem(
+                            theme,
+                            title: 'Delivered',
+                            subtitle: 'Meal successfully handed over!',
+                            isDone: state.currentStep >= 4,
+                            isActive: state.currentStep == 4,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Post-Delivery Rating Prompt Button
+                    if (state.currentStep >= 4) ...[
+                      CustomButton(
+                        text: 'Rate Your Meal & Delivery',
+                        icon: Icons.star_rounded,
+                        onPressed: () => _showRatingDialog(context),
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+
+                    // Rider & Vendor Contact Card
+                    Text(
+                      'Assigned Delivery Fleet',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    CustomCard(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: theme.colorScheme.secondary,
+                            child: const Icon(
+                              Icons.two_wheeler_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  state.riderName,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Sahiwal Express Rider • 4.9 ★',
-                                style: theme.textTheme.bodySmall,
-                              ),
-                            ],
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Sahiwal Express Rider • 4.9 ★',
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Calling Sahiwal Rider...')),
-                            );
-                          },
-                          icon: CircleAvatar(
-                            backgroundColor:
-                                theme.colorScheme.secondary.withAlpha(30),
-                            child: Icon(Icons.call_rounded,
-                                color: theme.colorScheme.secondary),
+                          IconButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Calling Sahiwal Rider...'),
+                                ),
+                              );
+                            },
+                            icon: CircleAvatar(
+                              backgroundColor: theme.colorScheme.secondary
+                                  .withAlpha(30),
+                              child: Icon(
+                                Icons.call_rounded,
+                                color: theme.colorScheme.secondary,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        }
+            );
+          }
 
           return const SizedBox();
         },
@@ -350,17 +372,15 @@ class _CustomerOrderTrackingScreenState
               Text(
                 title,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight:
-                      isActive || isDone ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isActive || isDone
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                   color: isDone
                       ? theme.colorScheme.onSurface
                       : theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              Text(
-                subtitle,
-                style: theme.textTheme.bodySmall,
-              ),
+              Text(subtitle, style: theme.textTheme.bodySmall),
             ],
           ),
         ),
