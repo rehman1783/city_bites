@@ -13,10 +13,7 @@ import '../widgets/cart_bill_summary_card.dart';
 class CustomerCartScreen extends StatefulWidget {
   final VoidCallback onProceedToCheckout;
 
-  const CustomerCartScreen({
-    super.key,
-    required this.onProceedToCheckout,
-  });
+  const CustomerCartScreen({super.key, required this.onProceedToCheckout});
 
   @override
   State<CustomerCartScreen> createState() => _CustomerCartScreenState();
@@ -36,10 +33,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Your Cart',
-        showBackButton: false,
-      ),
+      appBar: const CustomAppBar(title: 'Your Cart', showBackButton: false),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartEmpty) {
@@ -96,14 +90,15 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                 child: CartItemTile(
                                   item: item,
                                   onQuantityChanged: (cnt) {
-                                    context
-                                        .read<CartBloc>()
-                                        .updateQuantity(item['id'], cnt);
+                                    context.read<CartBloc>().updateQuantity(
+                                      item['id'],
+                                      cnt,
+                                    );
                                   },
                                   onDismissed: () {
-                                    context
-                                        .read<CartBloc>()
-                                        .removeItem(item['id']);
+                                    context.read<CartBloc>().removeItem(
+                                      item['id'],
+                                    );
                                   },
                                 ),
                               );
@@ -112,44 +107,61 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                           const SizedBox(height: 16),
 
                           // Promo Code Input Box
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: CustomTextField(
-                                  controller: _promoController,
-                                  labelText: '',
-                                  hintText:
-                                      'Promo Code (e.g. SAHIWAL50)',
-                                  prefixIcon: Icons.local_offer_outlined,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              SizedBox(
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (_promoController.text.isNotEmpty) {
-                                      context.read<CartBloc>().applyPromoCode(
-                                          _promoController.text.trim());
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content:
-                                                Text('Promo Code Applied!')),
-                                      );
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 18),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                          LayoutBuilder(
+                            builder: (context, cons) {
+                              final isCompact = cons.maxWidth < 420;
+                              final fieldHeight = isCompact ? 36.0 : 50.0;
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: CustomTextField(
+                                      controller: _promoController,
+                                      labelText: '',
+                                      hintText: 'Promo Code (e.g. SAHIWAL50)',
+                                      prefixIcon: Icons.local_offer_outlined,
+                                      isCompact: isCompact,
+                                      height: fieldHeight,
                                     ),
                                   ),
-                                  child: const Text('Apply'),
-                                ),
-                              ),
-                            ],
+                                  const SizedBox(width: 8),
+                                  SizedBox(
+                                    height: fieldHeight,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (_promoController.text.isNotEmpty) {
+                                          context
+                                              .read<CartBloc>()
+                                              .applyPromoCode(
+                                                _promoController.text.trim(),
+                                              );
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Promo Code Applied!',
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: isCompact ? 12 : 18,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            isCompact ? 16 : 18,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text('Apply'),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                           const SizedBox(height: 24),
 
