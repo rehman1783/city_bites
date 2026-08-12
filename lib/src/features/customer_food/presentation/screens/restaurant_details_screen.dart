@@ -105,6 +105,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
+                            'All',
                             'Popular',
                             'Deals',
                             'Fast Food',

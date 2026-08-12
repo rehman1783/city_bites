@@ -14,15 +14,20 @@ class RestaurantLoaded extends RestaurantDetailState {
   final Map<String, dynamic> restaurant;
   final String activeTab;
   final List<Map<String, dynamic>> menuItems;
+  final List<Map<String, dynamic>> allMenuItems;
 
   const RestaurantLoaded({
     required this.restaurant,
     required this.activeTab,
     required this.menuItems,
+    required this.allMenuItems,
   });
 
+  List<Map<String, dynamic>> get fullMenuItems =>
+      allMenuItems.isNotEmpty ? allMenuItems : menuItems;
+
   @override
-  List<Object?> get props => [restaurant, activeTab, menuItems];
+  List<Object?> get props => [restaurant, activeTab, menuItems, allMenuItems];
 }
 
 class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
@@ -91,18 +96,30 @@ class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
 
     emit(RestaurantLoaded(
       restaurant: rest,
-      activeTab: 'Popular',
+      activeTab: 'All',
       menuItems: dummyItems,
+      allMenuItems: dummyItems,
     ));
   }
 
   void filterByCategory(String cat) {
     if (state is RestaurantLoaded) {
       final current = state as RestaurantLoaded;
+      final sourceItems = current.allMenuItems.isNotEmpty
+          ? current.allMenuItems
+          : current.menuItems;
+      final filteredItems = cat == 'All'
+          ? List<Map<String, dynamic>>.from(sourceItems)
+          : sourceItems
+              .where((item) => item['category'] == cat)
+              .cast<Map<String, dynamic>>()
+              .toList();
+
       emit(RestaurantLoaded(
         restaurant: current.restaurant,
         activeTab: cat,
-        menuItems: current.menuItems,
+        menuItems: filteredItems,
+        allMenuItems: List<Map<String, dynamic>>.from(sourceItems),
       ));
     }
   }
