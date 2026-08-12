@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
       );
     }
 
-    // Main Tab Screens
+    // Main Tab Screens: Home, Restaurants, Explore, Cart, Profile
     final List<Widget> screens = [
       CustomerHomeScreen(
         onSelectRestaurant: (rest) {
@@ -106,10 +106,25 @@ class _MainScreenState extends State<MainScreen> {
         },
         onOpenCart: () {
           setState(() {
-            _currentIndex = 2;
+            _currentIndex = 3;
           });
         },
       ),
+
+      // Restaurants tab: reuse the Home screen restaurant listing
+      CustomerHomeScreen(
+        onSelectRestaurant: (rest) {
+          setState(() {
+            _selectedRestaurant = rest;
+          });
+        },
+        onOpenCart: () {
+          setState(() {
+            _currentIndex = 3;
+          });
+        },
+      ),
+
       ExploreScreen(
         onSelectRestaurant: (rest) {
           setState(() {
@@ -123,10 +138,11 @@ class _MainScreenState extends State<MainScreen> {
         },
         onOpenCart: () {
           setState(() {
-            _currentIndex = 2;
+            _currentIndex = 3;
           });
         },
       ),
+
       CustomerCartScreen(
         onProceedToCheckout: () {
           setState(() {
@@ -134,19 +150,23 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
-      CustomerOrderTrackingScreen(
-        orderId: 'ORD-SHW-9482',
-        onBackToHome: () {
-          setState(() {
-            _currentIndex = 0;
-          });
-        },
-      ),
+
       CustomerProfileScreen(
         onNavigateToOrders: () {
-          setState(() {
-            _currentIndex = 3;
-          });
+          // Push the orders/tracking screen from profile instead of a bottom tab
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => CustomerOrderTrackingScreen(
+                orderId: 'ORD-SHW-9482',
+                onBackToHome: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _currentIndex = 0;
+                  });
+                },
+              ),
+            ),
+          );
         },
         onLogout: widget.onLogout,
       ),
@@ -174,6 +194,11 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant_menu_outlined),
+            activeIcon: Icon(Icons.restaurant_menu),
+            label: 'Restaurants',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.explore_outlined),
             activeIcon: Icon(Icons.explore),
             label: 'Explore',
@@ -182,11 +207,6 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.shopping_bag_outlined),
             activeIcon: Icon(Icons.shopping_bag),
             label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.two_wheeler_outlined),
-            activeIcon: Icon(Icons.two_wheeler),
-            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
