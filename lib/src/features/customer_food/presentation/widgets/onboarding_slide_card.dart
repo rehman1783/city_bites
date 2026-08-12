@@ -23,7 +23,7 @@ class OnboardingSlideCard extends StatelessWidget {
           children: [
             const SizedBox(height: 8),
 
-            // Hero Illustration / Image Container
+            // Hero Illustration / Image Container with Floating Tag Overlay
             Container(
               height: imageHeight,
               width: double.infinity,
@@ -55,39 +55,75 @@ class OnboardingSlideCard extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
-                child: ImageLoader(
-                  imageUrl: slide['image'] ?? '',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: imageHeight,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ImageLoader(
+                      imageUrl: slide['image'] ?? '',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: imageHeight,
+                    ),
+
+                    // Gradient overlay for contrast
+                    if (slide['tag'] != null)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        height: 70,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withAlpha(140),
+                                Colors.transparent,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    // Feature Tag Chip Overlay on Image
+                    if (slide['tag'] != null)
+                      Positioned(
+                        bottom: 14,
+                        left: 14,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 7,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surface.withAlpha(230),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: theme.colorScheme.primary.withAlpha(100),
+                              width: 1.2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(40),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            slide['tag']!,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
-
-            // Feature Tag Chip
-            if (slide['tag'] != null) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withAlpha(25),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: theme.colorScheme.primary.withAlpha(70),
-                  ),
-                ),
-                child: Text(
-                  slide['tag']!,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-            ],
 
             // Title
             Text(
