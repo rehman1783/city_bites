@@ -31,13 +31,13 @@ class HomeFeedLoaded extends HomeFeedState {
 
   @override
   List<Object?> get props => [
-        location,
-        selectedCategory,
-        searchQuery,
-        banners,
-        categories,
-        restaurants,
-      ];
+    location,
+    selectedCategory,
+    searchQuery,
+    banners,
+    categories,
+    restaurants,
+  ];
 }
 
 class HomeFeedError extends HomeFeedState {
@@ -105,41 +105,47 @@ class HomeFeedBloc extends Cubit<HomeFeedState> {
       },
     ];
 
-    emit(HomeFeedLoaded(
-      location: savedLocation,
-      selectedCategory: 'all',
-      searchQuery: '',
-      banners: dummyBanners,
-      categories: dummyCategories,
-      restaurants: dummyRestaurants,
-    ));
+    emit(
+      HomeFeedLoaded(
+        location: savedLocation,
+        selectedCategory: 'all',
+        searchQuery: '',
+        banners: dummyBanners,
+        categories: dummyCategories,
+        restaurants: dummyRestaurants,
+      ),
+    );
   }
 
   void selectCategory(String categoryId) {
     if (state is HomeFeedLoaded) {
       final current = state as HomeFeedLoaded;
-      emit(HomeFeedLoaded(
-        location: current.location,
-        selectedCategory: categoryId,
-        searchQuery: current.searchQuery,
-        banners: current.banners,
-        categories: current.categories,
-        restaurants: current.restaurants,
-      ));
+      emit(
+        HomeFeedLoaded(
+          location: current.location,
+          selectedCategory: categoryId,
+          searchQuery: current.searchQuery,
+          banners: current.banners,
+          categories: current.categories,
+          restaurants: current.restaurants,
+        ),
+      );
     }
   }
 
   void updateSearchQuery(String query) {
     if (state is HomeFeedLoaded) {
       final current = state as HomeFeedLoaded;
-      emit(HomeFeedLoaded(
-        location: current.location,
-        selectedCategory: current.selectedCategory,
-        searchQuery: query,
-        banners: current.banners,
-        categories: current.categories,
-        restaurants: current.restaurants,
-      ));
+      emit(
+        HomeFeedLoaded(
+          location: current.location,
+          selectedCategory: current.selectedCategory,
+          searchQuery: query,
+          banners: current.banners,
+          categories: current.categories,
+          restaurants: current.restaurants,
+        ),
+      );
     }
   }
 
@@ -147,14 +153,16 @@ class HomeFeedBloc extends Cubit<HomeFeedState> {
     if (state is HomeFeedLoaded) {
       final current = state as HomeFeedLoaded;
       _saveLocation(newLoc);
-      emit(HomeFeedLoaded(
-        location: newLoc,
-        selectedCategory: current.selectedCategory,
-        searchQuery: current.searchQuery,
-        banners: current.banners,
-        categories: current.categories,
-        restaurants: current.restaurants,
-      ));
+      emit(
+        HomeFeedLoaded(
+          location: newLoc,
+          selectedCategory: current.selectedCategory,
+          searchQuery: current.searchQuery,
+          banners: current.banners,
+          categories: current.categories,
+          restaurants: current.restaurants,
+        ),
+      );
     }
   }
 

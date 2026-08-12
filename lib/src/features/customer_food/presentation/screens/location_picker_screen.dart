@@ -4,10 +4,7 @@ import '../../../../core/constants/app_constants.dart';
 class LocationPickerScreen extends StatefulWidget {
   final String initialLocation;
 
-  const LocationPickerScreen({
-    super.key,
-    this.initialLocation = '',
-  });
+  const LocationPickerScreen({super.key, this.initialLocation = ''});
 
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -68,9 +65,10 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                 setState(() {
                   _selectedLocation = value;
                   _filteredLocations = AppConstants.sahiwalLocations
-                      .where((address) => address
-                          .toLowerCase()
-                          .contains(value.toLowerCase()))
+                      .where(
+                        (address) =>
+                            address.toLowerCase().contains(value.toLowerCase()),
+                      )
                       .toList();
                 });
               },
@@ -101,9 +99,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                             setState(() {
                               _selectedLocation = address;
                               _filteredLocations = AppConstants.sahiwalLocations
-                                  .where((item) => item
-                                      .toLowerCase()
-                                      .contains(address.toLowerCase()))
+                                  .where(
+                                    (item) => item.toLowerCase().contains(
+                                      address.toLowerCase(),
+                                    ),
+                                  )
                                   .toList();
                             });
                           },

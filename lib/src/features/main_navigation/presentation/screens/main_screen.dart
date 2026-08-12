@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/customer_home_screen.dart';
+import 'package:city_bites/src/features/customer_food/presentation/screens/explore_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/food_details_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/restaurant_details_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/customer_cart_screen.dart';
@@ -10,10 +11,7 @@ import 'package:city_bites/src/features/customer_user/presentation/screens/custo
 class MainScreen extends StatefulWidget {
   final VoidCallback onLogout;
 
-  const MainScreen({
-    super.key,
-    required this.onLogout,
-  });
+  const MainScreen({super.key, required this.onLogout});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -102,7 +100,19 @@ class _MainScreenState extends State<MainScreen> {
         },
         onOpenCart: () {
           setState(() {
-            _currentIndex = 1;
+            _currentIndex = 2;
+          });
+        },
+      ),
+      ExploreScreen(
+        onSelectRestaurant: (rest) {
+          setState(() {
+            _selectedRestaurant = rest;
+          });
+        },
+        onOpenCart: () {
+          setState(() {
+            _currentIndex = 2;
           });
         },
       ),
@@ -124,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
       CustomerProfileScreen(
         onNavigateToOrders: () {
           setState(() {
-            _currentIndex = 2;
+            _currentIndex = 3;
           });
         },
         onLogout: widget.onLogout,
@@ -132,10 +142,7 @@ class _MainScreenState extends State<MainScreen> {
     ];
 
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -154,6 +161,11 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore_outlined),
+            activeIcon: Icon(Icons.explore),
+            label: 'Explore',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_outlined),

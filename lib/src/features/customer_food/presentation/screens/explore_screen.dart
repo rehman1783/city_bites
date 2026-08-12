@@ -1,31 +1,31 @@
 import 'package:city_bites/src/features/customer_food/presentation/screens/location_picker_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/widgets/banner_carousel.dart';
 import 'package:city_bites/src/features/customer_food/presentation/widgets/featured_restaurants_section.dart';
+import 'package:city_bites/src/features/customer_food/presentation/widgets/home_category_selector.dart';
+import 'package:city_bites/src/features/customer_food/presentation/widgets/home_header_bar.dart';
+import 'package:city_bites/src/features/customer_food/presentation/widgets/restaurant_card_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/responsive_wrapper.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/home_feed_bloc.dart';
-import '../widgets/home_header_bar.dart';
-import '../widgets/home_category_selector.dart';
-import '../widgets/restaurant_card_tile.dart';
 
-class CustomerHomeScreen extends StatefulWidget {
+class ExploreScreen extends StatefulWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
   final VoidCallback onOpenCart;
 
-  const CustomerHomeScreen({
+  const ExploreScreen({
     super.key,
     required this.onSelectRestaurant,
     required this.onOpenCart,
   });
 
   @override
-  State<CustomerHomeScreen> createState() => _CustomerHomeScreenState();
+  State<ExploreScreen> createState() => _ExploreScreenState();
 }
 
-class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
+class _ExploreScreenState extends State<ExploreScreen> {
   @override
   void initState() {
     super.initState();
@@ -73,12 +73,18 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
             if (state is HomeFeedLoaded) {
               final filteredRestaurants = state.restaurants.where((r) {
-                return state.selectedCategory == 'all' ||
+                final matchesCategory =
+                    state.selectedCategory == 'all' ||
                     (r['tags'] as List).any(
                       (t) =>
                           t.toString().toLowerCase() ==
                           state.selectedCategory.toLowerCase(),
                     );
+                final matchesSearch = state.searchQuery.isEmpty ||
+                    (r['name'] as String)
+                        .toLowerCase()
+                        .contains(state.searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
               }).toList();
 
               return ResponsiveWrapper(
@@ -101,35 +107,34 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             final newLocation = await Navigator.of(context)
                                 .push<String?>(
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    const LocationPickerScreen(),
+                                builder: (_) => const LocationPickerScreen(),
                               ),
                             );
                             if (newLocation != null && newLocation.isNotEmpty) {
                               context.read<HomeFeedBloc>().updateLocation(
-                                newLocation,
-                              );
+                                    newLocation,
+                                  );
                             }
                           },
-                          onSearchChanged: (_) {},
-                          showSearch: false,
+                          onSearchChanged: (query) {
+                            context.read<HomeFeedBloc>().updateSearchQuery(
+                                  query,
+                                );
+                          },
+                          showSearch: true,
                         ),
                         const SizedBox(height: 20),
-
-                        // Auto-Scrolling Promotional Carousel
                         BannerCarousel(
                           restaurants: state.restaurants,
                           onSelectRestaurant: widget.onSelectRestaurant,
                         ),
                         const SizedBox(height: 24),
-
-                        // Featured Restaurants Section
-                        FeaturedRestaurantsSection(
-                          onSelectRestaurant: widget.onSelectRestaurant,
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Categories Horizontal List Widget
+                        if (state.searchQuery.isEmpty) ...[
+                          FeaturedRestaurantsSection(
+                            onSelectRestaurant: widget.onSelectRestaurant,
+                          ),
+                          const SizedBox(height: 24),
+                        ],
                         HomeCategorySelector(
                           categories: state.categories,
                           selectedCategory: state.selectedCategory,
@@ -138,24 +143,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-
-                        // Top Rated Section Header
                         Text(
                           'All Restaurants in Sahiwal',
                           style: theme.textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 14),
-
-                        // Restaurant Cards List or Empty State
                         if (filteredRestaurants.isEmpty)
                           EmptyStateWidget(
                             icon: Icons.search_off_rounded,
                             title: 'No Restaurants Found',
                             description:
-                                'There are no restaurants available for the selected category right now.',
-                            buttonText: 'Try Again',
+                                'We could not find any restaurant or dish matching "${state.searchQuery}" in Sahiwal.',
+                            buttonText: 'Clear Search',
                             onRetry: () {
-                              context.read<HomeFeedBloc>().fetchHomeData();
+                              context
+                                  .read<HomeFeedBloc>()
+                                  .updateSearchQuery('');
                             },
                           )
                         else
@@ -169,7 +172,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: RestaurantCardTile(
                                   restaurant: rest,
-                                  onTap: () => widget.onSelectRestaurant(rest),
+                                  onTap: () =>
+                                      widget.onSelectRestaurant(rest),
                                 ),
                               );
                             },

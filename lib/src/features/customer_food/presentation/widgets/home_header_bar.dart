@@ -7,6 +7,7 @@ class HomeHeaderBar extends StatelessWidget {
   final VoidCallback onOpenCart;
   final VoidCallback onLocationTap;
   final ValueChanged<String> onSearchChanged;
+  final bool showSearch;
 
   const HomeHeaderBar({
     super.key,
@@ -14,6 +15,7 @@ class HomeHeaderBar extends StatelessWidget {
     required this.onOpenCart,
     required this.onLocationTap,
     required this.onSearchChanged,
+    this.showSearch = false,
   });
 
   @override
@@ -81,32 +83,32 @@ class HomeHeaderBar extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-
-        // Search & Filter Bar
-        Row(
-          children: [
-            Expanded(
-              child: CustomTextField(
-                labelText: '',
-                hintText: 'Search biryani, burger, restaurants...',
-                prefixIcon: Icons.search_rounded,
-                onChanged: onSearchChanged,
+        if (showSearch) ...[
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  labelText: '',
+                  hintText: 'Search biryani, burger, restaurants...',
+                  prefixIcon: Icons.search_rounded,
+                  onChanged: onSearchChanged,
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary,
-                borderRadius: BorderRadius.circular(12),
+              const SizedBox(width: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.tune_rounded, color: Colors.white),
+                  onPressed: () {},
+                ),
               ),
-              child: IconButton(
-                icon: const Icon(Icons.tune_rounded, color: Colors.white),
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ],
     );
   }
