@@ -31,7 +31,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
     {
       'id': 'prod_1',
       'name': 'Special Chicken Biryani',
-      'description': 'Aromatic basmati rice cooked with spices and tender chicken.',
+      'description':
+          'Aromatic basmati rice cooked with spices and tender chicken.',
       'price': 450.0,
       'image': AssetPaths.chickenBiryani,
       'category': 'biryani',
@@ -124,13 +125,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
             final filteredProducts = _productItems.where((product) {
               final matchesCategory =
                   state.selectedCategory == 'all' ||
-                  (product['category'] as String)
-                      .toLowerCase()
-                      .contains(state.selectedCategory.toLowerCase());
-              final matchesSearch = state.searchQuery.isEmpty ||
-                  (product['name'] as String)
-                      .toLowerCase()
-                      .contains(state.searchQuery.toLowerCase());
+                  (product['category'] as String).toLowerCase().contains(
+                    state.selectedCategory.toLowerCase(),
+                  );
+              final matchesSearch =
+                  state.searchQuery.isEmpty ||
+                  (product['name'] as String).toLowerCase().contains(
+                    state.searchQuery.toLowerCase(),
+                  );
               return matchesCategory && matchesSearch;
             }).toList();
 
@@ -148,66 +150,81 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: CustomTextField(
                               labelText: '',
-                              hintText: 'Search items, cuisines, restaurants...',
+                              hintText:
+                                  'Search items, cuisines, restaurants...',
                               prefixIcon: Icons.search_rounded,
+                              isCompact: true,
+                              height: 52,
                               onChanged: (query) {
                                 context.read<HomeFeedBloc>().updateSearchQuery(
-                                      query,
-                                    );
+                                  query,
+                                );
                               },
                             ),
                           ),
                           const SizedBox(width: 12),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              showModalBottomSheet<void>(
-                                context: context,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Filter by category',
-                                          style: theme.textTheme.headlineSmall,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        Wrap(
-                                          spacing: 8,
-                                          runSpacing: 8,
-                                          children: state.categories
-                                              .map((category) {
-                                                final isActive = state.selectedCategory == category['id'];
-                                                return ChoiceChip(
-                                                  label: Text(category['name']),
-                                                  selected: isActive,
-                                                  onSelected: (_) {
-                                                    Navigator.pop(context);
-                                                    context.read<HomeFeedBloc>().selectCategory(category['id'] as String);
-                                                  },
-                                                );
-                                              })
-                                              .toList()
-                                              .cast<Widget>(),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.filter_list),
-                            label: const Text('Filter'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 16,
+                          SizedBox(
+                            height: 52,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Filter by category',
+                                            style: theme.textTheme.headlineSmall,
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
+                                            children: state.categories
+                                                .map((category) {
+                                                  final isActive =
+                                                      state.selectedCategory ==
+                                                      category['id'];
+                                                  return ChoiceChip(
+                                                    label: Text(category['name']),
+                                                    selected: isActive,
+                                                    onSelected: (_) {
+                                                      Navigator.pop(context);
+                                                      context
+                                                          .read<HomeFeedBloc>()
+                                                          .selectCategory(
+                                                            category['id']
+                                                                as String,
+                                                          );
+                                                    },
+                                                  );
+                                                })
+                                                .toList()
+                                                .cast<Widget>(),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.filter_list),
+                              label: const Text('Filter'),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
                               ),
                             ),
                           ),
@@ -219,10 +236,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         onSelectRestaurant: widget.onSelectRestaurant,
                       ),
                       const SizedBox(height: 24),
-                      Text(
-                        'Products',
-                        style: theme.textTheme.headlineMedium,
-                      ),
+                      Text('Products', style: theme.textTheme.headlineMedium),
                       const SizedBox(height: 14),
                       HomeCategorySelector(
                         categories: state.categories,
