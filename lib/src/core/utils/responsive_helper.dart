@@ -18,15 +18,30 @@ class ResponsiveHelper {
       MediaQuery.of(context).size.height;
 
   static EdgeInsets pagePadding(BuildContext context) {
+    if (isDesktop(context)) {
+      return const EdgeInsets.symmetric(horizontal: 48, vertical: 32);
+    }
     if (isTablet(context)) {
       return const EdgeInsets.symmetric(horizontal: 32, vertical: 24);
     }
     return const EdgeInsets.symmetric(horizontal: 16, vertical: 16);
   }
 
-  static int gridCrossAxisCount(BuildContext context) {
-    if (isTablet(context)) return 3;
-    if (isDesktop(context)) return 4;
-    return 2;
+  static double horizontalPadding(BuildContext context) {
+    if (isDesktop(context)) return 48.0;
+    if (isTablet(context)) return 32.0;
+    return 16.0;
+  }
+
+  static int gridCrossAxisCount(BuildContext context, {int mobile = 2, int tablet = 3, int desktop = 4}) {
+    if (isDesktop(context)) return desktop;
+    if (isTablet(context)) return tablet;
+    return mobile;
+  }
+
+  static double cardChildAspectRatio(BuildContext context, {double mobile = 0.8, double tablet = 0.9, double desktop = 1.0}) {
+    if (isDesktop(context)) return desktop;
+    if (isTablet(context)) return tablet;
+    return mobile;
   }
 }

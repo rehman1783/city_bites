@@ -6,6 +6,7 @@ import 'package:city_bites/src/core/widgets/custom_button.dart';
 import 'package:city_bites/src/core/widgets/custom_card.dart';
 import 'package:city_bites/src/core/widgets/image_loader.dart';
 import 'package:city_bites/src/core/widgets/rating_dialog.dart';
+import 'package:city_bites/src/core/widgets/responsive_wrapper.dart';
 import '../bloc/order_tracking_bloc.dart';
 
 class CustomerOrderTrackingScreen extends StatefulWidget {
@@ -65,11 +66,14 @@ class _CustomerOrderTrackingScreenState
           }
 
           if (state is TrackingUpdated) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            return ResponsiveWrapper(
+              maxWidth: 900,
+              padding: EdgeInsets.zero,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                   // Simulated Live Map Route Container Header
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
@@ -294,11 +298,11 @@ class _CustomerOrderTrackingScreenState
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
                 ],
               ),
-            );
-          }
+            ),
+          );
+        }
 
           return const SizedBox();
         },

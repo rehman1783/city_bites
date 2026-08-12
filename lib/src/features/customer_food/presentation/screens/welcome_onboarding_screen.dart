@@ -1,10 +1,10 @@
+import 'package:city_bites/src/features/customer_food/presentation/bloc/onboarding_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/asset_paths.dart';
 import '../../../../core/widgets/app_logo.dart';
-import '../../../../core/widgets/custom_button.dart';
-import '../../../../core/widgets/image_loader.dart';
-import '../bloc/onboarding_cubit.dart';
+import '../widgets/onboarding_slide_card.dart';
+import '../widgets/onboarding_bottom_controls.dart';
 
 class WelcomeOnboardingScreen extends StatefulWidget {
   final VoidCallback onFinishOnboarding;
@@ -63,7 +63,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Gradient Glow Accents
+          // Background Glow Accents
           Positioned(
             top: -100,
             right: -80,
@@ -95,7 +95,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                 constraints: const BoxConstraints(maxWidth: 580),
                 child: Column(
                   children: [
-                    // Top Header: App Logo + Title + Skip Button
+                    // Top Header Bar
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
@@ -146,7 +146,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                       ),
                     ),
 
-                    // Main Full-Height Slider Content (Zero Empty Gaps + Zero Overflow)
+                    // Onboarding Page Content
                     Expanded(
                       child: PageView.builder(
                         controller: _pageController,
@@ -155,250 +155,23 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                           context.read<OnboardingCubit>().pageChanged(index);
                         },
                         itemBuilder: (context, index) {
-                          final slide = _slides[index];
-
-                          return LayoutBuilder(
-                            builder: (context, constraints) {
-                              final availableHeight = constraints.maxHeight;
-
-                              return SingleChildScrollView(
-                                physics: const BouncingScrollPhysics(),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    minHeight: availableHeight,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      const SizedBox(height: 8),
-
-                                      // Hero Image Frame Card (Dynamically Proportional)
-                                      Container(
-                                        height: (availableHeight * 0.45)
-                                            .clamp(160.0, 320.0),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: theme.colorScheme.primary
-                                                  .withAlpha(isDark ? 80 : 35),
-                                              blurRadius: 20,
-                                              spreadRadius: 1,
-                                              offset: const Offset(0, 8),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                              child: ImageLoader(
-                                                imageUrl: slide['image']!,
-                                                height: double.infinity,
-                                                width: double.infinity,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            // Gradient Overlay
-                                            Positioned.fill(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(24),
-                                                  gradient: LinearGradient(
-                                                    colors: [
-                                                      Colors.transparent,
-                                                      Colors.black
-                                                          .withAlpha(130),
-                                                    ],
-                                                    begin: Alignment.topCenter,
-                                                    end:
-                                                        Alignment.bottomCenter,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            // Floating Tag Badge
-                                            Positioned(
-                                              bottom: 14,
-                                              left: 14,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12,
-                                                        vertical: 6),
-                                                decoration: BoxDecoration(
-                                                  color: theme
-                                                      .colorScheme.surface
-                                                      .withAlpha(230),
-                                                  borderRadius:
-                                                      BorderRadius.circular(14),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.black
-                                                          .withAlpha(40),
-                                                      blurRadius: 6,
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Text(
-                                                  slide['tag']!,
-                                                  style: theme
-                                                      .textTheme.labelMedium
-                                                      ?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: theme
-                                                        .colorScheme.primary,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      const SizedBox(height: 12),
-
-                                      // Typography Section (Badge + Title + Subtitle)
-                                      Column(
-                                        children: [
-                                          // Subhead Category Chip
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12, vertical: 4),
-                                            decoration: BoxDecoration(
-                                              color: theme.colorScheme
-                                                  .primaryContainer,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text(
-                                              slide['badge']!.toUpperCase(),
-                                              style: theme.textTheme.labelSmall
-                                                  ?.copyWith(
-                                                color:
-                                                    theme.colorScheme.primary,
-                                                fontWeight: FontWeight.bold,
-                                                letterSpacing: 1.1,
-                                              ),
-                                            ),
-                                          ),
-
-                                          const SizedBox(height: 10),
-
-                                          // Main Title
-                                          Text(
-                                            slide['title']!,
-                                            textAlign: TextAlign.center,
-                                            style: theme.textTheme.titleLarge
-                                                ?.copyWith(
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 22,
-                                              height: 1.25,
-                                            ),
-                                          ),
-
-                                          const SizedBox(height: 10),
-
-                                          // Subtitle
-                                          Text(
-                                            slide['subtitle']!,
-                                            textAlign: TextAlign.center,
-                                            style: theme.textTheme.bodyMedium
-                                                ?.copyWith(
-                                              color: theme
-                                                  .colorScheme.onSurfaceVariant,
-                                              height: 1.45,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      const SizedBox(height: 8),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                          return OnboardingSlideCard(
+                            slide: _slides[index],
                           );
                         },
                       ),
                     ),
 
-                    // Bottom Section: Indicator Dots + CTA Button
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0, vertical: 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Page Indicator Dots
-                          BlocBuilder<OnboardingCubit, OnboardingState>(
-                            builder: (context, state) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                  _slides.length,
-                                  (index) {
-                                    final isSelected =
-                                        state.currentPage == index;
-                                    return AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 4),
-                                      height: 8,
-                                      width: isSelected ? 28 : 8,
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? theme.colorScheme.primary
-                                            : theme.colorScheme.outline
-                                                .withAlpha(90),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          // Main Action CTA Button
-                          BlocBuilder<OnboardingCubit, OnboardingState>(
-                            builder: (context, state) {
-                              final isLast =
-                                  state.currentPage == _slides.length - 1;
-                              return CustomButton(
-                                text: isLast
-                                    ? 'Get Started — Order Now'
-                                    : 'Continue',
-                                icon: isLast
-                                    ? Icons.rocket_launch_rounded
-                                    : Icons.arrow_forward_rounded,
-                                onPressed: () {
-                                  if (isLast) {
-                                    widget.onFinishOnboarding();
-                                  } else {
-                                    _pageController.nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 350),
-                                      curve: Curves.easeInOutCubic,
-                                    );
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                    // Bottom Controls Bar
+                    BlocBuilder<OnboardingCubit, OnboardingState>(
+                      builder: (context, state) {
+                        return OnboardingBottomControls(
+                          currentIndex: state.currentPage,
+                          totalSlides: _slides.length,
+                          pageController: _pageController,
+                          onFinish: widget.onFinishOnboarding,
+                        );
+                      },
                     ),
                   ],
                 ),

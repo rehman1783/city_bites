@@ -1,8 +1,10 @@
+import 'package:city_bites/src/core/widgets/custom_appbar.dart';
+import 'package:city_bites/src/features/admin_portal/presentation/bloc/admin_approvals_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/widgets/custom_appbar.dart';
-import '../../../../core/widgets/custom_card.dart';
-import '../bloc/admin_approvals_bloc.dart';
+
+import '../../../../core/widgets/responsive_wrapper.dart';
+import '../widgets/admin_vendor_card.dart';
 
 class AdminRestaurantApprovalsScreen extends StatefulWidget {
   final VoidCallback? onBack;
@@ -56,13 +58,17 @@ class _AdminRestaurantApprovalsScreenState
       body: BlocBuilder<AdminApprovalsBloc, AdminApprovalsState>(
         builder: (context, state) {
           if (state is AdminApprovalsLoaded) {
-            return TabBarView(
-              controller: _tabController,
-              children: [
-                _buildVendorList(context, state.pending, isPending: true),
-                _buildVendorList(context, state.active, isPending: false),
-                _buildVendorList(context, state.suspended, isPending: false),
-              ],
+            return ResponsiveWrapper(
+              maxWidth: 950,
+              padding: EdgeInsets.zero,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildVendorList(context, state.pending, isPending: true),
+                  _buildVendorList(context, state.active, isPending: false),
+                  _buildVendorList(context, state.suspended, isPending: false),
+                ],
+              ),
             );
           }
 
@@ -77,8 +83,6 @@ class _AdminRestaurantApprovalsScreenState
     List<Map<String, dynamic>> vendors, {
     required bool isPending,
   }) {
-    final theme = Theme.of(context);
-
     if (vendors.isEmpty) {
       return const Center(child: Text('No vendors in this queue.'));
     }
@@ -90,99 +94,15 @@ class _AdminRestaurantApprovalsScreenState
         final v = vendors[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: CustomCard(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      v['name'],
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Commission: ${v['commissionRate']}%',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Owner: ${v['ownerName']} (CNIC: ${v['cnic']})',
-                  style: theme.textTheme.bodyMedium,
-                ),
-                Text(
-                  'Location: ${v['address']}',
-                  style: theme.textTheme.bodySmall,
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(Icons.verified_outlined,
-                        size: 16, color: theme.colorScheme.primary),
-                    const SizedBox(width: 4),
-                    Text(
-                      'License Document Verified',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                if (isPending)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            context
-                                .read<AdminApprovalsBloc>()
-                                .rejectVendor(v['id']);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: theme.colorScheme.error,
-                            side: BorderSide(color: theme.colorScheme.error),
-                          ),
-                          child: const Text('Reject Application'),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            context
-                                .read<AdminApprovalsBloc>()
-                                .approveVendor(v['id']);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: const Text('Approve Restaurant'),
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
+          child: AdminVendorCard(
+            vendor: v,
+            isPending: isPending,
+            onApprove: () {
+              context.read<AdminApprovalsBloc>().approveVendor(v['id']);
+            },
+            onReject: () {
+              context.read<AdminApprovalsBloc>().rejectVendor(v['id']);
+            },
           ),
         );
       },

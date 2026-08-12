@@ -184,6 +184,12 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
                       _ownerSubRoute = 'analytics';
                     });
                   },
+                  onLogout: () {
+                    setState(() {
+                      _ownerSubRoute = 'dashboard';
+                    });
+                    context.read<AuthCubit>().logout();
+                  },
                 );
             }
           }
