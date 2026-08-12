@@ -111,22 +111,45 @@ class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
           ? current.allMenuItems
           : current.menuItems;
       final catLower = cat.toString().toLowerCase();
-      final filteredItems = catLower == 'all'
-          ? List<Map<String, dynamic>>.from(sourceItems)
-          : sourceItems
-                .where(
-                  (item) => (item['category'] ?? '')
-                      .toString()
-                      .toLowerCase()
-                      .contains(catLower),
-                )
-                .cast<Map<String, dynamic>>()
-                .toList();
+
+      // Map category ids to matching keywords present in menu data.
+      final Map<String, List<String>> categoryKeywords = {
+        'biryani': ['biryani'],
+        'burgers': ['burger', 'zinger'],
+        'pizza': ['pizza'],
+        'karahi': ['karahi'],
+        'desserts': ['dessert', 'brownie', 'cake'],
+        'drinks': ['drink', 'drinks', 'juice', 'beverage'],
+      };
+
+      List<Map<String, dynamic>> filteredItems;
+
+      if (catLower == 'all') {
+        filteredItems = List<Map<String, dynamic>>.from(sourceItems);
+      } else {
+        final keywords = categoryKeywords[catLower] ?? [catLower];
+
+        filteredItems = sourceItems
+            .where((item) {
+              final catField = (item['category'] ?? '')
+                  .toString()
+                  .toLowerCase();
+              final nameField = (item['name'] ?? '').toString().toLowerCase();
+
+              for (final kw in keywords) {
+                final k = kw.toLowerCase();
+                if (catField.contains(k) || nameField.contains(k)) return true;
+              }
+              return false;
+            })
+            .cast<Map<String, dynamic>>()
+            .toList();
+      }
 
       emit(
         RestaurantLoaded(
           restaurant: current.restaurant,
-          activeTab: cat,
+          activeTab: catLower,
           menuItems: filteredItems,
           allMenuItems: List<Map<String, dynamic>>.from(sourceItems),
         ),
