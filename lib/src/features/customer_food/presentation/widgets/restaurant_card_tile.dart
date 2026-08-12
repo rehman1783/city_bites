@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
+import '../../../../core/services/favorites_service.dart';
 import '../../../../core/widgets/rating_badge.dart';
 
 class RestaurantCardTile extends StatelessWidget {
@@ -50,11 +51,46 @@ class RestaurantCardTile extends StatelessWidget {
                 ),
               ),
               Positioned(
+                top: 12,
+                left: 12,
+                child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+                  valueListenable: FavoritesService.instance.restaurants,
+                  builder: (context, value, _) {
+                    final isFav = value.any(
+                      (e) =>
+                          (e['id']?.toString() ?? '') ==
+                          (restaurant['id']?.toString() ?? ''),
+                    );
+                    return GestureDetector(
+                      onTap: () async {
+                        await FavoritesService.instance.toggleRestaurant(
+                          restaurant,
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          isFav ? Icons.favorite : Icons.favorite_border,
+                          color: isFav ? Colors.red : Colors.black54,
+                          size: 18,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
                 bottom: 12,
                 left: 12,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withAlpha(180),
                     borderRadius: BorderRadius.circular(20),
@@ -124,10 +160,7 @@ class RestaurantCardTile extends StatelessWidget {
                               color: theme.colorScheme.surfaceContainerHighest,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: Text(
-                              t,
-                              style: theme.textTheme.labelSmall,
-                            ),
+                            child: Text(t, style: theme.textTheme.labelSmall),
                           ),
                         )
                         .toList(),

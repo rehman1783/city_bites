@@ -40,7 +40,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       children: [
                         Text(
                           'Products',
-                          style: Theme.of(context).textTheme.titleMedium
+                          style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: _selected == 0
@@ -48,9 +48,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     : null,
                               ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 8),
                         Container(
-                          height: 3,
+                          height: 4,
                           color: _selected == 0
                               ? Theme.of(context).colorScheme.primary
                               : Colors.transparent,
@@ -68,7 +68,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       children: [
                         Text(
                           'Restaurants',
-                          style: Theme.of(context).textTheme.titleMedium
+                          style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: _selected == 1
@@ -76,9 +76,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     : null,
                               ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 8),
                         Container(
-                          height: 3,
+                          height: 4,
                           color: _selected == 1
                               ? Theme.of(context).colorScheme.primary
                               : Colors.transparent,
@@ -248,16 +248,53 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                         Positioned(
                                           top: 6,
                                           right: 6,
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              Icons.delete_outline,
-                                            ),
-                                            color: Colors.white,
-                                            onPressed: () async {
-                                              await favSvc.toggleRestaurant(r);
-                                              setState(() {});
-                                            },
-                                          ),
+                                          child:
+                                              ValueListenableBuilder<
+                                                List<Map<String, dynamic>>
+                                              >(
+                                                valueListenable:
+                                                    FavoritesService
+                                                        .instance
+                                                        .restaurants,
+                                                builder: (context, value, _) {
+                                                  final isFav = value.any(
+                                                    (e) =>
+                                                        (e['id']?.toString() ??
+                                                            '') ==
+                                                        (r['id']?.toString() ??
+                                                            ''),
+                                                  );
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      await FavoritesService
+                                                          .instance
+                                                          .toggleRestaurant(r);
+                                                      setState(() {});
+                                                    },
+                                                    child: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            6,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white
+                                                            .withOpacity(0.9),
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Icon(
+                                                        isFav
+                                                            ? Icons.favorite
+                                                            : Icons
+                                                                  .favorite_border,
+                                                        color: isFav
+                                                            ? Colors.red
+                                                            : Colors.black54,
+                                                        size: 18,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                         ),
                                       ],
                                     ),
