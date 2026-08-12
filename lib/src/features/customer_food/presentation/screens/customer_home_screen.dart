@@ -100,11 +100,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           onLocationTap: () async {
                             final newLocation = await Navigator.of(context)
                                 .push<String?>(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    const LocationPickerScreen(),
-                              ),
-                            );
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const LocationPickerScreen(),
+                                  ),
+                                );
                             if (newLocation != null && newLocation.isNotEmpty) {
                               context.read<HomeFeedBloc>().updateLocation(
                                 newLocation,
