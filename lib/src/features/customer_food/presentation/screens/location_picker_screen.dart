@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 
 class LocationPickerScreen extends StatefulWidget {
-  const LocationPickerScreen({super.key});
+  final String initialLocation;
+
+  const LocationPickerScreen({
+    super.key,
+    this.initialLocation = '',
+  });
 
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -10,12 +15,15 @@ class LocationPickerScreen extends StatefulWidget {
 
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
   final TextEditingController _controller = TextEditingController();
-  String _selectedLocation = AppConstants.defaultLocation;
+  String _selectedLocation = '';
+  late List<String> _filteredLocations;
 
   @override
   void initState() {
     super.initState();
+    _selectedLocation = widget.initialLocation;
     _controller.text = _selectedLocation;
+    _filteredLocations = AppConstants.sahiwalLocations;
   }
 
   @override
@@ -52,12 +60,18 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               controller: _controller,
               decoration: const InputDecoration(
                 labelText: 'Delivery address',
+                hintText: 'Type a street, colony or landmark',
                 prefixIcon: Icon(Icons.location_on_outlined),
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) {
                 setState(() {
                   _selectedLocation = value;
+                  _filteredLocations = AppConstants.sahiwalLocations
+                      .where((address) => address
+                          .toLowerCase()
+                          .contains(value.toLowerCase()))
+                      .toList();
                 });
               },
             ),
@@ -70,20 +84,32 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: ListView(
-                children: AppConstants.sahiwalLocations.map((address) {
-                  return ListTile(
-                    leading: const Icon(Icons.location_city),
-                    title: Text(address),
-                    onTap: () {
-                      _controller.text = address;
-                      setState(() {
-                        _selectedLocation = address;
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
+              child: _filteredLocations.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No matching locations found.',
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    )
+                  : ListView(
+                      children: _filteredLocations.map((address) {
+                        return ListTile(
+                          leading: const Icon(Icons.location_city),
+                          title: Text(address),
+                          onTap: () {
+                            _controller.text = address;
+                            setState(() {
+                              _selectedLocation = address;
+                              _filteredLocations = AppConstants.sahiwalLocations
+                                  .where((item) => item
+                                      .toLowerCase()
+                                      .contains(address.toLowerCase()))
+                                  .toList();
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
             ),
             ElevatedButton.icon(
               onPressed: _selectedLocation.isEmpty

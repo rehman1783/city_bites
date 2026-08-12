@@ -33,11 +33,7 @@ class HomeHeaderBar extends StatelessWidget {
               showBorder: true,
             ),
             const SizedBox(width: 10),
-            Icon(
-              Icons.location_on,
-              color: theme.colorScheme.primary,
-              size: 20,
-            ),
+            Icon(Icons.location_on, color: theme.colorScheme.primary, size: 20),
             const SizedBox(width: 4),
             Expanded(
               child: InkWell(
@@ -48,25 +44,24 @@ class HomeHeaderBar extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Deliver to:',
-                        style: theme.textTheme.labelMedium,
-                      ),
+                      Text('Deliver to:', style: theme.textTheme.labelMedium),
                       Row(
                         children: [
                           Flexible(
                             child: Text(
-                              location,
+                              location.isEmpty
+                                  ? 'Select delivery location'
+                                  : location,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
+                                color: location.isEmpty
+                                    ? theme.colorScheme.onSurfaceVariant
+                                    : null,
                               ),
                             ),
                           ),
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 20,
-                          ),
+                          const Icon(Icons.keyboard_arrow_down, size: 20),
                         ],
                       ),
                     ],
@@ -106,10 +101,7 @@ class HomeHeaderBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: IconButton(
-                icon: const Icon(
-                  Icons.tune_rounded,
-                  color: Colors.white,
-                ),
+                icon: const Icon(Icons.tune_rounded, color: Colors.white),
                 onPressed: () {},
               ),
             ),

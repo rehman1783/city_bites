@@ -14,6 +14,8 @@ class AppConstants {
     'Faisal Hospital Area',
   ];
   static const String defaultLocation = 'Scheme 3, College Road, Sahiwal';
+  static const String locationPlaceholder = 'Select delivery location';
+  static const String locationKey = 'saved_delivery_location';
 
   // Currency
   static const String currency = 'Rs.';

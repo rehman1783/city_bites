@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/asset_paths.dart';
 
 abstract class HomeFeedState extends Equatable {
@@ -48,9 +50,10 @@ class HomeFeedError extends HomeFeedState {
 class HomeFeedBloc extends Cubit<HomeFeedState> {
   HomeFeedBloc() : super(HomeFeedLoading());
 
-  void fetchHomeData() {
+  Future<void> fetchHomeData() async {
     emit(HomeFeedLoading());
 
+    final savedLocation = await _loadSavedLocation();
     final dummyBanners = AssetPaths.promoBanners;
 
     final dummyCategories = [
@@ -103,7 +106,7 @@ class HomeFeedBloc extends Cubit<HomeFeedState> {
     ];
 
     emit(HomeFeedLoaded(
-      location: 'Scheme 3, Sahiwal',
+      location: savedLocation,
       selectedCategory: 'all',
       searchQuery: '',
       banners: dummyBanners,
@@ -143,6 +146,7 @@ class HomeFeedBloc extends Cubit<HomeFeedState> {
   void updateLocation(String newLoc) {
     if (state is HomeFeedLoaded) {
       final current = state as HomeFeedLoaded;
+      _saveLocation(newLoc);
       emit(HomeFeedLoaded(
         location: newLoc,
         selectedCategory: current.selectedCategory,
@@ -151,6 +155,24 @@ class HomeFeedBloc extends Cubit<HomeFeedState> {
         categories: current.categories,
         restaurants: current.restaurants,
       ));
+    }
+  }
+
+  Future<String> _loadSavedLocation() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(AppConstants.locationKey) ?? '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  Future<void> _saveLocation(String location) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(AppConstants.locationKey, location);
+    } catch (_) {
+      // Ignore storage failures and keep the app functional.
     }
   }
 }
