@@ -59,6 +59,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         SizedBox(
           height: fieldHeight,
           child: TextFormField(
+            textAlignVertical: TextAlignVertical.center,
             controller: widget.controller,
             obscureText: widget.isPassword ? _obscureText : false,
             keyboardType: widget.keyboardType,
@@ -71,7 +72,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 : theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               isDense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+              contentPadding: widget.maxLines != null && widget.maxLines! > 1
+                  ? const EdgeInsets.symmetric(horizontal: 12, vertical: 12)
+                  : const EdgeInsets.symmetric(horizontal: 12),
               hintText: widget.hintText,
               hintStyle: compact ? theme.textTheme.bodySmall : null,
               prefixIcon: widget.prefixIcon != null
