@@ -97,7 +97,7 @@ class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
     emit(
       RestaurantLoaded(
         restaurant: rest,
-        activeTab: 'All',
+        activeTab: 'all',
         menuItems: dummyItems,
         allMenuItems: dummyItems,
       ),
@@ -110,10 +110,16 @@ class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
       final sourceItems = current.allMenuItems.isNotEmpty
           ? current.allMenuItems
           : current.menuItems;
-      final filteredItems = cat == 'All'
+      final catLower = cat.toString().toLowerCase();
+      final filteredItems = catLower == 'all'
           ? List<Map<String, dynamic>>.from(sourceItems)
           : sourceItems
-                .where((item) => item['category'] == cat)
+                .where(
+                  (item) => (item['category'] ?? '')
+                      .toString()
+                      .toLowerCase()
+                      .contains(catLower),
+                )
                 .cast<Map<String, dynamic>>()
                 .toList();
 

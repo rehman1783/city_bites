@@ -124,40 +124,20 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                       child: Builder(
                         builder: (context) {
                           // Build a categories list from menu items, preserving display names
-                          final items = state.fullMenuItems;
-                          final seen = <String>{};
+                          // Use the same category palette as the Explore screen
                           final cats = <Map<String, String>>[
-                            {'id': 'All', 'name': 'All', 'icon': '🍽️'},
+                            {'id': 'all', 'name': 'All', 'icon': '🍽️'},
+                            {'id': 'biryani', 'name': 'Biryani', 'icon': '🍲'},
+                            {'id': 'burgers', 'name': 'Burgers', 'icon': '🍔'},
+                            {'id': 'pizza', 'name': 'Pizza', 'icon': '🍕'},
+                            {'id': 'karahi', 'name': 'Karahi', 'icon': '🥘'},
+                            {
+                              'id': 'desserts',
+                              'name': 'Desserts',
+                              'icon': '🍰',
+                            },
+                            {'id': 'drinks', 'name': 'Drinks', 'icon': '🥤'},
                           ];
-
-                          for (final it in items) {
-                            final catName = (it['category'] ?? '').toString();
-                            if (catName.isEmpty) continue;
-                            if (seen.add(catName)) {
-                              // crude icon mapping for common types
-                              String icon = '🍽️';
-                              final lower = catName.toLowerCase();
-                              if (lower.contains('pizza'))
-                                icon = '🍕';
-                              else if (lower.contains('burger') ||
-                                  lower.contains('zinger'))
-                                icon = '🍔';
-                              else if (lower.contains('biryani') ||
-                                  lower.contains('karahi'))
-                                icon = '🍲';
-                              else if (lower.contains('dessert') ||
-                                  lower.contains('brownie'))
-                                icon = '🍰';
-                              else if (lower.contains('drink'))
-                                icon = '🥤';
-
-                              cats.add({
-                                'id': catName,
-                                'name': catName,
-                                'icon': icon,
-                              });
-                            }
-                          }
 
                           return HomeCategorySelector(
                             categories: cats,

@@ -201,9 +201,13 @@ class _MainScreenState extends State<MainScreen> {
         }
 
         // We only handle double-back-to-exit when on main tabs (no overlays)
-        if (_selectedDish == null && _selectedRestaurant == null && !_isCheckingOut && _trackingOrderId == null) {
+        if (_selectedDish == null &&
+            _selectedRestaurant == null &&
+            !_isCheckingOut &&
+            _trackingOrderId == null) {
           final now = DateTime.now();
-          if (_lastBackPressed == null || now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
+          if (_lastBackPressed == null ||
+              now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
             _lastBackPressed = now;
             showAppSnackBar(context, 'Press back again to exit');
             return false;
@@ -218,48 +222,48 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: Scaffold(
         body: IndexedStack(index: _currentIndex, children: screens),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            _selectedRestaurant = null;
-            _selectedDish = null;
-            _isCheckingOut = false;
-            _trackingOrderId = null;
-          });
-        },
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurfaceVariant,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant_menu_outlined),
-            activeIcon: Icon(Icons.restaurant_menu),
-            label: 'Restaurants',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore_outlined),
-            activeIcon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
-            activeIcon: Icon(Icons.shopping_bag),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+              _selectedRestaurant = null;
+              _selectedDish = null;
+              _isCheckingOut = false;
+              _trackingOrderId = null;
+            });
+          },
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor: theme.colorScheme.onSurfaceVariant,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.restaurant_menu_outlined),
+              activeIcon: Icon(Icons.restaurant_menu),
+              label: 'Restaurants',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore_outlined),
+              activeIcon: Icon(Icons.explore),
+              label: 'Explore',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_outlined),
+              activeIcon: Icon(Icons.shopping_bag),
+              label: 'Cart',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 }
