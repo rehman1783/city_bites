@@ -177,7 +177,7 @@ class FoodDetailsScreen extends StatelessWidget {
                   ),
                 ),
 
-                // Bottom Sticky Bar: Quantity Stepper + Add to Cart CTA
+                // Bottom Sticky Bar: show quantity + price row, then action buttons
                 BlocBuilder<FoodDetailCubit, FoodDetailState>(
                   builder: (context, state) {
                     return Container(
@@ -192,23 +192,49 @@ class FoodDetailsScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          QuantityStepper(
-                            count: state.quantity,
-                            onChanged: (cnt) {
-                              context.read<FoodDetailCubit>().updateQuantity(
-                                cnt,
-                              );
-                            },
+                          // Top row: Quantity selector and price
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              QuantityStepper(
+                                count: state.quantity,
+                                onChanged: (cnt) {
+                                  context
+                                      .read<FoodDetailCubit>()
+                                      .updateQuantity(cnt);
+                                },
+                              ),
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primaryContainer,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  'PKR ${state.totalPrice.toInt()}',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CustomButton(
-                                  text: 'Buy Now — PKR ${state.totalPrice.toInt()}',
+                          const SizedBox(height: 12),
+
+                          // Action row: Buy Now and Add (no price in labels)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomButton(
+                                  text: 'Buy Now',
                                   icon: Icons.flash_on,
                                   onPressed: () {
                                     onBuyNow({
@@ -222,9 +248,11 @@ class FoodDetailsScreen extends StatelessWidget {
                                     });
                                   },
                                 ),
-                                const SizedBox(height: 10),
-                                CustomButton(
-                                  text: 'Add — PKR ${state.totalPrice.toInt()}',
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: CustomButton(
+                                  text: 'Add',
                                   icon: Icons.shopping_bag_outlined,
                                   type: CustomButtonType.secondary,
                                   onPressed: () {
@@ -239,8 +267,8 @@ class FoodDetailsScreen extends StatelessWidget {
                                     });
                                   },
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
