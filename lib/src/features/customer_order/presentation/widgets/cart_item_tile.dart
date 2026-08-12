@@ -93,49 +93,57 @@ class CartItemTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    QuantityStepper(
-                      count: item['quantity'] ?? 1,
-                      onChanged: onQuantityChanged,
-                      isCompact: isCompact,
-                    ),
-                    const SizedBox(height: 6),
-                    SizedBox(
-                      height: isCompact ? 30 : 36,
-                      child: OutlinedButton.icon(
-                        onPressed: onDismissed,
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: theme.colorScheme.error.withAlpha(230),
-                          ),
-                          foregroundColor: theme.colorScheme.error,
-                          backgroundColor: theme.colorScheme.error.withAlpha(20),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isCompact ? 8 : 10,
-                            vertical: isCompact ? 4 : 6,
-                          ),
-                          minimumSize: const Size(0, 0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          visualDensity: VisualDensity.compact,
-                        ),
-                        icon: Icon(
-                          Icons.delete_outline,
-                          size: isCompact ? 14 : 16,
-                          color: theme.colorScheme.error,
-                        ),
-                        label: Text(
-                          'Remove',
-                          style: theme.textTheme.labelSmall
-                              ?.copyWith(color: theme.colorScheme.error),
+                Builder(builder: (context) {
+                  final controlWidth = isCompact ? 72.0 : 88.0;
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: controlWidth,
+                        child: QuantityStepper(
+                          count: item['quantity'] ?? 1,
+                          onChanged: onQuantityChanged,
+                          isCompact: isCompact,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(height: 6),
+                      SizedBox(
+                        width: controlWidth,
+                        height: isCompact ? 30 : 36,
+                        child: OutlinedButton.icon(
+                          onPressed: onDismissed,
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: theme.colorScheme.error.withAlpha(230),
+                            ),
+                            foregroundColor: theme.colorScheme.error,
+                            backgroundColor:
+                                theme.colorScheme.error.withAlpha(20),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isCompact ? 6 : 8,
+                              vertical: isCompact ? 4 : 6,
+                            ),
+                            minimumSize: const Size(0, 0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          icon: Icon(
+                            Icons.delete_outline,
+                            size: isCompact ? 14 : 16,
+                            color: theme.colorScheme.error,
+                          ),
+                          label: Text(
+                            'Remove',
+                            style: theme.textTheme.labelSmall
+                                ?.copyWith(color: theme.colorScheme.error),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ],
             ),
           );
