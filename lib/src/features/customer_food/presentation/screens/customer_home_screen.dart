@@ -1,3 +1,4 @@
+import 'package:city_bites/src/features/customer_food/presentation/screens/location_picker_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/widgets/banner_carousel.dart';
 import 'package:city_bites/src/features/customer_food/presentation/widgets/featured_restaurants_section.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +104,19 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         HomeHeaderBar(
                           location: state.location,
                           onOpenCart: widget.onOpenCart,
+                          onLocationTap: () async {
+                            final newLocation = await Navigator.of(context)
+                                .push<String?>(
+                              MaterialPageRoute(
+                                builder: (_) => const LocationPickerScreen(),
+                              ),
+                            );
+                            if (newLocation != null && newLocation.isNotEmpty) {
+                              context.read<HomeFeedBloc>().updateLocation(
+                                    newLocation,
+                                  );
+                            }
+                          },
                           onSearchChanged: (query) {
                             context.read<HomeFeedBloc>().updateSearchQuery(
                               query,

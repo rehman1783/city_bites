@@ -5,12 +5,14 @@ import '../../../../core/widgets/custom_textfield.dart';
 class HomeHeaderBar extends StatelessWidget {
   final String location;
   final VoidCallback onOpenCart;
+  final VoidCallback onLocationTap;
   final ValueChanged<String> onSearchChanged;
 
   const HomeHeaderBar({
     super.key,
     required this.location,
     required this.onOpenCart,
+    required this.onLocationTap,
     required this.onSearchChanged,
   });
 
@@ -38,31 +40,38 @@ class HomeHeaderBar extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Deliver to:',
-                    style: theme.textTheme.labelMedium,
-                  ),
-                  Row(
+              child: InkWell(
+                onTap: onLocationTap,
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                        child: Text(
-                          location,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      Text(
+                        'Deliver to:',
+                        style: theme.textTheme.labelMedium,
                       ),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 20,
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              location,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 20,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
             IconButton(

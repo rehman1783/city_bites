@@ -94,12 +94,14 @@ class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
       },
     ];
 
-    emit(RestaurantLoaded(
-      restaurant: rest,
-      activeTab: 'All',
-      menuItems: dummyItems,
-      allMenuItems: dummyItems,
-    ));
+    emit(
+      RestaurantLoaded(
+        restaurant: rest,
+        activeTab: 'All',
+        menuItems: dummyItems,
+        allMenuItems: dummyItems,
+      ),
+    );
   }
 
   void filterByCategory(String cat) {
@@ -111,16 +113,18 @@ class RestaurantDetailBloc extends Cubit<RestaurantDetailState> {
       final filteredItems = cat == 'All'
           ? List<Map<String, dynamic>>.from(sourceItems)
           : sourceItems
-              .where((item) => item['category'] == cat)
-              .cast<Map<String, dynamic>>()
-              .toList();
+                .where((item) => item['category'] == cat)
+                .cast<Map<String, dynamic>>()
+                .toList();
 
-      emit(RestaurantLoaded(
-        restaurant: current.restaurant,
-        activeTab: cat,
-        menuItems: filteredItems,
-        allMenuItems: List<Map<String, dynamic>>.from(sourceItems),
-      ));
+      emit(
+        RestaurantLoaded(
+          restaurant: current.restaurant,
+          activeTab: cat,
+          menuItems: filteredItems,
+          allMenuItems: List<Map<String, dynamic>>.from(sourceItems),
+        ),
+      );
     }
   }
 }

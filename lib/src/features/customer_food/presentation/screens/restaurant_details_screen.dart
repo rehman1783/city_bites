@@ -104,36 +104,37 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: [
-                            'All',
-                            'Popular',
-                            'Deals',
-                            'Fast Food',
-                            'Drinks & Desserts'
-                          ].map((cat) {
-                            final isSelected = state.activeTab == cat;
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: FilterChip(
-                                label: Text(cat),
-                                selected: isSelected,
-                                onSelected: (_) {
-                                  context
-                                      .read<RestaurantDetailBloc>()
-                                      .filterByCategory(cat);
-                                },
-                                selectedColor: theme.colorScheme.primary,
-                                labelStyle: TextStyle(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : theme.colorScheme.onSurface,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                          children:
+                              [
+                                'All',
+                                'Popular',
+                                'Deals',
+                                'Fast Food',
+                                'Drinks & Desserts',
+                              ].map((cat) {
+                                final isSelected = state.activeTab == cat;
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: FilterChip(
+                                    label: Text(cat),
+                                    selected: isSelected,
+                                    onSelected: (_) {
+                                      context
+                                          .read<RestaurantDetailBloc>()
+                                          .filterByCategory(cat);
+                                    },
+                                    selectedColor: theme.colorScheme.primary,
+                                    labelStyle: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : theme.colorScheme.onSurface,
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                         ),
                       ),
                     ),
@@ -145,20 +146,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final dish = state.menuItems[index];
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final dish = state.menuItems[index];
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: DishMenuItemTile(
-                              dish: dish,
-                              onSelectDish: () => widget.onSelectDish(dish),
-                            ),
-                          );
-                        },
-                        childCount: state.menuItems.length,
-                      ),
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: DishMenuItemTile(
+                            dish: dish,
+                            onSelectDish: () => widget.onSelectDish(dish),
+                          ),
+                        );
+                      }, childCount: state.menuItems.length),
                     ),
                   ),
                   const SliverToBoxAdapter(child: SizedBox(height: 32)),
