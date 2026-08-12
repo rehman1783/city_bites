@@ -161,10 +161,15 @@ class FoodDetailsScreen extends StatelessWidget {
 
                                   // Special Instructions Field
                                   CustomTextField(
+                                    
                                     labelText: 'Special Instructions',
                                     hintText:
                                         'E.g. Make it less spicy, extra mint raita',
+                                    height: 60,
+                                    maxLines: 2,
+                                    keyboardType: TextInputType.multiline,
                                     onChanged: cubit.updateSpecialInstructions,
+                                 
                                   ),
                                   const SizedBox(height: 24),
                                 ],
