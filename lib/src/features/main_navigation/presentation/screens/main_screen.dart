@@ -71,6 +71,12 @@ class _MainScreenState extends State<MainScreen> {
             _currentIndex = 1; // Navigate to cart
           });
         },
+        onBuyNow: (item) {
+          setState(() {
+            _selectedDish = null;
+            _isCheckingOut = true;
+          });
+        },
       );
     }
 

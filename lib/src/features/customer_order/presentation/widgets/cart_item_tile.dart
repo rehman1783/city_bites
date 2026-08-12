@@ -5,6 +5,7 @@ import '../../../../core/widgets/quantity_stepper.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/food_details_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
+import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
 
 class CartItemTile extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -65,6 +66,21 @@ class CartItemTile extends StatelessWidget {
                         context.read<CartBloc>().addItem(newItem);
                       } catch (_) {}
                       Navigator.of(context).pop();
+                    },
+                    onBuyNow: (newItem) {
+                      try {
+                        context.read<CartBloc>().addItem(newItem);
+                      } catch (_) {}
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => CustomerCheckoutScreen(
+                            onOrderPlaced: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ),

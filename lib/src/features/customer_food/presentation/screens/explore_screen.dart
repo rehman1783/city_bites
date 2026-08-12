@@ -237,14 +237,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           ),
                         ],
                       ),
+                      // const SizedBox(height: 24),
+                      // BannerCarousel(
+                      //   restaurants: state.restaurants,
+                      //   onSelectRestaurant: widget.onSelectRestaurant,
+                      // ),
                       const SizedBox(height: 24),
-                      BannerCarousel(
-                        restaurants: state.restaurants,
-                        onSelectRestaurant: widget.onSelectRestaurant,
-                      ),
-                      const SizedBox(height: 24),
-                      Text('Products', style: theme.textTheme.headlineMedium),
-                      const SizedBox(height: 14),
+                      // Text('Products', style: theme.textTheme.headlineMedium),
+                      // const SizedBox(height: 14),
                       HomeCategorySelector(
                         categories: state.categories,
                         selectedCategory: state.selectedCategory,

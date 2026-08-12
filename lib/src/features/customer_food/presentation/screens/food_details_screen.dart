@@ -14,12 +14,14 @@ class FoodDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> dish;
   final VoidCallback onBack;
   final Function(Map<String, dynamic> item) onAddToCart;
+  final Function(Map<String, dynamic> item) onBuyNow;
 
   const FoodDetailsScreen({
     super.key,
     required this.dish,
     required this.onBack,
     required this.onAddToCart,
+    required this.onBuyNow,
   });
 
   @override
@@ -202,20 +204,42 @@ class FoodDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(width: 16),
                           Expanded(
-                            child: CustomButton(
-                              text: 'Add — PKR ${state.totalPrice.toInt()}',
-                              icon: Icons.shopping_bag_outlined,
-                              onPressed: () {
-                                onAddToCart({
-                                  'id': sanitizedDish['id'],
-                                  'name': sanitizedDish['name'],
-                                  'price': state.unitPrice,
-                                  'quantity': state.quantity,
-                                  'portion': state.selectedPortion,
-                                  'addons': state.selectedAddons.toList(),
-                                  'image': sanitizedDish['image'],
-                                });
-                              },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomButton(
+                                  text: 'Buy Now — PKR ${state.totalPrice.toInt()}',
+                                  icon: Icons.flash_on,
+                                  onPressed: () {
+                                    onBuyNow({
+                                      'id': sanitizedDish['id'],
+                                      'name': sanitizedDish['name'],
+                                      'price': state.unitPrice,
+                                      'quantity': state.quantity,
+                                      'portion': state.selectedPortion,
+                                      'addons': state.selectedAddons.toList(),
+                                      'image': sanitizedDish['image'],
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                CustomButton(
+                                  text: 'Add — PKR ${state.totalPrice.toInt()}',
+                                  icon: Icons.shopping_bag_outlined,
+                                  type: CustomButtonType.secondary,
+                                  onPressed: () {
+                                    onAddToCart({
+                                      'id': sanitizedDish['id'],
+                                      'name': sanitizedDish['name'],
+                                      'price': state.unitPrice,
+                                      'quantity': state.quantity,
+                                      'portion': state.selectedPortion,
+                                      'addons': state.selectedAddons.toList(),
+                                      'image': sanitizedDish['image'],
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ],
