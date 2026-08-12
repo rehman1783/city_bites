@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/customer_home_screen.dart';
+import 'package:city_bites/src/features/customer_food/presentation/screens/restaurants_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/explore_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/food_details_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/restaurant_details_screen.dart';
@@ -111,8 +112,8 @@ class _MainScreenState extends State<MainScreen> {
         },
       ),
 
-      // Restaurants tab: reuse the Home screen restaurant listing
-      CustomerHomeScreen(
+      // Restaurants tab: dedicated RestaurantsScreen (no header/banner/categories)
+      RestaurantsScreen(
         onSelectRestaurant: (rest) {
           setState(() {
             _selectedRestaurant = rest;
