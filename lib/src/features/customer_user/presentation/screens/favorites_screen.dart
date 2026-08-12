@@ -288,6 +288,46 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                                 },
                                               ),
                                         ),
+                                        // Delivery time overlay
+                                        Positioned(
+                                          bottom: 6,
+                                          left: 6,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 3,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black.withAlpha(
+                                                190,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(
+                                                  Icons
+                                                      .access_time_filled_rounded,
+                                                  color: Colors.white,
+                                                  size: 12,
+                                                ),
+                                                const SizedBox(width: 6),
+                                                Text(
+                                                  r['deliveryTime'] ??
+                                                      r['delivery_time'] ??
+                                                      '',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

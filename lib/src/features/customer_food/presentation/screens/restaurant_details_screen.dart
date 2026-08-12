@@ -77,11 +77,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 child: IconButton(
                                   icon: Icon(
                                     isFav
-                                        ? Icons.bookmark_rounded
-                                        : Icons.bookmark_border_rounded,
-                                    color: isFav
-                                        ? theme.colorScheme.primary
-                                        : Colors.white,
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: isFav ? Colors.red : Colors.white,
                                   ),
                                   onPressed: () async {
                                     await FavoritesService.instance

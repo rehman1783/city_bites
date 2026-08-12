@@ -70,7 +70,22 @@ class FavoritesService {
           .where((e) => (e['id']?.toString() ?? '') != id)
           .toList();
     } else {
-      restaurants.value = [...restaurants.value, item];
+      // Normalize restaurant fields so favorites always have consistent data
+      final normalized = <String, dynamic>{
+        'id': id,
+        'name': item['name'] ?? item['title'] ?? '',
+        'rating': item['rating'] ?? 0,
+        'image': item['image'] ?? item['photo'] ?? '',
+        'deliveryTime':
+            item['deliveryTime'] ??
+            item['delivery_time'] ??
+            item['delivery'] ??
+            '',
+        'branch': item['branch'] ?? item['location'] ?? item['address'] ?? '',
+        'location': item['location'] ?? item['branch'] ?? item['address'] ?? '',
+        'deliveryFee': item['deliveryFee'] ?? item['delivery_fee'] ?? 0,
+      };
+      restaurants.value = [...restaurants.value, normalized];
     }
     await _saveRestaurants();
   }
