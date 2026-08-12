@@ -39,13 +39,14 @@ class CartItemTile extends StatelessWidget {
       child: CustomCard(
         padding: const EdgeInsets.all(12),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
               child: NetworkImageLoader(
                 imageUrl: item['image'] ?? '',
-                width: 70,
-                height: 70,
+                width: 72,
+                height: 72,
                 fit: BoxFit.cover,
               ),
             ),
@@ -53,21 +54,28 @@ class CartItemTile extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     item['name'] ?? '',
+                    softWrap: true,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
+                      height: 1.25,
                     ),
                   ),
                   if (addons.isNotEmpty) ...[
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     Text(
                       'Addons: ${addons.join(", ")}',
-                      maxLines: 1,
+                      softWrap: true,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant.withAlpha(200),
+                      ),
                     ),
                   ],
                   const SizedBox(height: 6),
@@ -81,6 +89,7 @@ class CartItemTile extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             QuantityStepper(
               count: item['quantity'] ?? 1,
               onChanged: onQuantityChanged,

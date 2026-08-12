@@ -145,7 +145,9 @@ class FeaturedRestaurantsSection extends StatelessWidget {
                             right: 8,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.black.withAlpha(190),
                                 borderRadius: BorderRadius.circular(12),
@@ -153,8 +155,11 @@ class FeaturedRestaurantsSection extends StatelessWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.star_rounded,
-                                      color: AppColors.ratingGold, size: 14),
+                                  const Icon(
+                                    Icons.star_rounded,
+                                    color: AppColors.ratingGold,
+                                    size: 14,
+                                  ),
                                   const SizedBox(width: 2),
                                   Text(
                                     '${item['rating']}',
@@ -173,7 +178,9 @@ class FeaturedRestaurantsSection extends StatelessWidget {
                             left: 8,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 3),
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.primary,
                                 borderRadius: BorderRadius.circular(8),

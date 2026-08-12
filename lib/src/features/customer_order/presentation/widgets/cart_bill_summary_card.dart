@@ -101,8 +101,16 @@ class CartBillSummaryCard extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(label, style: style),
+        Expanded(
+          child: Text(
+            label,
+            style: style,
+            softWrap: true,
+          ),
+        ),
+        const SizedBox(width: 10),
         Text(value, style: valStyle),
       ],
     );
