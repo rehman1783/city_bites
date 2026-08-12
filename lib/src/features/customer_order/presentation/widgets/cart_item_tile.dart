@@ -55,18 +55,20 @@ class CartItemTile extends StatelessWidget {
                 'isSpicy': item['isSpicy'] ?? false,
               };
 
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => FoodDetailsScreen(
-                  dish: sanitized,
-                  onBack: () => Navigator.of(context).pop(),
-                  onAddToCart: (newItem) {
-                    try {
-                      context.read<CartBloc>().addItem(newItem);
-                    } catch (_) {}
-                    Navigator.of(context).pop();
-                  },
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => FoodDetailsScreen(
+                    dish: sanitized,
+                    onBack: () => Navigator.of(context).pop(),
+                    onAddToCart: (newItem) {
+                      try {
+                        context.read<CartBloc>().addItem(newItem);
+                      } catch (_) {}
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-              ));
+              );
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,7 +142,9 @@ class CartItemTile extends StatelessWidget {
                             color: theme.colorScheme.error.withAlpha(230),
                           ),
                           foregroundColor: theme.colorScheme.error,
-                          backgroundColor: theme.colorScheme.error.withAlpha(20),
+                          backgroundColor: theme.colorScheme.error.withAlpha(
+                            20,
+                          ),
                           padding: EdgeInsets.symmetric(
                             horizontal: isCompact ? 8 : 10,
                             vertical: isCompact ? 4 : 6,
@@ -158,8 +162,9 @@ class CartItemTile extends StatelessWidget {
                         ),
                         label: Text(
                           'Remove',
-                          style: theme.textTheme.labelSmall
-                              ?.copyWith(color: theme.colorScheme.error),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
                         ),
                       ),
                     ),

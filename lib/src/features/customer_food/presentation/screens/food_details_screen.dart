@@ -71,7 +71,9 @@ class FoodDetailsScreen extends StatelessWidget {
                                   top: 12,
                                   left: 12,
                                   child: CircleAvatar(
-                                    backgroundColor: Colors.black.withAlpha(120),
+                                    backgroundColor: Colors.black.withAlpha(
+                                      120,
+                                    ),
                                     child: IconButton(
                                       icon: const Icon(
                                         Icons.arrow_back,
@@ -86,7 +88,9 @@ class FoodDetailsScreen extends StatelessWidget {
                             const SizedBox(height: 16),
 
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -99,26 +103,31 @@ class FoodDetailsScreen extends StatelessWidget {
                                           sanitizedDish['name'],
                                           style: theme.textTheme.headlineMedium
                                               ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 6),
+                                          horizontal: 12,
+                                          vertical: 6,
+                                        ),
                                         decoration: BoxDecoration(
-                                          color:
-                                              theme.colorScheme.primaryContainer,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          color: theme
+                                              .colorScheme
+                                              .primaryContainer,
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                         child: Text(
                                           'PKR ${state.unitPrice.toInt()}',
                                           style: theme.textTheme.titleMedium
                                               ?.copyWith(
-                                            color: theme.colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                                color:
+                                                    theme.colorScheme.primary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ),
                                     ],
@@ -186,9 +195,9 @@ class FoodDetailsScreen extends StatelessWidget {
                           QuantityStepper(
                             count: state.quantity,
                             onChanged: (cnt) {
-                              context
-                                  .read<FoodDetailCubit>()
-                                  .updateQuantity(cnt);
+                              context.read<FoodDetailCubit>().updateQuantity(
+                                cnt,
+                              );
                             },
                           ),
                           const SizedBox(width: 16),
