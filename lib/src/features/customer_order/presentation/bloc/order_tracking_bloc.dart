@@ -15,6 +15,7 @@ class TrackingUpdated extends OrderTrackingState {
   final String restaurantName;
   final String riderName;
   final String riderPhone;
+  final String destination;
   final String eta;
 
   const TrackingUpdated({
@@ -23,6 +24,7 @@ class TrackingUpdated extends OrderTrackingState {
     required this.restaurantName,
     required this.riderName,
     required this.riderPhone,
+    required this.destination,
     required this.eta,
   });
 
@@ -33,6 +35,7 @@ class TrackingUpdated extends OrderTrackingState {
         restaurantName,
         riderName,
         riderPhone,
+        destination,
         eta,
       ];
 }
@@ -53,6 +56,7 @@ extension DummyTracking on OrderTrackingState {
       restaurantName: 'Royal Taj Restaurant & Bakers',
       riderName: 'Muhammad Ali (Sahiwal Express Rider)',
       riderPhone: '+92 300 9876543',
+      destination: 'Scheme 3, College Road, Sahiwal',
       eta: '12-18 mins',
     );
   }

@@ -139,9 +139,10 @@ class _CustomerOrderTrackingScreenState
                                   children: [
                                     Text(
                                       'Order #${state.orderId}',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: theme.textTheme.headlineMedium
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      overflow: TextOverflow.visible,
+                                      style: theme.textTheme.titleLarge
                                           ?.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -149,8 +150,8 @@ class _CustomerOrderTrackingScreenState
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      'Destination: Scheme 3, College Road',
-                                      maxLines: 1,
+                                      'Destination: ${state.destination}',
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: Colors.white.withAlpha(200),
