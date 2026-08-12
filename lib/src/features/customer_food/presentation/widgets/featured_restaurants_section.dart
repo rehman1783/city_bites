@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/services/favorites_service.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 
 class FeaturedRestaurantsSection extends StatelessWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
@@ -145,42 +146,46 @@ class FeaturedRestaurantsSection extends StatelessWidget {
                           Positioned(
                             top: 8,
                             left: 8,
-                            child:
-                                ValueListenableBuilder<
-                                  List<Map<String, dynamic>>
-                                >(
-                                  valueListenable:
-                                      FavoritesService.instance.restaurants,
-                                  builder: (context, value, _) {
-                                    final isFav = value.any(
-                                      (e) =>
-                                          (e['id']?.toString() ?? '') ==
-                                          (item['id']?.toString() ?? ''),
-                                    );
-                                    return GestureDetector(
-                                      onTap: () async {
-                                        await FavoritesService.instance
-                                            .toggleRestaurant(item);
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.9),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          isFav
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: isFav
-                                              ? Colors.red
-                                              : Colors.black54,
-                                          size: 18,
-                                        ),
-                                      ),
+                            child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+                              valueListenable:
+                                  FavoritesService.instance.restaurants,
+                              builder: (context, value, _) {
+                                final isFav = value.any(
+                                  (e) =>
+                                      (e['id']?.toString() ?? '') ==
+                                      (item['id']?.toString() ?? ''),
+                                );
+                                return GestureDetector(
+                                  onTap: () async {
+                                    final added = await FavoritesService
+                                        .instance
+                                        .toggleRestaurant(item);
+                                    showAppSnackBar(
+                                      context,
+                                      added
+                                          ? '${item['name']} added to favorites'
+                                          : '${item['name']} removed from favorites',
                                     );
                                   },
-                                ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.9),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      isFav
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: isFav
+                                          ? Colors.red
+                                          : Colors.black54,
+                                      size: 18,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           Positioned(
                             top: 8,

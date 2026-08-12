@@ -1,5 +1,6 @@
 import 'package:city_bites/src/core/widgets/image_loader.dart';
 import 'package:city_bites/src/core/services/favorites_service.dart';
+import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/responsive_wrapper.dart';
@@ -82,9 +83,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     color: isFav ? Colors.red : Colors.white,
                                   ),
                                   onPressed: () async {
-                                    await FavoritesService.instance
+                                    final added = await FavoritesService
+                                        .instance
                                         .toggleRestaurant(widget.restaurant);
                                     setState(() {});
+                                    showAppSnackBar(
+                                      context,
+                                      added
+                                          ? '${widget.restaurant['name']} added to favorites'
+                                          : '${widget.restaurant['name']} removed from favorites',
+                                    );
                                   },
                                 ),
                               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/services/favorites_service.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 import '../../../../core/widgets/rating_badge.dart';
 
 class RestaurantCardTile extends StatelessWidget {
@@ -63,8 +64,13 @@ class RestaurantCardTile extends StatelessWidget {
                     );
                     return GestureDetector(
                       onTap: () async {
-                        await FavoritesService.instance.toggleRestaurant(
-                          restaurant,
+                        final added = await FavoritesService.instance
+                            .toggleRestaurant(restaurant);
+                        showAppSnackBar(
+                          context,
+                          added
+                              ? '${restaurant['name']} added to favorites'
+                              : '${restaurant['name']} removed from favorites',
                         );
                       },
                       child: Container(

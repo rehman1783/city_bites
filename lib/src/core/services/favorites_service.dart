@@ -49,7 +49,7 @@ class FavoritesService {
     return restaurants.value.any((e) => (e['id'] ?? '') == id);
   }
 
-  Future<void> toggleProduct(Map<String, dynamic> item) async {
+  Future<bool> toggleProduct(Map<String, dynamic> item) async {
     final id = item['id']?.toString() ?? '';
     final exists = isProductFavorite(id);
     if (exists) {
@@ -60,9 +60,10 @@ class FavoritesService {
       products.value = [...products.value, item];
     }
     await _saveProducts();
+    return !exists; // true if newly added
   }
 
-  Future<void> toggleRestaurant(Map<String, dynamic> item) async {
+  Future<bool> toggleRestaurant(Map<String, dynamic> item) async {
     final id = item['id']?.toString() ?? '';
     final exists = isRestaurantFavorite(id);
     if (exists) {
@@ -88,5 +89,6 @@ class FavoritesService {
       restaurants.value = [...restaurants.value, normalized];
     }
     await _saveRestaurants();
+    return !exists;
   }
 }

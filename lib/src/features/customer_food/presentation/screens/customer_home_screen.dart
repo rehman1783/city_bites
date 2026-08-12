@@ -14,6 +14,7 @@ import '../widgets/dish_menu_item_tile.dart';
 import 'food_details_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
+import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
 import 'package:city_bites/src/core/constants/asset_paths.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -43,14 +44,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     },
     {
       'id': 'tp_2',
-      'name': 'Crispy Zinger Burger',
-      'description': 'Crispy chicken sandwich with fresh lettuce and sauce.',
-      'price': 380.0,
-      'image': AssetPaths.zingerBurger,
-      'isSpicy': false,
-    },
-    {
-      'id': 'tp_3',
       'name': 'Chocolate Brownie',
       'description': 'Warm chocolate brownie with dark chocolate drizzle.',
       'price': 250.0,
@@ -289,14 +282,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                                                 '',
                                                           });
                                                       Navigator.pop(context);
-                                                      ScaffoldMessenger.of(
+                                                      showAppSnackBar(
                                                         context,
-                                                      ).showSnackBar(
-                                                        SnackBar(
-                                                          content: Text(
-                                                            '${product['name']} added to cart',
-                                                          ),
-                                                        ),
+                                                        '${product['name']} added to cart',
                                                       );
                                                     },
                                                     child: const Text(

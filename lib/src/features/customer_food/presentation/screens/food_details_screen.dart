@@ -5,6 +5,7 @@ import 'package:city_bites/src/core/widgets/quantity_stepper.dart';
 import 'package:city_bites/src/features/customer_food/presentation/bloc/food_detail_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:city_bites/src/core/services/favorites_service.dart';
+import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/widgets/responsive_wrapper.dart';
@@ -116,10 +117,18 @@ class FoodDetailsScreen extends StatelessWidget {
                                                     : Colors.white,
                                               ),
                                               onPressed: () async {
-                                                await FavoritesService.instance
-                                                    .toggleProduct(
-                                                      sanitizedDish,
-                                                    );
+                                                final added =
+                                                    await FavoritesService
+                                                        .instance
+                                                        .toggleProduct(
+                                                          sanitizedDish,
+                                                        );
+                                                showAppSnackBar(
+                                                  context,
+                                                  added
+                                                      ? '${sanitizedDish['name']} added to favorites'
+                                                      : '${sanitizedDish['name']} removed from favorites',
+                                                );
                                               },
                                             ),
                                           );

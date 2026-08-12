@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/services/favorites_service.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 
 class DishMenuItemTile extends StatelessWidget {
   final Map<String, dynamic> dish;
@@ -123,7 +124,14 @@ class DishMenuItemTile extends StatelessWidget {
                       );
                       return GestureDetector(
                         onTap: () async {
-                          await FavoritesService.instance.toggleProduct(dish);
+                          final added = await FavoritesService.instance
+                              .toggleProduct(dish);
+                          showAppSnackBar(
+                            context,
+                            added
+                                ? '${dish['name']} added to favorites'
+                                : '${dish['name']} removed from favorites',
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(6),

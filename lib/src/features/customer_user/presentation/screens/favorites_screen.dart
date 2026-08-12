@@ -8,6 +8,7 @@ import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bl
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:city_bites/src/core/widgets/custom_card.dart';
 import 'package:city_bites/src/core/widgets/image_loader.dart';
+import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -132,6 +133,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               'addons': [],
                               'image': sanitized['image'],
                             });
+                            showAppSnackBar(
+                              context,
+                              '${sanitized['name']} added to cart',
+                            );
                           },
                           onSelectDish: () {},
                         ),
@@ -258,10 +263,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                                   );
                                                   return GestureDetector(
                                                     onTap: () async {
-                                                      await FavoritesService
-                                                          .instance
-                                                          .toggleRestaurant(r);
+                                                      final added =
+                                                          await FavoritesService
+                                                              .instance
+                                                              .toggleRestaurant(
+                                                                r,
+                                                              );
                                                       setState(() {});
+                                                      showAppSnackBar(
+                                                        context,
+                                                        added
+                                                            ? '${r['name']} added to favorites'
+                                                            : '${r['name']} removed from favorites',
+                                                      );
                                                     },
                                                     child: Container(
                                                       padding:
