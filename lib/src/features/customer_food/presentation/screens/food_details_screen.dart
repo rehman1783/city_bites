@@ -26,8 +26,17 @@ class FoodDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final sanitizedDish = {
+      'id': dish['id'] ?? '',
+      'name': dish['name'] ?? '',
+      'description': dish['description'] ?? '',
+      'price': dish['price'] ?? 0.0,
+      'image': dish['image'] ?? '',
+      'isSpicy': dish['isSpicy'] ?? false,
+    };
+
     return BlocProvider(
-      create: (context) => FoodDetailCubit(dish),
+      create: (context) => FoodDetailCubit(sanitizedDish),
       child: Scaffold(
         body: SafeArea(
           child: ResponsiveWrapper(
@@ -52,7 +61,7 @@ class FoodDetailsScreen extends StatelessWidget {
                                     bottom: Radius.circular(24),
                                   ),
                                   child: NetworkImageLoader(
-                                    imageUrl: dish['image'],
+                                    imageUrl: sanitizedDish['image'],
                                     height: 240,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
@@ -87,7 +96,7 @@ class FoodDetailsScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          dish['name'],
+                                          sanitizedDish['name'],
                                           style: theme.textTheme.headlineMedium
                                               ?.copyWith(
                                             fontWeight: FontWeight.bold,
@@ -116,7 +125,7 @@ class FoodDetailsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    dish['description'],
+                                    sanitizedDish['description'],
                                     style: theme.textTheme.bodyLarge?.copyWith(
                                       color: theme.colorScheme.onSurfaceVariant,
                                     ),
@@ -189,13 +198,13 @@ class FoodDetailsScreen extends StatelessWidget {
                               icon: Icons.shopping_bag_outlined,
                               onPressed: () {
                                 onAddToCart({
-                                  'id': dish['id'],
-                                  'name': dish['name'],
+                                  'id': sanitizedDish['id'],
+                                  'name': sanitizedDish['name'],
                                   'price': state.unitPrice,
                                   'quantity': state.quantity,
                                   'portion': state.selectedPortion,
                                   'addons': state.selectedAddons.toList(),
-                                  'image': dish['image'],
+                                  'image': sanitizedDish['image'],
                                 });
                               },
                             ),

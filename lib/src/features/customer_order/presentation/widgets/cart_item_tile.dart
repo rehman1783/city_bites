@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
 import '../../../../core/widgets/quantity_stepper.dart';
+import 'package:city_bites/src/features/customer_food/presentation/screens/food_details_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
 
 class CartItemTile extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -39,6 +42,32 @@ class CartItemTile extends StatelessWidget {
 
           return CustomCard(
             padding: const EdgeInsets.all(12),
+            onTap: () {
+              final sanitized = {
+                'id': item['id'] ?? '',
+                'name': item['name'] ?? '',
+                'description': item['description'] ?? '',
+                'price': item['price'] ?? 0.0,
+                'quantity': item['quantity'] ?? 1,
+                'portion': item['portion'] ?? 'Single',
+                'addons': item['addons'] ?? [],
+                'image': item['image'] ?? '',
+                'isSpicy': item['isSpicy'] ?? false,
+              };
+
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => FoodDetailsScreen(
+                  dish: sanitized,
+                  onBack: () => Navigator.of(context).pop(),
+                  onAddToCart: (newItem) {
+                    try {
+                      context.read<CartBloc>().addItem(newItem);
+                    } catch (_) {}
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ));
+            },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

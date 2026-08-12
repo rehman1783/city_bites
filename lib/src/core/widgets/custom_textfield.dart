@@ -63,7 +63,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             validator: widget.validator,
             onChanged: widget.onChanged,
             focusNode: widget.focusNode,
-            style: compact ? theme.textTheme.bodySmall : theme.textTheme.bodyLarge,
+            style: compact
+                ? theme.textTheme.bodySmall
+                : theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(horizontal: 12),
