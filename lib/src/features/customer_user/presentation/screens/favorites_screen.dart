@@ -19,6 +19,42 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
   int _selected = 0; // 0 = products, 1 = restaurants
 
+  Widget _buildSegmentItem({required String label, required int index}) {
+    final theme = Theme.of(context);
+    final isSelected = _selected == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _selected = index),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? theme.colorScheme.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(50.0),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withAlpha(60),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : [],
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final favSvc = FavoritesService.instance;
@@ -30,64 +66,20 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _selected = 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Products',
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: _selected == 0
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          height: 4,
-                          color: _selected == 0
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _selected = 1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Restaurants',
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: _selected == 1
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          height: 4,
-                          color: _selected == 1
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            // Segmented control matching the auth screen's RoleToggleButton
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildSegmentItem(label: 'Products', index: 0),
+                  _buildSegmentItem(label: 'Restaurants', index: 1),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
 

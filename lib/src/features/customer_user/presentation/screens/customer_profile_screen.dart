@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/profile_user_header_card.dart';
 import 'favorites_screen.dart';
+import 'package:city_bites/src/features/customer_order/presentation/screens/order_history_screen.dart';
+import 'package:city_bites/src/features/customer_order/presentation/screens/order_status_screen.dart';
 
 class CustomerProfileScreen extends StatelessWidget {
   final VoidCallback onNavigateToOrders;
@@ -63,17 +65,43 @@ class CustomerProfileScreen extends StatelessWidget {
                           ListTile(
                             leading: _buildIconContainer(
                               theme,
-                              icon: Icons.receipt_long_rounded,
+                              icon: Icons.history_rounded,
                             ),
-                            title: const Text('Order History & Status'),
+                            title: const Text('Order History'),
                             subtitle: const Text(
-                              'Track active orders & past receipts',
+                              'View past receipts and orders',
                             ),
                             trailing: const Icon(
                               Icons.arrow_forward_ios_rounded,
                               size: 14,
                             ),
-                            onTap: onNavigateToOrders,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const OrderHistoryScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          const Divider(height: 1),
+                          ListTile(
+                            leading: _buildIconContainer(
+                              theme,
+                              icon: Icons.receipt_long_rounded,
+                            ),
+                            title: const Text('Order Status'),
+                            subtitle: const Text('Track active orders'),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const OrderStatusScreen(),
+                                ),
+                              );
+                            },
                           ),
                           const Divider(height: 1),
                           ListTile(
