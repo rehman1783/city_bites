@@ -3,6 +3,7 @@ import '../../../../core/constants/asset_paths.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
+import '../../../../core/services/favorites_service.dart';
 
 class FeaturedRestaurantsSection extends StatelessWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
@@ -140,6 +141,33 @@ class FeaturedRestaurantsSection extends StatelessWidget {
                             width: double.infinity,
                             fit: BoxFit.cover,
                             borderRadius: 16,
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+                              valueListenable: FavoritesService.instance.restaurants,
+                              builder: (context, value, _) {
+                                final isFav = value.any((e) => (e['id']?.toString() ?? '') == (item['id']?.toString() ?? ''));
+                                return GestureDetector(
+                                  onTap: () async {
+                                    await FavoritesService.instance.toggleRestaurant(item);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.9),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      isFav ? Icons.favorite : Icons.favorite_border,
+                                      color: isFav ? Colors.red : Colors.black54,
+                                      size: 18,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           Positioned(
                             top: 8,

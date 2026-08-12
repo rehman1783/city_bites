@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/core/theme/app_theme.dart';
+import 'src/core/services/favorites_service.dart';
 import 'src/core/theme/theme_cubit.dart';
 import 'src/core/widgets/role_toggle_button.dart';
 import 'src/features/admin_portal/presentation/bloc/admin_approvals_bloc.dart';
@@ -35,8 +36,9 @@ import 'src/features/owner_manage/presentation/screens/owner_dashboard_screen.da
 import 'src/features/owner_manage/presentation/screens/owner_menu_management_screen.dart';
 import 'src/features/owner_manage/presentation/screens/owner_orders_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FavoritesService.instance.init();
   runApp(const SahiwalFoodExpressApp());
 }
 

@@ -7,6 +7,7 @@ import 'package:city_bites/src/features/customer_user/presentation/bloc/profile_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/profile_user_header_card.dart';
+import 'favorites_screen.dart';
 
 class CustomerProfileScreen extends StatelessWidget {
   final VoidCallback onNavigateToOrders;
@@ -86,6 +87,21 @@ class CustomerProfileScreen extends StatelessWidget {
                                     content: Text(
                                         'Default Delivery Location: Scheme 3, Sahiwal')),
                               );
+                            },
+                          ),
+                          const Divider(height: 1),
+                          ListTile(
+                            leading: _buildIconContainer(
+                              theme,
+                              icon: Icons.favorite_rounded,
+                            ),
+                            title: const Text('Favorites'),
+                            subtitle: const Text('Products & Restaurants'),
+                            trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => const FavoritesScreen(),
+                              ));
                             },
                           ),
                         ],

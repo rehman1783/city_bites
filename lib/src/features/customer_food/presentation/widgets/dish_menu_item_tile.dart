@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/custom_card.dart';
 import '../../../../core/widgets/image_loader.dart';
+import '../../../../core/services/favorites_service.dart';
 
 class DishMenuItemTile extends StatelessWidget {
   final Map<String, dynamic> dish;
@@ -86,11 +87,11 @@ class DishMenuItemTile extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Positioned(
-                  bottom: 4,
-                  right: 4,
-                  child: ElevatedButton(
-                    onPressed: onAdd ?? onSelectDish,
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: ElevatedButton(
+                        onPressed: onAdd ?? onSelectDish,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -108,6 +109,34 @@ class DishMenuItemTile extends StatelessWidget {
                     ),
                   ),
                 ),
+                    // Favorite icon
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+                        valueListenable: FavoritesService.instance.products,
+                        builder: (context, value, _) {
+                          final isFav = value.any((e) => (e['id']?.toString() ?? '') == (dish['id']?.toString() ?? ''));
+                          return GestureDetector(
+                            onTap: () async {
+                              await FavoritesService.instance.toggleProduct(dish);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.9),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                isFav ? Icons.favorite : Icons.favorite_border,
+                                color: isFav ? Colors.red : Colors.black54,
+                                size: 18,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
               ],
             ),
           ),
