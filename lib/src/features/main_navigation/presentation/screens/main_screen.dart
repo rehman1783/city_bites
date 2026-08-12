@@ -3,6 +3,7 @@ import 'package:city_bites/src/features/customer_food/presentation/screens/custo
 import 'package:city_bites/src/features/customer_food/presentation/screens/restaurants_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/explore_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/food_details_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
 import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   bool _isCheckingOut = false;
   String? _trackingOrderId;
   List<Map<String, dynamic>>? _checkoutPreviewItems;
+  DateTime? _lastBackPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +191,33 @@ class _MainScreenState extends State<MainScreen> {
       ),
     ];
 
-    return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: screens),
+    return WillPopScope(
+      onWillPop: () async {
+        // If keyboard is open, close it first
+        final currentFocus = FocusScope.of(context);
+        if (currentFocus.hasFocus && currentFocus.focusedChild != null) {
+          currentFocus.unfocus();
+          return false;
+        }
+
+        // We only handle double-back-to-exit when on main tabs (no overlays)
+        if (_selectedDish == null && _selectedRestaurant == null && !_isCheckingOut && _trackingOrderId == null) {
+          final now = DateTime.now();
+          if (_lastBackPressed == null || now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
+            _lastBackPressed = now;
+            showAppSnackBar(context, 'Press back again to exit');
+            return false;
+          }
+          // Exit the app
+          SystemNavigator.pop();
+          return true;
+        }
+
+        // Otherwise allow normal pop (navigate back)
+        return true;
+      },
+      child: Scaffold(
+        body: IndexedStack(index: _currentIndex, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -232,6 +259,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 }

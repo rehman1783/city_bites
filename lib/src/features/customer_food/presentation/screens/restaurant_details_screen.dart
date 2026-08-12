@@ -7,6 +7,7 @@ import '../../../../core/widgets/responsive_wrapper.dart';
 import '../bloc/restaurant_detail_bloc.dart';
 import '../widgets/restaurant_info_header.dart';
 import '../widgets/dish_menu_item_tile.dart';
+import '../widgets/home_category_selector.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> restaurant;
@@ -116,45 +117,58 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     child: RestaurantInfoHeader(restaurant: rest),
                   ),
 
-                  // Sticky Menu Category Tabs
+                  // Sticky Menu Category selector (reuse Explore's design)
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children:
-                              [
-                                'All',
-                                'Popular',
-                                'Deals',
-                                'Fast Food',
-                                'Drinks & Desserts',
-                              ].map((cat) {
-                                final isSelected = state.activeTab == cat;
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: FilterChip(
-                                    label: Text(cat),
-                                    selected: isSelected,
-                                    onSelected: (_) {
-                                      context
-                                          .read<RestaurantDetailBloc>()
-                                          .filterByCategory(cat);
-                                    },
-                                    selectedColor: theme.colorScheme.primary,
-                                    labelStyle: TextStyle(
-                                      color: isSelected
-                                          ? Colors.white
-                                          : theme.colorScheme.onSurface,
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                        ),
+                      child: Builder(
+                        builder: (context) {
+                          // Build a categories list from menu items, preserving display names
+                          final items = state.fullMenuItems;
+                          final seen = <String>{};
+                          final cats = <Map<String, String>>[
+                            {'id': 'All', 'name': 'All', 'icon': '🍽️'},
+                          ];
+
+                          for (final it in items) {
+                            final catName = (it['category'] ?? '').toString();
+                            if (catName.isEmpty) continue;
+                            if (seen.add(catName)) {
+                              // crude icon mapping for common types
+                              String icon = '🍽️';
+                              final lower = catName.toLowerCase();
+                              if (lower.contains('pizza'))
+                                icon = '🍕';
+                              else if (lower.contains('burger') ||
+                                  lower.contains('zinger'))
+                                icon = '🍔';
+                              else if (lower.contains('biryani') ||
+                                  lower.contains('karahi'))
+                                icon = '🍲';
+                              else if (lower.contains('dessert') ||
+                                  lower.contains('brownie'))
+                                icon = '🍰';
+                              else if (lower.contains('drink'))
+                                icon = '🥤';
+
+                              cats.add({
+                                'id': catName,
+                                'name': catName,
+                                'icon': icon,
+                              });
+                            }
+                          }
+
+                          return HomeCategorySelector(
+                            categories: cats,
+                            selectedCategory: state.activeTab,
+                            onSelectCategory: (catId) {
+                              context
+                                  .read<RestaurantDetailBloc>()
+                                  .filterByCategory(catId);
+                            },
+                          );
+                        },
                       ),
                     ),
                   ),

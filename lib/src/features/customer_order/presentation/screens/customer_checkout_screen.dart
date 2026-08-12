@@ -268,8 +268,13 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                 double discount = 0.0;
 
                                 if ((widget.previewItems ?? []).isNotEmpty) {
-                                  itemsTotal = widget.previewItems!
-                                      .fold(0.0, (sum, it) => sum + ((it['price'] ?? 0) * (it['quantity'] ?? 1)));
+                                  itemsTotal = widget.previewItems!.fold(
+                                    0.0,
+                                    (sum, it) =>
+                                        sum +
+                                        ((it['price'] ?? 0) *
+                                            (it['quantity'] ?? 1)),
+                                  );
                                   if (cartState is CartLoaded) {
                                     deliveryFee = cartState.deliveryFee;
                                     serviceFee = cartState.serviceFee;
@@ -282,7 +287,13 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                   discount = cartState.discountAmount;
                                 }
 
-                                final total = (itemsTotal + deliveryFee + serviceFee - discount).clamp(0, 999999).toInt();
+                                final total =
+                                    (itemsTotal +
+                                            deliveryFee +
+                                            serviceFee -
+                                            discount)
+                                        .clamp(0, 999999)
+                                        .toInt();
 
                                 return Container(
                                   width: double.infinity,
@@ -292,12 +303,20 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text('Price Summary', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                      Text(
+                                        'Price Summary',
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
                                       const SizedBox(height: 8),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text('Items subtotal'),
                                           Text('PKR ${itemsTotal.toInt()}'),
@@ -305,7 +324,8 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                       ),
                                       const SizedBox(height: 6),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text('Delivery fee'),
                                           Text('PKR ${deliveryFee.toInt()}'),
@@ -313,7 +333,8 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                       ),
                                       const SizedBox(height: 6),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text('Platform service fee'),
                                           Text('PKR ${serviceFee.toInt()}'),
@@ -322,19 +343,39 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                       if (discount > 0) ...[
                                         const SizedBox(height: 6),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Text('Discount'),
-                                            Text('- PKR ${discount.toInt()}', style: TextStyle(color: theme.colorScheme.primary)),
+                                            Text(
+                                              '- PKR ${discount.toInt()}',
+                                              style: TextStyle(
+                                                color:
+                                                    theme.colorScheme.primary,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],
                                       const Divider(height: 16),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Total', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-                                          Text('PKR $total', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                          Text(
+                                            'Total',
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Text(
+                                            'PKR $total',
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
                                         ],
                                       ),
                                     ],

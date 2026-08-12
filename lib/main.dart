@@ -128,44 +128,100 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
           final role = authState.role;
 
           if (role == UserRole.owner) {
+            // Helper to wrap owner screens so system back matches top-bar back
+            Widget wrapOwner(
+              Widget child,
+              VoidCallback? onBack, {
+              bool isRoot = false,
+            }) {
+              return WillPopScope(
+                onWillPop: () async {
+                  // If keyboard is open, dismiss it first
+                  final currentFocus = FocusScope.of(context);
+                  if (currentFocus.hasFocus &&
+                      currentFocus.focusedChild != null) {
+                    currentFocus.unfocus();
+                    return false;
+                  }
+
+                  if (onBack != null && !isRoot) {
+                    onBack();
+                    return false;
+                  }
+
+                  // Prevent system back from closing the app on owner screens
+                  return false;
+                },
+                child: child,
+              );
+            }
+
             switch (_ownerSubRoute) {
               case 'menu':
-                return OwnerMenuManagementScreen(
-                  onAddNewItem: () {
-                    setState(() {
-                      _ownerSubRoute = 'add_food';
-                    });
-                  },
-                  onBack: () {
+                return wrapOwner(
+                  OwnerMenuManagementScreen(
+                    onAddNewItem: () {
+                      setState(() {
+                        _ownerSubRoute = 'add_food';
+                      });
+                    },
+                    onBack: () {
+                      setState(() {
+                        _ownerSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _ownerSubRoute = 'dashboard';
                     });
                   },
                 );
               case 'add_food':
-                return OwnerAddFoodScreen(
-                  onSaved: () {
-                    setState(() {
-                      _ownerSubRoute = 'menu';
-                    });
-                  },
-                  onBack: () {
+                return wrapOwner(
+                  OwnerAddFoodScreen(
+                    onSaved: () {
+                      setState(() {
+                        _ownerSubRoute = 'menu';
+                      });
+                    },
+                    onBack: () {
+                      setState(() {
+                        _ownerSubRoute = 'menu';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _ownerSubRoute = 'menu';
                     });
                   },
                 );
               case 'orders':
-                return OwnerOrdersScreen(
-                  onBack: () {
+                return wrapOwner(
+                  OwnerOrdersScreen(
+                    onBack: () {
+                      setState(() {
+                        _ownerSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _ownerSubRoute = 'dashboard';
                     });
                   },
                 );
               case 'analytics':
-                return OwnerAnalyticsScreen(
-                  onBack: () {
+                return wrapOwner(
+                  OwnerAnalyticsScreen(
+                    onBack: () {
+                      setState(() {
+                        _ownerSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _ownerSubRoute = 'dashboard';
                     });
@@ -173,61 +229,120 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
                 );
               case 'dashboard':
               default:
-                return OwnerDashboardScreen(
-                  onNavigateToMenu: () {
-                    setState(() {
-                      _ownerSubRoute = 'menu';
-                    });
-                  },
-                  onNavigateToOrders: () {
-                    setState(() {
-                      _ownerSubRoute = 'orders';
-                    });
-                  },
-                  onNavigateToAnalytics: () {
-                    setState(() {
-                      _ownerSubRoute = 'analytics';
-                    });
-                  },
-                  onLogout: () {
-                    setState(() {
-                      _ownerSubRoute = 'dashboard';
-                    });
-                    context.read<AuthCubit>().logout();
-                  },
+                return wrapOwner(
+                  OwnerDashboardScreen(
+                    onNavigateToMenu: () {
+                      setState(() {
+                        _ownerSubRoute = 'menu';
+                      });
+                    },
+                    onNavigateToOrders: () {
+                      setState(() {
+                        _ownerSubRoute = 'orders';
+                      });
+                    },
+                    onNavigateToAnalytics: () {
+                      setState(() {
+                        _ownerSubRoute = 'analytics';
+                      });
+                    },
+                    onLogout: () {
+                      setState(() {
+                        _ownerSubRoute = 'dashboard';
+                      });
+                      context.read<AuthCubit>().logout();
+                    },
+                  ),
+                  null,
+                  isRoot: true,
                 );
             }
           }
 
           if (role == UserRole.admin) {
+            // Helper to wrap admin screens so system back matches top-bar back
+            Widget wrapAdmin(
+              Widget child,
+              VoidCallback? onBack, {
+              bool isRoot = false,
+            }) {
+              return WillPopScope(
+                onWillPop: () async {
+                  final currentFocus = FocusScope.of(context);
+                  if (currentFocus.hasFocus &&
+                      currentFocus.focusedChild != null) {
+                    currentFocus.unfocus();
+                    return false;
+                  }
+
+                  if (onBack != null && !isRoot) {
+                    onBack();
+                    return false;
+                  }
+
+                  // Prevent system back from closing the app on admin screens
+                  return false;
+                },
+                child: child,
+              );
+            }
+
             switch (_adminSubRoute) {
               case 'users':
-                return AdminUsersScreen(
-                  onBack: () {
+                return wrapAdmin(
+                  AdminUsersScreen(
+                    onBack: () {
+                      setState(() {
+                        _adminSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _adminSubRoute = 'dashboard';
                     });
                   },
                 );
               case 'approvals':
-                return AdminRestaurantApprovalsScreen(
-                  onBack: () {
+                return wrapAdmin(
+                  AdminRestaurantApprovalsScreen(
+                    onBack: () {
+                      setState(() {
+                        _adminSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _adminSubRoute = 'dashboard';
                     });
                   },
                 );
               case 'orders':
-                return AdminGlobalOrdersScreen(
-                  onBack: () {
+                return wrapAdmin(
+                  AdminGlobalOrdersScreen(
+                    onBack: () {
+                      setState(() {
+                        _adminSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _adminSubRoute = 'dashboard';
                     });
                   },
                 );
               case 'analytics':
-                return AdminAnalyticsHeatmapScreen(
-                  onBack: () {
+                return wrapAdmin(
+                  AdminAnalyticsHeatmapScreen(
+                    onBack: () {
+                      setState(() {
+                        _adminSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  () {
                     setState(() {
                       _adminSubRoute = 'dashboard';
                     });
@@ -235,33 +350,37 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
                 );
               case 'dashboard':
               default:
-                return AdminDashboardScreen(
-                  onNavigateToUsers: () {
-                    setState(() {
-                      _adminSubRoute = 'users';
-                    });
-                  },
-                  onNavigateToApprovals: () {
-                    setState(() {
-                      _adminSubRoute = 'approvals';
-                    });
-                  },
-                  onNavigateToOrders: () {
-                    setState(() {
-                      _adminSubRoute = 'orders';
-                    });
-                  },
-                  onNavigateToAnalytics: () {
-                    setState(() {
-                      _adminSubRoute = 'analytics';
-                    });
-                  },
-                  onLogout: () {
-                    context.read<AuthCubit>().logout();
-                    setState(() {
-                      _adminSubRoute = 'dashboard';
-                    });
-                  },
+                return wrapAdmin(
+                  AdminDashboardScreen(
+                    onNavigateToUsers: () {
+                      setState(() {
+                        _adminSubRoute = 'users';
+                      });
+                    },
+                    onNavigateToApprovals: () {
+                      setState(() {
+                        _adminSubRoute = 'approvals';
+                      });
+                    },
+                    onNavigateToOrders: () {
+                      setState(() {
+                        _adminSubRoute = 'orders';
+                      });
+                    },
+                    onNavigateToAnalytics: () {
+                      setState(() {
+                        _adminSubRoute = 'analytics';
+                      });
+                    },
+                    onLogout: () {
+                      context.read<AuthCubit>().logout();
+                      setState(() {
+                        _adminSubRoute = 'dashboard';
+                      });
+                    },
+                  ),
+                  null,
+                  isRoot: true,
                 );
             }
           }
