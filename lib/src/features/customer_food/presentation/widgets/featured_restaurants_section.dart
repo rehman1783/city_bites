@@ -73,6 +73,7 @@ class FeaturedRestaurantsSection extends StatelessWidget {
             children: [
               Expanded(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
@@ -118,7 +119,7 @@ class FeaturedRestaurantsSection extends StatelessWidget {
           height: 225,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             itemCount: featuredList.length,
             separatorBuilder: (context, index) => const SizedBox(width: 14),
             itemBuilder: (context, index) {

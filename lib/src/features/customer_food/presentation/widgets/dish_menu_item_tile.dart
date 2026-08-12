@@ -4,12 +4,16 @@ import '../../../../core/widgets/image_loader.dart';
 
 class DishMenuItemTile extends StatelessWidget {
   final Map<String, dynamic> dish;
+  final VoidCallback? onTap;
   final VoidCallback onSelectDish;
+  final VoidCallback? onAdd;
 
   const DishMenuItemTile({
     super.key,
     required this.dish,
+    this.onTap,
     required this.onSelectDish,
+    this.onAdd,
   });
 
   @override
@@ -17,7 +21,7 @@ class DishMenuItemTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return CustomCard(
-      onTap: onSelectDish,
+      onTap: onTap ?? onSelectDish,
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
@@ -86,10 +90,12 @@ class DishMenuItemTile extends StatelessWidget {
                   bottom: 4,
                   right: 4,
                   child: ElevatedButton(
-                    onPressed: onSelectDish,
+                    onPressed: onAdd ?? onSelectDish,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),

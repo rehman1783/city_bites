@@ -9,7 +9,12 @@ import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/home_feed_bloc.dart';
 import '../widgets/home_header_bar.dart';
 import '../widgets/home_category_selector.dart';
-import '../widgets/restaurant_card_tile.dart';
+// restaurant_card_tile removed for Home -> Top Products view
+import '../widgets/dish_menu_item_tile.dart';
+import 'food_details_screen.dart';
+import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
+import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
+import 'package:city_bites/src/core/constants/asset_paths.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
@@ -26,6 +31,33 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
+  final List<Map<String, dynamic>> _topProducts = [
+    {
+      'id': 'tp_1',
+      'name': 'Special Chicken Biryani',
+      'description':
+          'Aromatic basmati rice cooked with spices and tender chicken.',
+      'price': 450.0,
+      'image': AssetPaths.chickenBiryani,
+      'isSpicy': true,
+    },
+    {
+      'id': 'tp_2',
+      'name': 'Crispy Zinger Burger',
+      'description': 'Crispy chicken sandwich with fresh lettuce and sauce.',
+      'price': 380.0,
+      'image': AssetPaths.zingerBurger,
+      'isSpicy': false,
+    },
+    {
+      'id': 'tp_3',
+      'name': 'Chocolate Brownie',
+      'description': 'Warm chocolate brownie with dark chocolate drizzle.',
+      'price': 250.0,
+      'image': AssetPaths.chocolateBrownie,
+      'isSpicy': false,
+    },
+  ];
   @override
   void initState() {
     super.initState();
@@ -72,15 +104,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             }
 
             if (state is HomeFeedLoaded) {
-              final filteredRestaurants = state.restaurants.where((r) {
-                return state.selectedCategory == 'all' ||
-                    (r['tags'] as List).any(
-                      (t) =>
-                          t.toString().toLowerCase() ==
-                          state.selectedCategory.toLowerCase(),
-                    );
-              }).toList();
-
               return ResponsiveWrapper(
                 maxWidth: 1100,
                 padding: EdgeInsets.zero,
@@ -130,50 +153,183 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         const SizedBox(height: 24),
 
                         // Categories Horizontal List Widget
-                        HomeCategorySelector(
-                          categories: state.categories,
-                          selectedCategory: state.selectedCategory,
-                          onSelectCategory: (catId) {
-                            context.read<HomeFeedBloc>().selectCategory(catId);
-                          },
-                        ),
-                        const SizedBox(height: 20),
+                        // HomeCategorySelector(
+                        //   categories: state.categories,
+                        //   selectedCategory: state.selectedCategory,
+                        //   onSelectCategory: (catId) {
+                        //     context.read<HomeFeedBloc>().selectCategory(catId);
+                        //   },
+                        // ),
+                        // const SizedBox(height: 20),
 
-                        // Top Rated Section Header
+                        // Top Rated Products header
                         Text(
-                          'All Restaurants in Sahiwal',
+                          'Top Rated Products',
                           style: theme.textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 14),
 
-                        // Restaurant Cards List or Empty State
-                        if (filteredRestaurants.isEmpty)
-                          EmptyStateWidget(
-                            icon: Icons.search_off_rounded,
-                            title: 'No Restaurants Found',
-                            description:
-                                'There are no restaurants available for the selected category right now.',
-                            buttonText: 'Try Again',
-                            onRetry: () {
-                              context.read<HomeFeedBloc>().fetchHomeData();
-                            },
-                          )
-                        else
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: filteredRestaurants.length,
-                            itemBuilder: (context, index) {
-                              final rest = filteredRestaurants[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: RestaurantCardTile(
-                                  restaurant: rest,
-                                  onTap: () => widget.onSelectRestaurant(rest),
-                                ),
-                              );
-                            },
-                          ),
+                        // Top Rated Products list
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _topProducts.length,
+                          itemBuilder: (context, index) {
+                            final product = _topProducts[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: DishMenuItemTile(
+                                dish: {
+                                  'id': product['id'],
+                                  'name': product['name'],
+                                  'description': product['description'] ?? '',
+                                  'price': product['price'] ?? 0,
+                                  'image': product['image'] ?? '',
+                                  'isSpicy': product['isSpicy'] ?? false,
+                                },
+                                onTap: () {
+                                  final sanitized = {
+                                    'id': product['id'] ?? '',
+                                    'name': product['name'] ?? '',
+                                    'description': product['description'] ?? '',
+                                    'price': product['price'] ?? 0.0,
+                                    'image': product['image'] ?? '',
+                                    'isSpicy': product['isSpicy'] ?? false,
+                                  };
+
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => FoodDetailsScreen(
+                                        dish: sanitized,
+                                        onBack: () =>
+                                            Navigator.of(context).pop(),
+                                        onAddToCart: (newItem) {
+                                          try {
+                                            context.read<CartBloc>().addItem(
+                                              newItem,
+                                            );
+                                          } catch (_) {}
+                                          Navigator.of(context).pop();
+                                        },
+                                        onBuyNow: (newItem) {
+                                          try {
+                                            context.read<CartBloc>().addItem(
+                                              newItem,
+                                            );
+                                          } catch (_) {}
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  CustomerCheckoutScreen(
+                                                    onOrderPlaced: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                                onAdd: () {
+                                  // show bottom sheet like Explore does
+                                  showModalBottomSheet<void>(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(24),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product['name'] ?? '',
+                                              style: theme
+                                                  .textTheme
+                                                  .headlineSmall
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              product['description'] ?? '',
+                                              style: theme.textTheme.bodyMedium,
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      context
+                                                          .read<CartBloc>()
+                                                          .addItem({
+                                                            'id': product['id'],
+                                                            'name':
+                                                                product['name'],
+                                                            'price':
+                                                                product['price'] ??
+                                                                0,
+                                                            'quantity': 1,
+                                                            'portion': 'Single',
+                                                            'addons': [],
+                                                            'image':
+                                                                product['image'] ??
+                                                                '',
+                                                          });
+                                                      Navigator.pop(context);
+                                                      ScaffoldMessenger.of(
+                                                        context,
+                                                      ).showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            '${product['name']} added to cart',
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const Text(
+                                                      'Add to cart',
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: OutlinedButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      widget.onOpenCart();
+                                                    },
+                                                    child: const Text(
+                                                      'View cart',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 16),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                onSelectDish: () {},
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
