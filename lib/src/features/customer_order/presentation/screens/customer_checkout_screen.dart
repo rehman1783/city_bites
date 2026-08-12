@@ -258,6 +258,90 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 16),
+                            // Price Breakdown Summary
+                            BlocBuilder<CartBloc, CartState>(
+                              builder: (context, cartState) {
+                                double itemsTotal = 0;
+                                double deliveryFee = 60.0;
+                                double serviceFee = 20.0;
+                                double discount = 0.0;
+
+                                if ((widget.previewItems ?? []).isNotEmpty) {
+                                  itemsTotal = widget.previewItems!
+                                      .fold(0.0, (sum, it) => sum + ((it['price'] ?? 0) * (it['quantity'] ?? 1)));
+                                  if (cartState is CartLoaded) {
+                                    deliveryFee = cartState.deliveryFee;
+                                    serviceFee = cartState.serviceFee;
+                                    discount = cartState.discountAmount;
+                                  }
+                                } else if (cartState is CartLoaded) {
+                                  itemsTotal = cartState.subtotal;
+                                  deliveryFee = cartState.deliveryFee;
+                                  serviceFee = cartState.serviceFee;
+                                  discount = cartState.discountAmount;
+                                }
+
+                                final total = (itemsTotal + deliveryFee + serviceFee - discount).clamp(0, 999999).toInt();
+
+                                return Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.surfaceVariant,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Price Summary', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('Items subtotal'),
+                                          Text('PKR ${itemsTotal.toInt()}'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('Delivery fee'),
+                                          Text('PKR ${deliveryFee.toInt()}'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('Platform service fee'),
+                                          Text('PKR ${serviceFee.toInt()}'),
+                                        ],
+                                      ),
+                                      if (discount > 0) ...[
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Discount'),
+                                            Text('- PKR ${discount.toInt()}', style: TextStyle(color: theme.colorScheme.primary)),
+                                          ],
+                                        ),
+                                      ],
+                                      const Divider(height: 16),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Total', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                          Text('PKR $total', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
