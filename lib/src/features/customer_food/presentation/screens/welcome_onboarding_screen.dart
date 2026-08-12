@@ -66,8 +66,8 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                 // Top Header Bar
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
+                    horizontal: 22,
+                    vertical: 12,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,19 +75,39 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                       Row(
                         children: [
                           const AppLogo(
-                            size: 36,
-                            borderRadius: 10,
-                            showShadow: false,
+                            size: 38,
+                            borderRadius: 12,
+                            showShadow: true,
                             showBorder: true,
                           ),
                           const SizedBox(width: 10),
-                          Text(
-                            'CITY BYTES',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 1.2,
-                              color: theme.colorScheme.primary,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'CITY BYTES',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.4,
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                              BlocBuilder<OnboardingCubit, OnboardingState>(
+                                builder: (context, state) {
+                                  return Text(
+                                    'EXPLORE • STEP ${state.currentPage + 1}/${_slides.length}',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 1.0,
+                                      color: theme.colorScheme.onSurfaceVariant
+                                          .withAlpha(180),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -95,7 +115,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                         onPressed: widget.onFinishOnboarding,
                         icon: const Icon(
                           Icons.arrow_forward_ios_rounded,
-                          size: 12,
+                          size: 11,
                         ),
                         label: Text(
                           'Skip',
@@ -106,13 +126,16 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary
-                              .withAlpha(20),
+                              .withAlpha(22),
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 6,
+                            horizontal: 16,
+                            vertical: 8,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: theme.colorScheme.primary.withAlpha(40),
+                            ),
                           ),
                         ),
                       ),

@@ -21,31 +21,43 @@ class OnboardingBottomControls extends StatelessWidget {
     final isLastSlide = currentIndex == totalSlides - 1;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Indicator Dots
+          // Indicator Dots with Glow
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               totalSlides,
-              (index) => AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutCubic,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                height: 8,
-                width: currentIndex == index ? 24 : 8,
-                decoration: BoxDecoration(
-                  color: currentIndex == index
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.primary.withAlpha(40),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
+              (index) {
+                final isActive = currentIndex == index;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 350),
+                  curve: Curves.easeOutCubic,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  height: 8,
+                  width: isActive ? 28 : 8,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.primary.withAlpha(45),
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: isActive
+                        ? [
+                            BoxShadow(
+                              color: theme.colorScheme.primary.withAlpha(120),
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
+                  ),
+                );
+              },
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
 
           // Next / Get Started Action Button
           CustomButton(
