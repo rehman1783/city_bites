@@ -21,7 +21,7 @@ class OnboardingBottomControls extends StatelessWidget {
     final isLastSlide = currentIndex == totalSlides - 1;
 
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -45,7 +45,7 @@ class OnboardingBottomControls extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
 
           // Next / Get Started Action Button
           CustomButton(

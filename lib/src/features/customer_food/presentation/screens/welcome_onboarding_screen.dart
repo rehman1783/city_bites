@@ -55,131 +55,100 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background Glow Accents
-          Positioned(
-            top: -100,
-            right: -80,
-            child: Container(
-              width: 280,
-              height: 280,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.colorScheme.primary.withAlpha(isDark ? 40 : 25),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -60,
-            left: -60,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.colorScheme.secondary.withAlpha(isDark ? 30 : 20),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 580),
-                child: Column(
-                  children: [
-                    // Top Header Bar
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Column(
+              children: [
+                // Top Header Bar
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              const AppLogo(
-                                size: 36,
-                                borderRadius: 10,
-                                showShadow: false,
-                                showBorder: true,
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'CITY BYTES',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1.2,
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
-                            ],
+                          const AppLogo(
+                            size: 36,
+                            borderRadius: 10,
+                            showShadow: false,
+                            showBorder: true,
                           ),
-                          TextButton.icon(
-                            onPressed: widget.onFinishOnboarding,
-                            icon: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 12,
-                            ),
-                            label: Text(
-                              'Skip',
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: TextButton.styleFrom(
-                              backgroundColor: theme.colorScheme.primary
-                                  .withAlpha(20),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 6,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'CITY BYTES',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1.2,
+                              color: theme.colorScheme.primary,
                             ),
                           ),
                         ],
                       ),
-                    ),
-
-                    // Onboarding Page Content
-                    Expanded(
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: _slides.length,
-                        onPageChanged: (index) {
-                          context.read<OnboardingCubit>().pageChanged(index);
-                        },
-                        itemBuilder: (context, index) {
-                          return OnboardingSlideCard(slide: _slides[index]);
-                        },
+                      TextButton.icon(
+                        onPressed: widget.onFinishOnboarding,
+                        icon: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 12,
+                        ),
+                        label: Text(
+                          'Skip',
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary
+                              .withAlpha(20),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 6,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                       ),
-                    ),
-
-                    // Bottom Controls Bar
-                    BlocBuilder<OnboardingCubit, OnboardingState>(
-                      builder: (context, state) {
-                        return OnboardingBottomControls(
-                          currentIndex: state.currentPage,
-                          totalSlides: _slides.length,
-                          pageController: _pageController,
-                          onFinish: widget.onFinishOnboarding,
-                        );
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+
+                // Onboarding Page Content
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _slides.length,
+                    onPageChanged: (index) {
+                      context.read<OnboardingCubit>().pageChanged(index);
+                    },
+                    itemBuilder: (context, index) {
+                      return OnboardingSlideCard(slide: _slides[index]);
+                    },
+                  ),
+                ),
+
+                // Bottom Controls Bar
+                BlocBuilder<OnboardingCubit, OnboardingState>(
+                  builder: (context, state) {
+                    return OnboardingBottomControls(
+                      currentIndex: state.currentPage,
+                      totalSlides: _slides.length,
+                      pageController: _pageController,
+                      onFinish: widget.onFinishOnboarding,
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
