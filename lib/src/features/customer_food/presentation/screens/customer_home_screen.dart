@@ -51,15 +51,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SkeletonLoader(
-                            width: double.infinity,
-                            height: 140,
-                            borderRadius: 16),
+                          width: double.infinity,
+                          height: 140,
+                          borderRadius: 16,
+                        ),
                         SizedBox(height: 8),
-                        SkeletonLoader(
-                            width: 180, height: 20, borderRadius: 8),
+                        SkeletonLoader(width: 180, height: 20, borderRadius: 8),
                         SizedBox(height: 4),
-                        SkeletonLoader(
-                            width: 120, height: 14, borderRadius: 6),
+                        SkeletonLoader(width: 120, height: 14, borderRadius: 6),
                       ],
                     ),
                   ),
@@ -73,14 +72,18 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
             if (state is HomeFeedLoaded) {
               final filteredRestaurants = state.restaurants.where((r) {
-                final matchesCategory = state.selectedCategory == 'all' ||
-                    (r['tags'] as List).any((t) =>
-                        t.toString().toLowerCase() ==
-                        state.selectedCategory.toLowerCase());
-                final matchesSearch = state.searchQuery.isEmpty ||
-                    (r['name'] as String)
-                        .toLowerCase()
-                        .contains(state.searchQuery.toLowerCase());
+                final matchesCategory =
+                    state.selectedCategory == 'all' ||
+                    (r['tags'] as List).any(
+                      (t) =>
+                          t.toString().toLowerCase() ==
+                          state.selectedCategory.toLowerCase(),
+                    );
+                final matchesSearch =
+                    state.searchQuery.isEmpty ||
+                    (r['name'] as String).toLowerCase().contains(
+                      state.searchQuery.toLowerCase(),
+                    );
                 return matchesCategory && matchesSearch;
               }).toList();
 
@@ -101,9 +104,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           location: state.location,
                           onOpenCart: widget.onOpenCart,
                           onSearchChanged: (query) {
-                            context
-                                .read<HomeFeedBloc>()
-                                .updateSearchQuery(query);
+                            context.read<HomeFeedBloc>().updateSearchQuery(
+                              query,
+                            );
                           },
                         ),
                         const SizedBox(height: 20),
@@ -149,9 +152,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                 'We could not find any restaurant or dish matching "${state.searchQuery}" in Sahiwal.',
                             buttonText: 'Clear Search',
                             onRetry: () {
-                              context
-                                  .read<HomeFeedBloc>()
-                                  .updateSearchQuery('');
+                              context.read<HomeFeedBloc>().updateSearchQuery(
+                                '',
+                              );
                             },
                           )
                         else
