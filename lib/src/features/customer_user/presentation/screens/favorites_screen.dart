@@ -6,6 +6,7 @@ import 'package:city_bites/src/features/customer_food/presentation/screens/food_
 import 'package:city_bites/src/features/customer_food/presentation/screens/restaurant_details_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
 import 'package:city_bites/src/core/widgets/custom_card.dart';
 import 'package:city_bites/src/core/widgets/image_loader.dart';
 import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
@@ -116,9 +117,36 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                   dish: sanitized,
                                   onBack: () => Navigator.of(context).pop(),
                                   onAddToCart: (newItem) {
-                                    context.read<CartBloc>().addItem(newItem);
+                                    try {
+                                      context.read<CartBloc>().addItem(newItem);
+                                    } catch (_) {}
+                                    showAppSnackBar(
+                                      context,
+                                      '${newItem['name']} added to cart',
+                                    );
                                   },
-                                  onBuyNow: (newItem) {},
+                                  onBuyNow: (newItem) {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => CustomerCheckoutScreen(
+                                          previewItems: [
+                                            {
+                                              'id': newItem['id'],
+                                              'name': newItem['name'],
+                                              'price': newItem['price'] ?? 0,
+                                              'quantity':
+                                                  newItem['quantity'] ?? 1,
+                                              'image': newItem['image'] ?? '',
+                                            },
+                                          ],
+                                          onOrderPlaced: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             );

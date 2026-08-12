@@ -3,6 +3,9 @@ import 'package:city_bites/src/features/customer_food/presentation/screens/custo
 import 'package:city_bites/src/features/customer_food/presentation/screens/restaurants_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/explore_screen.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/food_details_screen.dart';
+import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
+import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:city_bites/src/features/customer_food/presentation/screens/restaurant_details_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/customer_cart_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
@@ -24,6 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   Map<String, dynamic>? _selectedDish;
   bool _isCheckingOut = false;
   String? _trackingOrderId;
+  List<Map<String, dynamic>>? _checkoutPreviewItems;
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +48,17 @@ class _MainScreenState extends State<MainScreen> {
 
     if (_isCheckingOut) {
       return CustomerCheckoutScreen(
+        previewItems: _checkoutPreviewItems,
         onBack: () {
           setState(() {
             _isCheckingOut = false;
+            _checkoutPreviewItems = null;
           });
         },
         onOrderPlaced: () {
           setState(() {
             _isCheckingOut = false;
+            _checkoutPreviewItems = null;
             _trackingOrderId = 'ORD-SHW-9482';
           });
         },
@@ -67,15 +74,24 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         onAddToCart: (item) {
-          setState(() {
-            _selectedDish = null;
-            _currentIndex = 1; // Navigate to cart
-          });
+          try {
+            context.read<CartBloc>().addItem(item);
+          } catch (_) {}
+          showAppSnackBar(context, '${item['name']} added to cart');
         },
         onBuyNow: (item) {
           setState(() {
             _selectedDish = null;
             _isCheckingOut = true;
+            _checkoutPreviewItems = [
+              {
+                'id': item['id'],
+                'name': item['name'],
+                'price': item['price'] ?? 0,
+                'quantity': item['quantity'] ?? 1,
+                'image': item['image'] ?? '',
+              },
+            ];
           });
         },
       );

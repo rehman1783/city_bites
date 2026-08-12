@@ -6,6 +6,7 @@ import 'package:city_bites/src/features/customer_food/presentation/screens/food_
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bloc.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 
 class CartItemTile extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -65,16 +66,26 @@ class CartItemTile extends StatelessWidget {
                       try {
                         context.read<CartBloc>().addItem(newItem);
                       } catch (_) {}
-                      Navigator.of(context).pop();
+                      showAppSnackBar(
+                        context,
+                        '${newItem['name']} added to cart',
+                      );
                     },
                     onBuyNow: (newItem) {
-                      try {
-                        context.read<CartBloc>().addItem(newItem);
-                      } catch (_) {}
+                      // Direct checkout for this single item (do not modify global cart)
                       Navigator.of(context).pop();
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => CustomerCheckoutScreen(
+                            previewItems: [
+                              {
+                                'id': newItem['id'],
+                                'name': newItem['name'],
+                                'price': newItem['price'] ?? 0,
+                                'quantity': newItem['quantity'] ?? 1,
+                                'image': newItem['image'] ?? '',
+                              },
+                            ],
                             onOrderPlaced: () {
                               Navigator.of(context).pop();
                             },

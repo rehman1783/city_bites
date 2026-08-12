@@ -11,11 +11,13 @@ import '../widgets/checkout_payment_card.dart';
 class CustomerCheckoutScreen extends StatefulWidget {
   final VoidCallback onOrderPlaced;
   final VoidCallback? onBack;
+  final List<Map<String, dynamic>>? previewItems;
 
   const CustomerCheckoutScreen({
     super.key,
     required this.onOrderPlaced,
     this.onBack,
+    this.previewItems,
   });
 
   @override
@@ -24,8 +26,9 @@ class CustomerCheckoutScreen extends StatefulWidget {
 
 class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _phoneController =
-      TextEditingController(text: '+92 300 1234567');
+  final TextEditingController _phoneController = TextEditingController(
+    text: '+92 300 1234567',
+  );
   final TextEditingController _notesController = TextEditingController();
 
   @override
@@ -174,39 +177,80 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                              '2x Special Chicken Biryani'),
-                                          Text('PKR 900',
+                                      if ((widget.previewItems ?? [])
+                                          .isNotEmpty)
+                                        ...widget.previewItems!.map((it) {
+                                          final qty = it['quantity'] ?? 1;
+                                          final name = it['name'] ?? '';
+                                          final price =
+                                              ((it['price'] ?? 0) * qty)
+                                                  .toInt();
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 6,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text('${qty}x $name'),
+                                                Text(
+                                                  'PKR $price',
+                                                  style: theme
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList()
+                                      else ...[
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              '2x Special Chicken Biryani',
+                                            ),
+                                            Text(
+                                              'PKR 900',
                                               style:
-                                                  theme.textTheme.titleMedium),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text('1x Crispy Zinger Burger'),
-                                          Text('PKR 380',
+                                                  theme.textTheme.titleMedium,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              '1x Crispy Zinger Burger',
+                                            ),
+                                            Text(
+                                              'PKR 380',
                                               style:
-                                                  theme.textTheme.titleMedium),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text('Delivery & Platform Fee'),
-                                          Text('PKR 80',
+                                                  theme.textTheme.titleMedium,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Delivery & Platform Fee',
+                                            ),
+                                            Text(
+                                              'PKR 80',
                                               style:
-                                                  theme.textTheme.titleMedium),
-                                        ],
-                                      ),
+                                                  theme.textTheme.titleMedium,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ],
                                   ),
                                 ),

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class CartState extends Equatable {
   const CartState();
@@ -26,8 +29,8 @@ class CartLoaded extends CartState {
     this.serviceFee = 20.0,
   });
 
-  double get subtotal => items.fold(
-      0.0, (sum, item) => sum + (item['price'] * item['quantity']));
+  double get subtotal =>
+      items.fold(0.0, (sum, item) => sum + (item['price'] * item['quantity']));
 
   double get totalPayable =>
       (subtotal + deliveryFee + serviceFee - discountAmount).clamp(0, 999999);
@@ -52,39 +55,47 @@ class CartLoaded extends CartState {
 
   @override
   List<Object?> get props => [
-        items,
-        promoCode,
-        discountAmount,
-        restaurantName,
-        deliveryFee,
-        serviceFee,
-      ];
+    items,
+    promoCode,
+    discountAmount,
+    restaurantName,
+    deliveryFee,
+    serviceFee,
+  ];
 }
 
 class CartBloc extends Cubit<CartState> {
-  CartBloc()
-      : super(const CartLoaded(items: [
-          {
-            'id': 'dish_1',
-            'name': 'Special Sahiwal Chicken Biryani',
-            'price': 450.0,
-            'quantity': 2,
-            'portion': 'Single',
-            'addons': ['Extra Cheese'],
-            'image':
-                'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&auto=format&fit=crop&q=60',
-          },
-          {
-            'id': 'dish_2',
-            'name': 'Crispy Zinger Burger',
-            'price': 380.0,
-            'quantity': 1,
-            'portion': 'Single',
-            'addons': [],
-            'image':
-                'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60',
-          },
-        ]));
+  static const _kCartKey = 'cart_items_v1';
+
+  SharedPreferences? _prefs;
+
+  CartBloc() : super(const CartLoaded(items: [])) {
+    _loadCart();
+  }
+
+  Future<void> _loadCart() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    final list = _prefs!.getStringList(_kCartKey) ?? [];
+    if (list.isNotEmpty) {
+      final items = list
+          .map((s) => jsonDecode(s) as Map<String, dynamic>)
+          .toList(growable: true);
+      emit(CartLoaded(items: items));
+    } else {
+      emit(const CartLoaded(items: []));
+    }
+  }
+
+  Future<void> _saveCart() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    if (state is CartLoaded) {
+      final current = state as CartLoaded;
+      final list = current.items.map((m) => jsonEncode(m)).toList();
+      await _prefs!.setStringList(_kCartKey, list);
+    } else {
+      await _prefs!.remove(_kCartKey);
+    }
+  }
 
   void addItem(Map<String, dynamic> item) {
     if (state is CartEmpty) {
@@ -94,8 +105,9 @@ class CartBloc extends Cubit<CartState> {
 
     if (state is CartLoaded) {
       final current = state as CartLoaded;
-      final existingIndex =
-          current.items.indexWhere((element) => element['id'] == item['id']);
+      final existingIndex = current.items.indexWhere(
+        (element) => element['id'] == item['id'],
+      );
 
       final updatedItems = List<Map<String, dynamic>>.from(current.items);
       if (existingIndex >= 0) {
@@ -109,6 +121,7 @@ class CartBloc extends Cubit<CartState> {
       }
 
       emit(current.copyWith(items: updatedItems));
+      _saveCart();
     }
   }
 
@@ -127,8 +140,10 @@ class CartBloc extends Cubit<CartState> {
 
       if (updatedItems.isEmpty) {
         emit(CartEmpty());
+        _saveCart();
       } else {
         emit(current.copyWith(items: updatedItems));
+        _saveCart();
       }
     }
   }
@@ -136,12 +151,15 @@ class CartBloc extends Cubit<CartState> {
   void removeItem(String id) {
     if (state is CartLoaded) {
       final current = state as CartLoaded;
-      final updatedItems =
-          current.items.where((item) => item['id'] != id).toList();
+      final updatedItems = current.items
+          .where((item) => item['id'] != id)
+          .toList();
       if (updatedItems.isEmpty) {
         emit(CartEmpty());
+        _saveCart();
       } else {
         emit(current.copyWith(items: updatedItems));
+        _saveCart();
       }
     }
   }
@@ -154,6 +172,7 @@ class CartBloc extends Cubit<CartState> {
       } else {
         emit(current.copyWith(promoCode: code, discountAmount: 20.0));
       }
+      _saveCart();
     }
   }
 }

@@ -202,19 +202,33 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                               newItem,
                                             );
                                           } catch (_) {}
-                                          Navigator.of(context).pop();
+                                          showAppSnackBar(
+                                            context,
+                                            '${newItem['name']} added to cart',
+                                          );
                                         },
                                         onBuyNow: (newItem) {
-                                          try {
-                                            context.read<CartBloc>().addItem(
-                                              newItem,
-                                            );
-                                          } catch (_) {}
+                                          // Navigate to checkout with only this item
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (_) =>
                                                   CustomerCheckoutScreen(
+                                                    previewItems: [
+                                                      {
+                                                        'id': newItem['id'],
+                                                        'name': newItem['name'],
+                                                        'price':
+                                                            newItem['price'] ??
+                                                            0,
+                                                        'quantity':
+                                                            newItem['quantity'] ??
+                                                            1,
+                                                        'image':
+                                                            newItem['image'] ??
+                                                            '',
+                                                      },
+                                                    ],
                                                     onOrderPlaced: () {
                                                       Navigator.of(
                                                         context,
@@ -281,7 +295,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                                                 product['image'] ??
                                                                 '',
                                                           });
-                                                      Navigator.pop(context);
                                                       showAppSnackBar(
                                                         context,
                                                         '${product['name']} added to cart',
