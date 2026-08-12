@@ -110,6 +110,11 @@ class _MainScreenState extends State<MainScreen> {
             _selectedRestaurant = rest;
           });
         },
+        onSelectDish: (dish) {
+          setState(() {
+            _selectedDish = dish;
+          });
+        },
         onOpenCart: () {
           setState(() {
             _currentIndex = 2;

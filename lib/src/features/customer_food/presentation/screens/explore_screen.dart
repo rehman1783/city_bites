@@ -14,11 +14,13 @@ import '../bloc/home_feed_bloc.dart';
 
 class ExploreScreen extends StatefulWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
+  final Function(Map<String, dynamic> dish) onSelectDish;
   final VoidCallback onOpenCart;
 
   const ExploreScreen({
     super.key,
     required this.onSelectRestaurant,
+    required this.onSelectDish,
     required this.onOpenCart,
   });
 
@@ -145,7 +147,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 },
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -169,7 +171,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           ),
                           const SizedBox(width: 12),
                           SizedBox(
-                            height: 52,
+                            height: 48,
+                            width: 92,
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 showModalBottomSheet<void>(
@@ -184,7 +187,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                         children: [
                                           Text(
                                             'Filter by category',
-                                            style: theme.textTheme.headlineSmall,
+                                            style:
+                                                theme.textTheme.headlineSmall,
                                           ),
                                           const SizedBox(height: 16),
                                           Wrap(
@@ -196,7 +200,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                       state.selectedCategory ==
                                                       category['id'];
                                                   return ChoiceChip(
-                                                    label: Text(category['name']),
+                                                    label: Text(
+                                                      category['name'],
+                                                    ),
                                                     selected: isActive,
                                                     onSelected: (_) {
                                                       Navigator.pop(context);
@@ -218,12 +224,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   },
                                 );
                               },
-                              icon: const Icon(Icons.filter_list),
+                              icon: const Icon(Icons.filter_list, size: 18),
                               label: const Text('Filter'),
                               style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(92, 48),
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 16,
+                                  horizontal: 08,
+                                  vertical: 08,
                                 ),
                               ),
                             ),
@@ -275,7 +282,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   'image': product['image'] ?? '',
                                   'isSpicy': product['isSpicy'] ?? false,
                                 },
-                                onSelectDish: () {},
+                                onSelectDish: () =>
+                                    widget.onSelectDish(product),
                               ),
                             );
                           },
