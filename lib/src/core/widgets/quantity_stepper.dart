@@ -19,48 +19,58 @@ class QuantityStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final iconSize = isCompact ? 14.0 : 16.0;
-    final paddingVal = isCompact ? 4.0 : 6.0;
-    final textPadding = isCompact ? 6.0 : 8.0;
+    final iconSize = isCompact ? 12.0 : 14.0;
+    final paddingVal = isCompact ? 0.0 : 1.0;
+    final textPadding = isCompact ? 1.0 : 2.0;
+    final stepperHeight = isCompact ? 30.0 : 36.0;
+    final iconConstraints = isCompact
+        ? BoxConstraints(
+            minWidth: stepperHeight - 8,
+            minHeight: stepperHeight - 8,
+          )
+        : BoxConstraints(
+            minWidth: stepperHeight - 6,
+            minHeight: stepperHeight - 6,
+          );
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(50.0),
-        border: Border.all(
-          color: theme.colorScheme.outline.withAlpha(50),
+    return SizedBox(
+      height: stepperHeight,
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(34.0),
+          border: Border.all(color: theme.colorScheme.outline.withAlpha(50)),
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: Icon(Icons.remove, size: iconSize),
-            padding: EdgeInsets.all(paddingVal),
-            constraints: const BoxConstraints(),
-            onPressed: count > minCount ? () => onChanged(count - 1) : null,
-            color: theme.colorScheme.primary,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: textPadding),
-            child: Text(
-              '$count',
-              style: (isCompact
-                      ? theme.textTheme.titleSmall
-                      : theme.textTheme.titleMedium)
-                  ?.copyWith(
-                fontWeight: FontWeight.bold,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove, size: iconSize),
+              padding: EdgeInsets.all(paddingVal),
+              constraints: iconConstraints,
+              onPressed: count > minCount ? () => onChanged(count - 1) : null,
+              color: theme.colorScheme.primary,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: textPadding),
+              child: Text(
+                '$count',
+                style:
+                    (isCompact
+                            ? theme.textTheme.bodySmall
+                            : theme.textTheme.labelLarge)
+                        ?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.add, size: iconSize),
-            padding: EdgeInsets.all(paddingVal),
-            constraints: const BoxConstraints(),
-            onPressed: count < maxCount ? () => onChanged(count + 1) : null,
-            color: theme.colorScheme.primary,
-          ),
-        ],
+            IconButton(
+              icon: Icon(Icons.add, size: iconSize),
+              padding: EdgeInsets.all(paddingVal),
+              constraints: iconConstraints,
+              onPressed: count < maxCount ? () => onChanged(count + 1) : null,
+              color: theme.colorScheme.primary,
+            ),
+          ],
+        ),
       ),
     );
   }

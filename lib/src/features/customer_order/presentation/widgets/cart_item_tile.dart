@@ -19,7 +19,6 @@ class CartItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final addons = item['addons'] is List ? (item['addons'] as List) : [];
-
     return Dismissible(
       key: Key(item['id'] ?? ''),
       direction: DismissDirection.endToStart,
@@ -30,72 +29,117 @@ class CartItemTile extends StatelessWidget {
           color: theme.colorScheme.error,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Icon(
-          Icons.delete_outline,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.delete_outline, color: Colors.white),
       ),
       onDismissed: (_) => onDismissed(),
-      child: CustomCard(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: NetworkImageLoader(
-                imageUrl: item['image'] ?? '',
-                width: 72,
-                height: 72,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    item['name'] ?? '',
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      height: 1.25,
-                    ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isCompact = constraints.maxWidth < 360;
+          final imageSize = isCompact ? 56.0 : 72.0;
+
+          return CustomCard(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: NetworkImageLoader(
+                    imageUrl: item['image'] ?? '',
+                    width: imageSize,
+                    height: imageSize,
+                    fit: BoxFit.cover,
                   ),
-                  if (addons.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      'Addons: ${addons.join(", ")}',
-                      softWrap: true,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant.withAlpha(200),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        item['name'] ?? '',
+                        softWrap: true,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          height: 1.25,
+                        ),
+                      ),
+                      if (addons.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          'Addons: ${addons.join(", ")}',
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant.withAlpha(
+                              200,
+                            ),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 6),
+                      Text(
+                        'PKR ${((item['price'] ?? 0) * (item['quantity'] ?? 1)).toInt()}',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    QuantityStepper(
+                      count: item['quantity'] ?? 1,
+                      onChanged: onQuantityChanged,
+                      isCompact: isCompact,
+                    ),
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      height: isCompact ? 30 : 36,
+                      child: OutlinedButton.icon(
+                        onPressed: onDismissed,
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: theme.colorScheme.error.withAlpha(230),
+                          ),
+                          foregroundColor: theme.colorScheme.error,
+                          backgroundColor: theme.colorScheme.error.withAlpha(20),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isCompact ? 8 : 10,
+                            vertical: isCompact ? 4 : 6,
+                          ),
+                          minimumSize: const Size(0, 0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                        icon: Icon(
+                          Icons.delete_outline,
+                          size: isCompact ? 14 : 16,
+                          color: theme.colorScheme.error,
+                        ),
+                        label: Text(
+                          'Remove',
+                          style: theme.textTheme.labelSmall
+                              ?.copyWith(color: theme.colorScheme.error),
+                        ),
                       ),
                     ),
                   ],
-                  const SizedBox(height: 6),
-                  Text(
-                    'PKR ${((item['price'] ?? 0) * (item['quantity'] ?? 1)).toInt()}',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            QuantityStepper(
-              count: item['quantity'] ?? 1,
-              onChanged: onQuantityChanged,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
