@@ -7,6 +7,8 @@ import '../../../../core/widgets/responsive_wrapper.dart';
 import '../bloc/checkout_bloc.dart';
 import '../widgets/checkout_address_card.dart';
 import '../widgets/checkout_payment_card.dart';
+import '../../presentation/bloc/cart_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerCheckoutScreen extends StatefulWidget {
   final VoidCallback onOrderPlaced;
@@ -262,28 +264,56 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
                     ),
 
                     // Bottom Sticky CTA Bar
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.shadowColor.withAlpha(20),
-                            blurRadius: 10,
-                            offset: const Offset(0, -4),
-                          ),
-                        ],
-                      ),
-                      child: CustomButton(
-                        text: 'Confirm & Place Order — PKR 1,180',
-                        isLoading: isPlacing,
-                        icon: Icons.check_circle_outline,
-                        onPressed: () {
-                          if (_formKey.currentState?.validate() ?? true) {
-                            cubit.submitOrder();
+                    BlocBuilder<CartBloc, CartState>(
+                      builder: (context, cartState) {
+                        double itemsTotal = 0;
+                        double deliveryFee = 60.0;
+                        double serviceFee = 20.0;
+
+                        if ((widget.previewItems ?? []).isNotEmpty) {
+                          itemsTotal = widget.previewItems!.fold(
+                            0.0,
+                            (sum, it) =>
+                                sum +
+                                ((it['price'] ?? 0) * (it['quantity'] ?? 1)),
+                          );
+                          if (cartState is CartLoaded) {
+                            deliveryFee = cartState.deliveryFee;
+                            serviceFee = cartState.serviceFee;
                           }
-                        },
-                      ),
+                        } else if (cartState is CartLoaded) {
+                          itemsTotal = cartState.subtotal;
+                          deliveryFee = cartState.deliveryFee;
+                          serviceFee = cartState.serviceFee;
+                        }
+
+                        final total = (itemsTotal + deliveryFee + serviceFee)
+                            .toInt();
+
+                        return Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surface,
+                            boxShadow: [
+                              BoxShadow(
+                                color: theme.shadowColor.withAlpha(20),
+                                blurRadius: 10,
+                                offset: const Offset(0, -4),
+                              ),
+                            ],
+                          ),
+                          child: CustomButton(
+                            text: 'Confirm & Place Order — PKR $total',
+                            isLoading: isPlacing,
+                            icon: Icons.check_circle_outline,
+                            onPressed: () {
+                              if (_formKey.currentState?.validate() ?? true) {
+                                cubit.submitOrder();
+                              }
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
