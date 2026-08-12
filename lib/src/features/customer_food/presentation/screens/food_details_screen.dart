@@ -4,6 +4,7 @@ import 'package:city_bites/src/core/widgets/image_loader.dart';
 import 'package:city_bites/src/core/widgets/quantity_stepper.dart';
 import 'package:city_bites/src/features/customer_food/presentation/bloc/food_detail_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:city_bites/src/core/services/favorites_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/widgets/responsive_wrapper.dart';
@@ -84,6 +85,46 @@ class FoodDetailsScreen extends StatelessWidget {
                                       onPressed: onBack,
                                     ),
                                   ),
+                                ),
+                                Positioned(
+                                  top: 12,
+                                  right: 12,
+                                  child:
+                                      ValueListenableBuilder<
+                                        List<Map<String, dynamic>>
+                                      >(
+                                        valueListenable:
+                                            FavoritesService.instance.products,
+                                        builder: (context, value, _) {
+                                          final isFav = value.any(
+                                            (e) =>
+                                                (e['id']?.toString() ?? '') ==
+                                                (sanitizedDish['id']
+                                                        ?.toString() ??
+                                                    ''),
+                                          );
+                                          return CircleAvatar(
+                                            backgroundColor: Colors.black
+                                                .withAlpha(120),
+                                            child: IconButton(
+                                              icon: Icon(
+                                                isFav
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                color: isFav
+                                                    ? Colors.red
+                                                    : Colors.white,
+                                              ),
+                                              onPressed: () async {
+                                                await FavoritesService.instance
+                                                    .toggleProduct(
+                                                      sanitizedDish,
+                                                    );
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
                                 ),
                               ],
                             ),

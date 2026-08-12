@@ -21,10 +21,14 @@ class FavoritesService {
   Future<void> init() async {
     _prefs ??= await SharedPreferences.getInstance();
     final prodList = _prefs!.getStringList(_kProductsKey) ?? <String>[];
-    products.value = prodList.map((s) => jsonDecode(s) as Map<String, dynamic>).toList();
+    products.value = prodList
+        .map((s) => jsonDecode(s) as Map<String, dynamic>)
+        .toList();
 
     final restList = _prefs!.getStringList(_kRestaurantsKey) ?? <String>[];
-    restaurants.value = restList.map((s) => jsonDecode(s) as Map<String, dynamic>).toList();
+    restaurants.value = restList
+        .map((s) => jsonDecode(s) as Map<String, dynamic>)
+        .toList();
   }
 
   Future<void> _saveProducts() async {
@@ -49,7 +53,9 @@ class FavoritesService {
     final id = item['id']?.toString() ?? '';
     final exists = isProductFavorite(id);
     if (exists) {
-      products.value = products.value.where((e) => (e['id']?.toString() ?? '') != id).toList();
+      products.value = products.value
+          .where((e) => (e['id']?.toString() ?? '') != id)
+          .toList();
     } else {
       products.value = [...products.value, item];
     }
@@ -60,7 +66,9 @@ class FavoritesService {
     final id = item['id']?.toString() ?? '';
     final exists = isRestaurantFavorite(id);
     if (exists) {
-      restaurants.value = restaurants.value.where((e) => (e['id']?.toString() ?? '') != id).toList();
+      restaurants.value = restaurants.value
+          .where((e) => (e['id']?.toString() ?? '') != id)
+          .toList();
     } else {
       restaurants.value = [...restaurants.value, item];
     }

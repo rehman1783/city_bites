@@ -54,7 +54,9 @@ class SahiwalFoodExpressApp extends StatelessWidget {
         BlocProvider<OnboardingCubit>(create: (_) => OnboardingCubit()),
         BlocProvider<AuthCubit>(create: (_) => AuthCubit()),
         BlocProvider<HomeFeedBloc>(create: (_) => HomeFeedBloc()),
-        BlocProvider<RestaurantDetailBloc>(create: (_) => RestaurantDetailBloc()),
+        BlocProvider<RestaurantDetailBloc>(
+          create: (_) => RestaurantDetailBloc(),
+        ),
         BlocProvider<CartBloc>(create: (_) => CartBloc()),
         BlocProvider<OrderTrackingBloc>(create: (_) => OrderTrackingBloc()),
         BlocProvider<ProfileBloc>(create: (_) => ProfileBloc()),
@@ -88,7 +90,8 @@ class AppNavigationController extends StatefulWidget {
   const AppNavigationController({super.key});
 
   @override
-  State<AppNavigationController> createState() => _AppNavigationControllerState();
+  State<AppNavigationController> createState() =>
+      _AppNavigationControllerState();
 }
 
 class _AppNavigationControllerState extends State<AppNavigationController> {
@@ -272,9 +275,7 @@ class _AppNavigationControllerState extends State<AppNavigationController> {
         }
 
         // Unauthenticated -> Auth Screen
-        return AuthScreen(
-          onAuthSuccess: () {},
-        );
+        return AuthScreen(onAuthSuccess: () {});
       },
     );
   }

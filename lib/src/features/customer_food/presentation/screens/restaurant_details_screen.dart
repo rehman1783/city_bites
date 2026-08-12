@@ -1,4 +1,5 @@
 import 'package:city_bites/src/core/widgets/image_loader.dart';
+import 'package:city_bites/src/core/services/favorites_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/responsive_wrapper.dart';
@@ -24,8 +25,6 @@ class RestaurantDetailsScreen extends StatefulWidget {
 }
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
-  bool isFavorite = false;
-
   @override
   void initState() {
     super.initState();
@@ -63,25 +62,39 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                       ),
                     ),
                     actions: [
-                      CircleAvatar(
-                        backgroundColor: Colors.black.withAlpha(120),
-                        child: IconButton(
-                          icon: Icon(
-                            isFavorite
-                                ? Icons.bookmark_rounded
-                                : Icons.bookmark_border_rounded,
-                            color: isFavorite
-                                ? theme.colorScheme.primary
-                                : Colors.white,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isFavorite = !isFavorite;
-                            });
-                          },
-                        ),
+                      ValueListenableBuilder<List<Map<String, dynamic>>>(
+                        valueListenable: FavoritesService.instance.restaurants,
+                        builder: (context, value, _) {
+                          final isFav = value.any(
+                            (e) =>
+                                (e['id']?.toString() ?? '') ==
+                                (widget.restaurant['id']?.toString() ?? ''),
+                          );
+                          return Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.black.withAlpha(120),
+                                child: IconButton(
+                                  icon: Icon(
+                                    isFav
+                                        ? Icons.bookmark_rounded
+                                        : Icons.bookmark_border_rounded,
+                                    color: isFav
+                                        ? theme.colorScheme.primary
+                                        : Colors.white,
+                                  ),
+                                  onPressed: () async {
+                                    await FavoritesService.instance
+                                        .toggleRestaurant(widget.restaurant);
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                            ],
+                          );
+                        },
                       ),
-                      const SizedBox(width: 12),
                     ],
                     flexibleSpace: FlexibleSpaceBar(
                       background: NetworkImageLoader(

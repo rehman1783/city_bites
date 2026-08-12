@@ -66,9 +66,13 @@ class CustomerProfileScreen extends StatelessWidget {
                               icon: Icons.receipt_long_rounded,
                             ),
                             title: const Text('Order History & Status'),
-                            subtitle: const Text('Track active orders & past receipts'),
-                            trailing:
-                                const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                            subtitle: const Text(
+                              'Track active orders & past receipts',
+                            ),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                            ),
                             onTap: onNavigateToOrders,
                           ),
                           const Divider(height: 1),
@@ -79,13 +83,17 @@ class CustomerProfileScreen extends StatelessWidget {
                             ),
                             title: const Text('Saved Sahiwal Addresses'),
                             subtitle: Text(state.address, maxLines: 1),
-                            trailing:
-                                const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                            ),
                             onTap: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text(
-                                        'Default Delivery Location: Scheme 3, Sahiwal')),
+                                  content: Text(
+                                    'Default Delivery Location: Scheme 3, Sahiwal',
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -97,11 +105,16 @@ class CustomerProfileScreen extends StatelessWidget {
                             ),
                             title: const Text('Favorites'),
                             subtitle: const Text('Products & Restaurants'),
-                            trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                            ),
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => const FavoritesScreen(),
-                              ));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const FavoritesScreen(),
+                                ),
+                              );
                             },
                           ),
                         ],
@@ -170,13 +183,18 @@ class CustomerProfileScreen extends StatelessWidget {
                               icon: Icons.headset_mic_rounded,
                             ),
                             title: const Text('Sahiwal Help & Customer Care'),
-                            subtitle: const Text('Available 10 AM - 10 PM daily'),
-                            trailing:
-                                const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                            subtitle: const Text(
+                              'Available 10 AM - 10 PM daily',
+                            ),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                            ),
                             onTap: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('Support Hotline: 040-1234567')),
+                                  content: Text('Support Hotline: 040-1234567'),
+                                ),
                               );
                             },
                           ),
@@ -233,11 +251,7 @@ class CustomerProfileScreen extends StatelessWidget {
         color: theme.colorScheme.primary.withAlpha(25),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(
-        icon,
-        color: theme.colorScheme.primary,
-        size: 20,
-      ),
+      child: Icon(icon, color: theme.colorScheme.primary, size: 20),
     );
   }
 }
