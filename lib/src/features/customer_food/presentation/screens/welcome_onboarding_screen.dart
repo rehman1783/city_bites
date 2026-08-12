@@ -65,9 +65,9 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
               children: [
                 // Top Header Bar
                 Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 22,
-                    vertical: 12,
+                    vertical: MediaQuery.of(context).size.height < 600 ? 6.0 : 12.0,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
