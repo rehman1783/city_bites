@@ -4,7 +4,14 @@ import '../../../../core/constants/asset_paths.dart';
 import '../../../../core/widgets/image_loader.dart';
 
 class BannerCarousel extends StatefulWidget {
-  const BannerCarousel({super.key});
+  final List<Map<String, dynamic>> restaurants;
+  final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
+
+  const BannerCarousel({
+    super.key,
+    required this.restaurants,
+    required this.onSelectRestaurant,
+  });
 
   @override
   State<BannerCarousel> createState() => _BannerCarouselState();
@@ -21,18 +28,24 @@ class _BannerCarouselState extends State<BannerCarousel> {
       'subtitle': 'Use Voucher Code: SAHIWAL30',
       'image': AssetPaths.promoBanners[0],
       'tag': 'LIMITED DEAL',
+      'restaurantId': 'rest_1',
+      'restaurantName': 'Royal Taj Restaurant & Bakers',
     },
     {
       'title': 'Free Delivery in Scheme 3',
       'subtitle': 'On orders above Rs. 500 from Top Restaurants',
       'image': AssetPaths.promoBanners[1],
       'tag': 'FREE DELIVERY',
+      'restaurantId': 'rest_2',
+      'restaurantName': 'Sahiwal Grill & Fast Food',
     },
     {
       'title': 'Midnight Craving Specials',
       'subtitle': 'Hot Burgers, Pizzas & Karahi till 2 AM',
       'image': AssetPaths.promoBanners[2],
       'tag': 'NIGHT SPECIAL',
+      'restaurantId': 'rest_3',
+      'restaurantName': 'Pizza Haven Sahiwal',
     },
   ];
 
@@ -88,93 +101,107 @@ class _BannerCarouselState extends State<BannerCarousel> {
                     child: child,
                   );
                 },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(30),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: ImageLoader(
-                          imageUrl: banner['image']!,
-                          width: double.infinity,
-                          height: 165,
-                          fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: () => _handleBannerTap(index),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(30),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
-                      ),
-                      // Dark Gradient Overlay for optimal text readability
-                      Container(
-                        decoration: BoxDecoration(
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.black.withAlpha(210),
-                              Colors.black.withAlpha(80),
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
+                          child: ImageLoader(
+                            imageUrl: banner['image']!,
+                            width: double.infinity,
+                            height: 165,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                      // Content Overlay
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                banner['tag']!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
+                        // Dark Gradient Overlay for optimal text readability
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.black.withAlpha(210),
+                                Colors.black.withAlpha(80),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
+                        ),
+                        // Content Overlay
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  banner['tag']!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              banner['title']!,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                              const SizedBox(height: 8),
+                              Text(
+                                banner['restaurantName']!,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              banner['subtitle']!,
-                              style: TextStyle(
-                                color: Colors.white.withAlpha(220),
-                                fontSize: 12,
+                              const SizedBox(height: 6),
+                              Text(
+                                banner['title']!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                              const SizedBox(height: 4),
+                              Text(
+                                banner['subtitle']!,
+                                style: TextStyle(
+                                  color: Colors.white.withAlpha(220),
+                                  fontSize: 12,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -203,5 +230,23 @@ class _BannerCarouselState extends State<BannerCarousel> {
         ),
       ],
     );
+  }
+
+  void _handleBannerTap(int index) {
+    final banner = _banners[index];
+    final restaurantId = banner['restaurantId'];
+    if (restaurantId == null) return;
+
+    Map<String, dynamic>? selectedRestaurant;
+    for (final rest in widget.restaurants) {
+      if (rest['id'] == restaurantId) {
+        selectedRestaurant = Map<String, dynamic>.from(rest);
+        break;
+      }
+    }
+
+    if (selectedRestaurant != null) {
+      widget.onSelectRestaurant(selectedRestaurant);
+    }
   }
 }

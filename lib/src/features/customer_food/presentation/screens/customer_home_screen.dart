@@ -109,7 +109,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         const SizedBox(height: 20),
 
                         // Auto-Scrolling Promotional Carousel
-                        const BannerCarousel(),
+                        BannerCarousel(
+                          restaurants: state.restaurants,
+                          onSelectRestaurant: widget.onSelectRestaurant,
+                        ),
                         const SizedBox(height: 24),
 
                         // Featured Restaurants Section

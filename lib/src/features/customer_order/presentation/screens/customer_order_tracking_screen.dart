@@ -158,7 +158,6 @@ class _CustomerOrderTrackingScreenState
                                                 ?.copyWith(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
-                                                  
                                                 ),
                                           ),
                                         ),
