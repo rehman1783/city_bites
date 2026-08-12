@@ -9,10 +9,7 @@ import '../widgets/onboarding_bottom_controls.dart';
 class WelcomeOnboardingScreen extends StatefulWidget {
   final VoidCallback onFinishOnboarding;
 
-  const WelcomeOnboardingScreen({
-    super.key,
-    required this.onFinishOnboarding,
-  });
+  const WelcomeOnboardingScreen({super.key, required this.onFinishOnboarding});
 
   @override
   State<WelcomeOnboardingScreen> createState() =>
@@ -98,7 +95,9 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                     // Top Header Bar
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -123,8 +122,10 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                           ),
                           TextButton.icon(
                             onPressed: widget.onFinishOnboarding,
-                            icon: const Icon(Icons.arrow_forward_ios_rounded,
-                                size: 12),
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 12,
+                            ),
                             label: Text(
                               'Skip',
                               style: theme.textTheme.titleSmall?.copyWith(
@@ -133,10 +134,12 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                               ),
                             ),
                             style: TextButton.styleFrom(
-                              backgroundColor:
-                                  theme.colorScheme.primary.withAlpha(20),
+                              backgroundColor: theme.colorScheme.primary
+                                  .withAlpha(20),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 6),
+                                horizontal: 14,
+                                vertical: 6,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -155,9 +158,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
                           context.read<OnboardingCubit>().pageChanged(index);
                         },
                         itemBuilder: (context, index) {
-                          return OnboardingSlideCard(
-                            slide: _slides[index],
-                          );
+                          return OnboardingSlideCard(slide: _slides[index]);
                         },
                       ),
                     ),

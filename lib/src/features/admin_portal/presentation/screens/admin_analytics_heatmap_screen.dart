@@ -54,10 +54,14 @@ class AdminAnalyticsHeatmapScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      area['zone'],
-                                      style: theme.textTheme.titleMedium,
+                                    Expanded(
+                                      child: Text(
+                                        area['zone'],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: theme.textTheme.titleMedium,
+                                      ),
                                     ),
+                                    const SizedBox(width: 8),
                                     Text(
                                       '${area['ordersCount']} orders (${area['density']})',
                                       style: TextStyle(

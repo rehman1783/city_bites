@@ -153,10 +153,12 @@ class _OwnerAddFoodScreenState extends State<OwnerAddFoodScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Add-on Variants / Options',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        'Add-on Variants / Options',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     TextButton.icon(
@@ -179,7 +181,12 @@ class _OwnerAddFoodScreenState extends State<OwnerAddFoodScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${v['title']} (+ PKR ${v['price']})'),
+                          Expanded(
+                            child: Text(
+                              '${v['title']} (+ PKR ${v['price']})',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {

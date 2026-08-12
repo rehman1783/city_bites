@@ -138,7 +138,7 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                       shrinkWrap: true,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 1.5,
+                      childAspectRatio: 1.35,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         OwnerStatCard(

@@ -65,13 +65,20 @@ class AdminGlobalOrderTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Amount: PKR ${order['amount'] != null ? order['amount'].toInt() : 0}',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Amount: PKR ${order['amount'] != null ? order['amount'].toInt() : 0}',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               if (!isCancelled)
                 OutlinedButton(
                   onPressed: onForceCancel,

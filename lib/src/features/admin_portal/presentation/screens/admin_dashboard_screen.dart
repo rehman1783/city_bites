@@ -127,7 +127,7 @@ class AdminDashboardScreen extends StatelessWidget {
                       shrinkWrap: true,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 1.4,
+                      childAspectRatio: 1.35,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         AdminKpiCard(

@@ -4,10 +4,7 @@ import '../../../../core/widgets/image_loader.dart';
 class OnboardingSlideCard extends StatelessWidget {
   final Map<String, String> slide;
 
-  const OnboardingSlideCard({
-    super.key,
-    required this.slide,
-  });
+  const OnboardingSlideCard({super.key, required this.slide});
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +37,20 @@ class OnboardingSlideCard extends StatelessWidget {
                       colors: isDark
                           ? [
                               theme.colorScheme.surfaceContainer,
-                              theme.colorScheme.surface
+                              theme.colorScheme.surface,
                             ]
                           : [
                               theme.colorScheme.primary.withAlpha(15),
-                              theme.colorScheme.surfaceContainerLow
+                              theme.colorScheme.surfaceContainerLow,
                             ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: theme.colorScheme.shadow.withAlpha(isDark ? 50 : 20),
+                        color: theme.colorScheme.shadow.withAlpha(
+                          isDark ? 50 : 20,
+                        ),
                         blurRadius: 16,
                         offset: const Offset(0, 6),
                       ),
@@ -71,8 +70,10 @@ class OnboardingSlideCard extends StatelessWidget {
                 // Feature Tag Chip
                 if (slide['tag'] != null) ...[
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.secondary.withAlpha(30),
                       borderRadius: BorderRadius.circular(20),

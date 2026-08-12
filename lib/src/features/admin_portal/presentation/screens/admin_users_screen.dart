@@ -45,32 +45,35 @@ class AdminUsersScreen extends StatelessWidget {
                       prefixIcon: Icons.search,
                     ),
                     const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: ['All', 'Customer', 'Owner', 'Rider'].map((role) {
-                        final isSelected = state.activeRoleFilter == role;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: ChoiceChip(
-                            label: Text(role),
-                            selected: isSelected,
-                            selectedColor: theme.colorScheme.primary,
-                            labelStyle: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : theme.colorScheme.onSurface,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: ['All', 'Customer', 'Owner', 'Rider'].map((role) {
+                          final isSelected = state.activeRoleFilter == role;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: ChoiceChip(
+                              label: Text(role),
+                              selected: isSelected,
+                              selectedColor: theme.colorScheme.primary,
+                              labelStyle: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                              onSelected: (_) {
+                                context
+                                    .read<AdminUsersBloc>()
+                                    .setRoleFilter(role);
+                              },
                             ),
-                            onSelected: (_) {
-                              context
-                                  .read<AdminUsersBloc>()
-                                  .setRoleFilter(role);
-                            },
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     ListView.builder(

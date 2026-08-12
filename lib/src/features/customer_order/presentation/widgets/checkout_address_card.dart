@@ -15,6 +15,21 @@ class CheckoutAddressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final addresses = [
+      {
+        'value': 'Scheme 3, College Road, Sahiwal',
+        'title': 'Home (Default)',
+        'subtitle': 'House #42, Scheme 3, College Road, Sahiwal',
+        'icon': Icons.home_outlined,
+      },
+      {
+        'value': 'High Street Market, Sahiwal',
+        'title': 'Office',
+        'subtitle': 'Plaza 3, High Street Market, Sahiwal',
+        'icon': Icons.work_outline,
+      },
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,27 +43,60 @@ class CheckoutAddressCard extends StatelessWidget {
         CustomCard(
           padding: EdgeInsets.zero,
           child: Column(
-            children: [
-              RadioListTile<String>(
-                value: 'Scheme 3, College Road, Sahiwal',
-                groupValue: selectedAddress,
-                onChanged: (val) => onAddressSelected(val!),
-                title: const Text('Home (Default)'),
-                subtitle: const Text(
-                    'House #42, Scheme 3, College Road, Sahiwal'),
-                secondary: const Icon(Icons.home_outlined, size: 20),
-              ),
-              const Divider(height: 1),
-              RadioListTile<String>(
-                value: 'High Street Market, Sahiwal',
-                groupValue: selectedAddress,
-                onChanged: (val) => onAddressSelected(val!),
-                title: const Text('Office'),
-                subtitle: const Text(
-                    'Plaza 3, High Street Market, Sahiwal'),
-                secondary: const Icon(Icons.work_outline, size: 20),
-              ),
-            ],
+            children: addresses.asMap().entries.map((entry) {
+              final idx = entry.key;
+              final addr = entry.value;
+              final isSelected = selectedAddress == addr['value'];
+
+              return Column(
+                children: [
+                  if (idx > 0) const Divider(height: 1),
+                  InkWell(
+                    onTap: () => onAddressSelected(addr['value'] as String),
+                    borderRadius: BorderRadius.vertical(
+                      top: idx == 0 ? const Radius.circular(16) : Radius.zero,
+                      bottom: idx == addresses.length - 1 ? const Radius.circular(16) : Radius.zero,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Row(
+                        children: [
+                          Icon(
+                            isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline,
+                            size: 22,
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  addr['title'] as String,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                ),
+                                Text(
+                                  addr['subtitle'] as String,
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            addr['icon'] as IconData,
+                            size: 20,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ),
         ),
       ],

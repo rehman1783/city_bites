@@ -34,32 +34,35 @@ class OwnerAnalyticsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Time Range Segmented Selector
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: ['Today', 'This Week', 'This Month'].map((range) {
-                        final isSelected = state.timeRange == range;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: ChoiceChip(
-                            label: Text(range),
-                            selected: isSelected,
-                            selectedColor: theme.colorScheme.primary,
-                            labelStyle: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : theme.colorScheme.onSurface,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: ['Today', 'This Week', 'This Month'].map((range) {
+                          final isSelected = state.timeRange == range;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: ChoiceChip(
+                              label: Text(range),
+                              selected: isSelected,
+                              selectedColor: theme.colorScheme.primary,
+                              labelStyle: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                              onSelected: (_) {
+                                context
+                                    .read<OwnerAnalyticsBloc>()
+                                    .setTimeRange(range);
+                              },
                             ),
-                            onSelected: (_) {
-                              context
-                                  .read<OwnerAnalyticsBloc>()
-                                  .setTimeRange(range);
-                            },
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
                     const SizedBox(height: 20),
 

@@ -113,34 +113,41 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
 
                           // Promo Code Input Box
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Expanded(
                                 child: CustomTextField(
                                   controller: _promoController,
                                   labelText: '',
                                   hintText:
-                                      'Enter Promo Code (e.g. SAHIWAL50)',
+                                      'Promo Code (e.g. SAHIWAL50)',
                                   prefixIcon: Icons.local_offer_outlined,
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (_promoController.text.isNotEmpty) {
-                                    context.read<CartBloc>().applyPromoCode(
-                                        _promoController.text.trim());
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content:
-                                              Text('Promo Code Applied!')),
-                                    );
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 16),
+                              SizedBox(
+                                height: 50,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_promoController.text.isNotEmpty) {
+                                      context.read<CartBloc>().applyPromoCode(
+                                          _promoController.text.trim());
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('Promo Code Applied!')),
+                                      );
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 18),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text('Apply'),
                                 ),
-                                child: const Text('Apply'),
                               ),
                             ],
                           ),
