@@ -276,7 +276,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 icon: Icons.info_outline_rounded,
                               ),
                               title: const Text('About Us'),
-                              subtitle: const Text('Learn more about City Bites'),
+                              subtitle: const Text(
+                                'Learn more about City Bites',
+                              ),
                               trailing: const Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 size: 14,

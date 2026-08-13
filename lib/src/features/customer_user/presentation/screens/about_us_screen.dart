@@ -66,7 +66,8 @@ class AboutUsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(ThemeData theme, {
+  Widget _buildSection(
+    ThemeData theme, {
     required String title,
     required String text,
   }) {
@@ -76,9 +77,7 @@ class AboutUsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-        ),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,10 +89,7 @@ class AboutUsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            text,
-            style: theme.textTheme.bodyMedium,
-          ),
+          Text(text, style: theme.textTheme.bodyMedium),
         ],
       ),
     );

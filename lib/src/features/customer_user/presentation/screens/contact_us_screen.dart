@@ -59,9 +59,7 @@ class ContactUsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-        ),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,10 +70,7 @@ class ContactUsScreen extends StatelessWidget {
               color: theme.colorScheme.primary.withAlpha(24),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              color: theme.colorScheme.primary,
-            ),
+            child: Icon(icon, color: theme.colorScheme.primary),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -89,10 +84,7 @@ class ContactUsScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  value,
-                  style: theme.textTheme.bodyMedium,
-                ),
+                Text(value, style: theme.textTheme.bodyMedium),
               ],
             ),
           ),

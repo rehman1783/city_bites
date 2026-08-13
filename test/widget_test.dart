@@ -13,8 +13,9 @@ void main() {
     expect(find.byType(SahiwalFoodExpressApp), findsOneWidget);
   });
 
-  testWidgets('Profile shows About Us, Contact Us and Privacy & Policy links',
-      (WidgetTester tester) async {
+  testWidgets('Profile shows About Us, Contact Us and Privacy & Policy links', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MultiBlocProvider(
         providers: [
