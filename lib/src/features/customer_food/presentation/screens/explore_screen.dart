@@ -207,7 +207,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Future<void> _performRefresh() async {
     await context.read<HomeFeedBloc>().fetchHomeData();
-    setState(() {});
+    // Clear search input and suggestions on refresh
+    _searchController.clear();
+    context.read<HomeFeedBloc>().updateSearchQuery('');
+    setState(() {
+      _currentSuggestions = [];
+    });
   }
 
   @override
@@ -269,8 +274,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               padding: EdgeInsets.zero,
               child: RefreshIndicator(
                 onRefresh: () async {
-                  await context.read<HomeFeedBloc>().fetchHomeData();
-                  setState(() {});
+                  await _performRefresh();
                 },
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -394,72 +398,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          SizedBox(
-                            height: 48,
-                            width: 92,
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Filter by category',
-                                            style:
-                                                theme.textTheme.headlineSmall,
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Wrap(
-                                            spacing: 8,
-                                            runSpacing: 8,
-                                            children: state.categories
-                                                .map((category) {
-                                                  final isActive =
-                                                      state.selectedCategory ==
-                                                      category['id'];
-                                                  return ChoiceChip(
-                                                    label: Text(
-                                                      category['name'],
-                                                    ),
-                                                    selected: isActive,
-                                                    onSelected: (_) {
-                                                      Navigator.pop(context);
-                                                      context
-                                                          .read<HomeFeedBloc>()
-                                                          .selectCategory(
-                                                            category['id']
-                                                                as String,
-                                                          );
-                                                    },
-                                                  );
-                                                })
-                                                .toList()
-                                                .cast<Widget>(),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.filter_list, size: 18),
-                              label: const Text('Filter'),
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(92, 48),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 08,
-                                  vertical: 08,
-                                ),
-                              ),
-                            ),
-                          ),
+                          const SizedBox(width: 0),
                         ],
                       ),
                       // const SizedBox(height: 24),
