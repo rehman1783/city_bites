@@ -153,14 +153,35 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final q = query.toLowerCase();
     final matches = <Map<String, dynamic>>[];
 
+    // Respect selected category from bloc state
+    String selectedCategory = 'all';
+    final blocState = context.read<HomeFeedBloc>().state;
+    if (blocState is HomeFeedLoaded) {
+      selectedCategory = blocState.selectedCategory.toLowerCase();
+    }
+
+    bool productInCategory(Map<String, dynamic> p) {
+      final cat = (p['category'] as String).toLowerCase();
+      return selectedCategory == 'all' || cat.contains(selectedCategory);
+    }
+
     if (q.isEmpty) {
-      // show recent history as simple string suggestions
+      // show recent history but only those relevant to the selected category
       for (final h in _searchHistory) {
-        matches.add({'type': 'history', 'text': h});
+        final hLower = h.toLowerCase();
+        final related = _productItems.any((p) {
+          return productInCategory(p) &&
+              ((p['name'] as String).toLowerCase().contains(hLower) ||
+                  (p['description'] as String).toLowerCase().contains(hLower));
+        });
+        if (related) {
+          matches.add({'type': 'history', 'text': h});
+        }
       }
     } else {
-      // product matches
+      // product matches (restricted to selected category)
       for (final p in _productItems) {
+        if (!productInCategory(p)) continue;
         final name = (p['name'] as String).toLowerCase();
         final desc = (p['description'] as String).toLowerCase();
         final category = (p['category'] as String).toLowerCase();
@@ -168,10 +189,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
           matches.add({'type': 'product', 'product': p});
         }
       }
-      // also include matching history entries
+      // also include matching history entries relevant to category
       for (final h in _searchHistory) {
         if (h.toLowerCase().contains(q)) {
-          matches.insert(0, {'type': 'history', 'text': h});
+          // ensure history entry maps to selected category
+          final hLower = h.toLowerCase();
+          final matchesCat = _productItems.any((p) {
+            return productInCategory(p) &&
+                ((p['name'] as String).toLowerCase().contains(hLower) ||
+                    (p['description'] as String).toLowerCase().contains(
+                      hLower,
+                    ));
+          });
+          if (matchesCat) {
+            matches.insert(0, {'type': 'history', 'text': h});
+          }
         }
       }
     }
