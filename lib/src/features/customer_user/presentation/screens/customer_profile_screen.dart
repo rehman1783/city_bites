@@ -9,8 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/profile_user_header_card.dart';
 import 'about_us_screen.dart';
 import 'contact_us_screen.dart';
+import 'customer_care_screen.dart';
 import 'favorites_screen.dart';
 import 'privacy_policy_screen.dart';
+import 'saved_addresses_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/order_history_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/order_status_screen.dart';
 
@@ -157,11 +159,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 size: 14,
                               ),
                               onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Default Delivery Location: Scheme 3, Sahiwal',
-                                    ),
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const SavedAddressesScreen(),
                                   ),
                                 );
                               },
@@ -260,11 +260,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 size: 14,
                               ),
                               onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Support Hotline: 040-1234567',
-                                    ),
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const CustomerCareScreen(),
                                   ),
                                 );
                               },
