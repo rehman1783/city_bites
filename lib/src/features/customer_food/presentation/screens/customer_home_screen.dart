@@ -3,12 +3,12 @@ import 'package:city_bites/src/features/customer_food/presentation/widgets/banne
 import 'package:city_bites/src/features/customer_food/presentation/widgets/featured_restaurants_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/responsive_wrapper.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/home_feed_bloc.dart';
 import '../widgets/home_header_bar.dart';
-import '../widgets/home_category_selector.dart';
+// HomeCategorySelector currently unused in Home; keep import commented until needed
+// import '../widgets/home_category_selector.dart';
 // restaurant_card_tile removed for Home -> Top Products view
 import '../widgets/dish_menu_item_tile.dart';
 import 'food_details_screen.dart';
@@ -51,10 +51,48 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       'isSpicy': false,
     },
   ];
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     context.read<HomeFeedBloc>().fetchHomeData();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> onSystemBackPressed() async {
+    if (_scrollController.hasClients && _scrollController.offset > 0) {
+      // trigger refresh and scroll to top
+      await _performRefresh();
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> refreshAndScrollToTop() async {
+    await _performRefresh();
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  Future<void> _performRefresh() async {
+    await context.read<HomeFeedBloc>().fetchHomeData();
+    setState(() {});
   }
 
   @override
@@ -102,9 +140,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 padding: EdgeInsets.zero,
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    context.read<HomeFeedBloc>().fetchHomeData();
+                    await context.read<HomeFeedBloc>().fetchHomeData();
+                    setState(() {});
                   },
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
@@ -122,6 +162,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                   ),
                                 );
                             if (newLocation != null && newLocation.isNotEmpty) {
+                              if (!context.mounted) return;
                               context.read<HomeFeedBloc>().updateLocation(
                                 newLocation,
                               );

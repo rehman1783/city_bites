@@ -126,6 +126,7 @@ class DishMenuItemTile extends StatelessWidget {
                         onTap: () async {
                           final added = await FavoritesService.instance
                               .toggleProduct(dish);
+                          if (!context.mounted) return;
                           showAppSnackBar(
                             context,
                             added

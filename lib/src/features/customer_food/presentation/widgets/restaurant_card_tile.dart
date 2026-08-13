@@ -66,6 +66,7 @@ class RestaurantCardTile extends StatelessWidget {
                       onTap: () async {
                         final added = await FavoritesService.instance
                             .toggleRestaurant(restaurant);
+                        if (!context.mounted) return;
                         showAppSnackBar(
                           context,
                           added

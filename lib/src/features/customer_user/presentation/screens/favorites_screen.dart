@@ -297,6 +297,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                                               .toggleRestaurant(
                                                                 r,
                                                               );
+                                                      if (!context.mounted)
+                                                        return;
                                                       setState(() {});
                                                       showAppSnackBar(
                                                         context,

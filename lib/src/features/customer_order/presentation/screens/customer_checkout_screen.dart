@@ -8,7 +8,7 @@ import '../bloc/checkout_bloc.dart';
 import '../widgets/checkout_address_card.dart';
 import '../widgets/checkout_payment_card.dart';
 import '../../presentation/bloc/cart_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// duplicate import removed
 
 class CustomerCheckoutScreen extends StatefulWidget {
   final VoidCallback onOrderPlaced;

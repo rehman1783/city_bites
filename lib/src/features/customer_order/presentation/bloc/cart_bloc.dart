@@ -86,6 +86,9 @@ class CartBloc extends Cubit<CartState> {
     }
   }
 
+  /// Public API to reload cart from persistent storage.
+  Future<void> reload() async => _loadCart();
+
   Future<void> _saveCart() async {
     _prefs ??= await SharedPreferences.getInstance();
     if (state is CartLoaded) {

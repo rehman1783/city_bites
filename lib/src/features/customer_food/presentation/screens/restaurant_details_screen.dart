@@ -27,6 +27,38 @@ class RestaurantDetailsScreen extends StatefulWidget {
 }
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> onSystemBackPressed() async {
+    if (_scrollController.hasClients && _scrollController.offset > 0) {
+      context.read<RestaurantDetailBloc>().loadRestaurant(widget.restaurant);
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> refreshAndScrollToTop() async {
+    context.read<RestaurantDetailBloc>().loadRestaurant(widget.restaurant);
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +67,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: BlocBuilder<RestaurantDetailBloc, RestaurantDetailState>(
         builder: (context, state) {
@@ -50,130 +80,152 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             return ResponsiveWrapper(
               maxWidth: 1000,
               padding: EdgeInsets.zero,
-              child: CustomScrollView(
-                slivers: [
-                  // Expandable Hero Banner SliverAppBar
-                  SliverAppBar(
-                    expandedHeight: 220,
-                    pinned: true,
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.black.withAlpha(120),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: widget.onBack,
-                      ),
-                    ),
-                    actions: [
-                      ValueListenableBuilder<List<Map<String, dynamic>>>(
-                        valueListenable: FavoritesService.instance.restaurants,
-                        builder: (context, value, _) {
-                          final isFav = value.any(
-                            (e) =>
-                                (e['id']?.toString() ?? '') ==
-                                (widget.restaurant['id']?.toString() ?? ''),
-                          );
-                          return Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.black.withAlpha(120),
-                                child: IconButton(
-                                  icon: Icon(
-                                    isFav
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: isFav ? Colors.red : Colors.white,
-                                  ),
-                                  onPressed: () async {
-                                    final added = await FavoritesService
-                                        .instance
-                                        .toggleRestaurant(widget.restaurant);
-                                    setState(() {});
-                                    showAppSnackBar(
-                                      context,
-                                      added
-                                          ? '${widget.restaurant['name']} added to favorites'
-                                          : '${widget.restaurant['name']} removed from favorites',
-                                    );
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: NetworkImageLoader(
-                        imageUrl: rest['image'],
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-
-                  // Meta Overlay Header Card
-                  SliverToBoxAdapter(
-                    child: RestaurantInfoHeader(restaurant: rest),
-                  ),
-
-                  // Sticky Menu Category selector (reuse Explore's design)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Builder(
-                        builder: (context) {
-                          // Build a categories list from menu items, preserving display names
-                          // Use the same category palette as the Explore screen
-                          final cats = <Map<String, String>>[
-                            {'id': 'all', 'name': 'All', 'icon': '🍽️'},
-                            {'id': 'biryani', 'name': 'Biryani', 'icon': '🍲'},
-                            {'id': 'burgers', 'name': 'Burgers', 'icon': '🍔'},
-                            {'id': 'pizza', 'name': 'Pizza', 'icon': '🍕'},
-                            {'id': 'karahi', 'name': 'Karahi', 'icon': '🥘'},
-                            {
-                              'id': 'desserts',
-                              'name': 'Desserts',
-                              'icon': '🍰',
-                            },
-                            {'id': 'drinks', 'name': 'Drinks', 'icon': '🥤'},
-                          ];
-
-                          return HomeCategorySelector(
-                            categories: cats,
-                            selectedCategory: state.activeTab,
-                            onSelectCategory: (catId) {
-                              context
-                                  .read<RestaurantDetailBloc>()
-                                  .filterByCategory(catId);
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
-                  // Dish Items List
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final dish = state.menuItems[index];
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: DishMenuItemTile(
-                            dish: dish,
-                            onSelectDish: () => widget.onSelectDish(dish),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<RestaurantDetailBloc>().loadRestaurant(
+                    widget.restaurant,
+                  );
+                  setState(() {});
+                },
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    // Expandable Hero Banner SliverAppBar
+                    SliverAppBar(
+                      expandedHeight: 220,
+                      pinned: true,
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.black.withAlpha(120),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
                           ),
-                        );
-                      }, childCount: state.menuItems.length),
+                          onPressed: widget.onBack,
+                        ),
+                      ),
+                      actions: [
+                        ValueListenableBuilder<List<Map<String, dynamic>>>(
+                          valueListenable:
+                              FavoritesService.instance.restaurants,
+                          builder: (context, value, _) {
+                            final isFav = value.any(
+                              (e) =>
+                                  (e['id']?.toString() ?? '') ==
+                                  (widget.restaurant['id']?.toString() ?? ''),
+                            );
+                            return Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.black.withAlpha(120),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      isFav
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: isFav ? Colors.red : Colors.white,
+                                    ),
+                                    onPressed: () async {
+                                      final added = await FavoritesService
+                                          .instance
+                                          .toggleRestaurant(widget.restaurant);
+                                      if (!context.mounted) return;
+                                      setState(() {});
+                                      showAppSnackBar(
+                                        context,
+                                        added
+                                            ? '${widget.restaurant['name']} added to favorites'
+                                            : '${widget.restaurant['name']} removed from favorites',
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: NetworkImageLoader(
+                          imageUrl: rest['image'],
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 32)),
-                ],
+
+                    // Meta Overlay Header Card
+                    SliverToBoxAdapter(
+                      child: RestaurantInfoHeader(restaurant: rest),
+                    ),
+
+                    // Sticky Menu Category selector (reuse Explore's design)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Builder(
+                          builder: (context) {
+                            // Build a categories list from menu items, preserving display names
+                            // Use the same category palette as the Explore screen
+                            final cats = <Map<String, String>>[
+                              {'id': 'all', 'name': 'All', 'icon': '🍽️'},
+                              {
+                                'id': 'biryani',
+                                'name': 'Biryani',
+                                'icon': '🍲',
+                              },
+                              {
+                                'id': 'burgers',
+                                'name': 'Burgers',
+                                'icon': '🍔',
+                              },
+                              {'id': 'pizza', 'name': 'Pizza', 'icon': '🍕'},
+                              {'id': 'karahi', 'name': 'Karahi', 'icon': '🥘'},
+                              {
+                                'id': 'desserts',
+                                'name': 'Desserts',
+                                'icon': '🍰',
+                              },
+                              {'id': 'drinks', 'name': 'Drinks', 'icon': '🥤'},
+                            ];
+
+                            return HomeCategorySelector(
+                              categories: cats,
+                              selectedCategory: state.activeTab,
+                              onSelectCategory: (catId) {
+                                context
+                                    .read<RestaurantDetailBloc>()
+                                    .filterByCategory(catId);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+                    // Dish Items List
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final dish = state.menuItems[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: DishMenuItemTile(
+                              dish: dish,
+                              onSelectDish: () => widget.onSelectDish(dish),
+                            ),
+                          );
+                        }, childCount: state.menuItems.length),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 32)),
+                  ],
+                ),
               ),
             );
           }

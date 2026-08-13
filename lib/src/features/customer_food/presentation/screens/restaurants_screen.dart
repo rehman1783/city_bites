@@ -23,10 +23,47 @@ class RestaurantsScreen extends StatefulWidget {
 }
 
 class _RestaurantsScreenState extends State<RestaurantsScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     context.read<HomeFeedBloc>().fetchHomeData();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> onSystemBackPressed() async {
+    if (_scrollController.hasClients && _scrollController.offset > 0) {
+      await _performRefresh();
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> refreshAndScrollToTop() async {
+    await _performRefresh();
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  Future<void> _performRefresh() async {
+    await context.read<HomeFeedBloc>().fetchHomeData();
+    setState(() {});
   }
 
   @override
@@ -77,9 +114,11 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
                 padding: EdgeInsets.zero,
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    context.read<HomeFeedBloc>().fetchHomeData();
+                    await context.read<HomeFeedBloc>().fetchHomeData();
+                    setState(() {});
                   },
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,

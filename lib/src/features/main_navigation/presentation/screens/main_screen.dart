@@ -24,6 +24,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+  final GlobalKey homeKey = GlobalKey();
+  final GlobalKey restaurantsKey = GlobalKey();
+  final GlobalKey exploreKey = GlobalKey();
+  final GlobalKey cartKey = GlobalKey();
+  final GlobalKey profileKey = GlobalKey();
   Map<String, dynamic>? _selectedRestaurant;
   Map<String, dynamic>? _selectedDish;
   bool _isCheckingOut = false;
@@ -118,6 +123,7 @@ class _MainScreenState extends State<MainScreen> {
     // Main Tab Screens: Home, Restaurants, Explore, Cart, Profile
     final List<Widget> screens = [
       CustomerHomeScreen(
+        key: homeKey,
         onSelectRestaurant: (rest) {
           setState(() {
             _selectedRestaurant = rest;
@@ -132,6 +138,7 @@ class _MainScreenState extends State<MainScreen> {
 
       // Restaurants tab: dedicated RestaurantsScreen (no header/banner/categories)
       RestaurantsScreen(
+        key: restaurantsKey,
         onSelectRestaurant: (rest) {
           setState(() {
             _selectedRestaurant = rest;
@@ -145,6 +152,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
 
       ExploreScreen(
+        key: exploreKey,
         onSelectRestaurant: (rest) {
           setState(() {
             _selectedRestaurant = rest;
@@ -163,6 +171,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
 
       CustomerCartScreen(
+        key: cartKey,
         onProceedToCheckout: () {
           setState(() {
             _isCheckingOut = true;
@@ -171,6 +180,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
 
       CustomerProfileScreen(
+        key: profileKey,
         onNavigateToOrders: () {
           // Push the orders/tracking screen from profile instead of a bottom tab
           Navigator.of(context).push(
@@ -200,19 +210,39 @@ class _MainScreenState extends State<MainScreen> {
           return false;
         }
 
-        // We only handle double-back-to-exit when on main tabs (no overlays)
+        // If the currently visible main tab can handle the system back (e.g. scroll->top + refresh), let it.
         if (_selectedDish == null &&
             _selectedRestaurant == null &&
             !_isCheckingOut &&
             _trackingOrderId == null) {
+          final List<GlobalKey> keys = [
+            homeKey,
+            restaurantsKey,
+            exploreKey,
+            cartKey,
+            profileKey,
+          ];
+          final currentKey = keys[_currentIndex];
+          final state = currentKey.currentState;
+          if (state != null) {
+            try {
+              final handled =
+                  await (state as dynamic).onSystemBackPressed?.call() as bool?;
+              if (handled == true) {
+                return false; // child handled it (refresh/scroll-to-top)
+              }
+            } catch (_) {}
+          }
+
+          // Default double-back-to-exit when on main tabs
           final now = DateTime.now();
           if (_lastBackPressed == null ||
               now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
             _lastBackPressed = now;
+            if (!context.mounted) return false;
             showAppSnackBar(context, 'Press back again to exit');
             return false;
           }
-          // Exit the app
           SystemNavigator.pop();
           return true;
         }
@@ -224,7 +254,26 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(index: _currentIndex, children: screens),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (index) {
+          onTap: (index) async {
+            // If tapping the already-selected tab, attempt to refresh + scroll-to-top
+            if (index == _currentIndex) {
+              final List<GlobalKey> keys = [
+                homeKey,
+                restaurantsKey,
+                exploreKey,
+                cartKey,
+                profileKey,
+              ];
+              final currentKey = keys[_currentIndex];
+              final state = currentKey.currentState;
+              if (state != null) {
+                try {
+                  await (state as dynamic).refreshAndScrollToTop?.call();
+                } catch (_) {}
+              }
+              return;
+            }
+
             setState(() {
               _currentIndex = index;
               _selectedRestaurant = null;

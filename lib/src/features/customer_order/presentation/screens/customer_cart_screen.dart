@@ -21,11 +21,42 @@ class CustomerCartScreen extends StatefulWidget {
 
 class _CustomerCartScreenState extends State<CustomerCartScreen> {
   final TextEditingController _promoController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     _promoController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<bool> onSystemBackPressed() async {
+    if (_scrollController.hasClients && _scrollController.offset > 0) {
+      await _performRefresh();
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> refreshAndScrollToTop() async {
+    await _performRefresh();
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  Future<void> _performRefresh() async {
+    await context.read<CartBloc>().reload();
+    setState(() {});
   }
 
   @override
@@ -52,128 +83,136 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
               child: Column(
                 children: [
                   Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Restaurant Header Title
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.storefront,
-                                color: theme.colorScheme.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  state.restaurantName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: theme.textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await _performRefresh();
+                      },
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Restaurant Header Title
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.storefront,
+                                  color: theme.colorScheme.primary,
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Items List
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.items.length,
-                            itemBuilder: (context, index) {
-                              final item = state.items[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: CartItemTile(
-                                  item: item,
-                                  onQuantityChanged: (cnt) {
-                                    context.read<CartBloc>().updateQuantity(
-                                      item['id'],
-                                      cnt,
-                                    );
-                                  },
-                                  onDismissed: () {
-                                    context.read<CartBloc>().removeItem(
-                                      item['id'],
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Promo Code Input Box
-                          LayoutBuilder(
-                            builder: (context, cons) {
-                              final isCompact = cons.maxWidth < 420;
-                              final fieldHeight = isCompact ? 36.0 : 50.0;
-                              return Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: CustomTextField(
-                                      controller: _promoController,
-                                      labelText: '',
-                                      hintText: 'Promo Code (e.g. SAHIWAL50)',
-                                      prefixIcon: Icons.local_offer_outlined,
-                                      isCompact: isCompact,
-                                      height: fieldHeight,
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    state.restaurantName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: theme.textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  SizedBox(
-                                    height: fieldHeight,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        if (_promoController.text.isNotEmpty) {
-                                          context
-                                              .read<CartBloc>()
-                                              .applyPromoCode(
-                                                _promoController.text.trim(),
-                                              );
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Promo Code Applied!',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Items List
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.items.length,
+                              itemBuilder: (context, index) {
+                                final item = state.items[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: CartItemTile(
+                                    item: item,
+                                    onQuantityChanged: (cnt) {
+                                      context.read<CartBloc>().updateQuantity(
+                                        item['id'],
+                                        cnt,
+                                      );
+                                    },
+                                    onDismissed: () {
+                                      context.read<CartBloc>().removeItem(
+                                        item['id'],
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Promo Code Input Box
+                            LayoutBuilder(
+                              builder: (context, cons) {
+                                final isCompact = cons.maxWidth < 420;
+                                final fieldHeight = isCompact ? 36.0 : 50.0;
+                                return Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextField(
+                                        controller: _promoController,
+                                        labelText: '',
+                                        hintText: 'Promo Code (e.g. SAHIWAL50)',
+                                        prefixIcon: Icons.local_offer_outlined,
+                                        isCompact: isCompact,
+                                        height: fieldHeight,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    SizedBox(
+                                      height: fieldHeight,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (_promoController
+                                              .text
+                                              .isNotEmpty) {
+                                            context
+                                                .read<CartBloc>()
+                                                .applyPromoCode(
+                                                  _promoController.text.trim(),
+                                                );
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Promo Code Applied!',
+                                                ),
                                               ),
+                                            );
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: isCompact ? 12 : 18,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              isCompact ? 16 : 18,
                                             ),
-                                          );
-                                        }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: isCompact ? 12 : 18,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            isCompact ? 16 : 18,
                                           ),
                                         ),
+                                        child: const Text('Apply'),
                                       ),
-                                      child: const Text('Apply'),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 24),
+                                  ],
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 24),
 
-                          // Bill Breakdown Summary Widget
-                          CartBillSummaryCard(
-                            subtotal: state.subtotal,
-                            deliveryFee: state.deliveryFee,
-                            serviceFee: state.serviceFee,
-                            discountAmount: state.discountAmount,
-                            totalPayable: state.totalPayable,
-                          ),
-                        ],
+                            // Bill Breakdown Summary Widget
+                            CartBillSummaryCard(
+                              subtotal: state.subtotal,
+                              deliveryFee: state.deliveryFee,
+                              serviceFee: state.serviceFee,
+                              discountAmount: state.discountAmount,
+                              totalPayable: state.totalPayable,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

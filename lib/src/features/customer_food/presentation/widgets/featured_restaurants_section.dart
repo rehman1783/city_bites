@@ -160,6 +160,7 @@ class FeaturedRestaurantsSection extends StatelessWidget {
                                     final added = await FavoritesService
                                         .instance
                                         .toggleRestaurant(item);
+                                    if (!context.mounted) return;
                                     showAppSnackBar(
                                       context,
                                       added
