@@ -81,9 +81,15 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
         onWillPop: () async {
           final handled = await onSystemBackPressed();
           if (handled) return false;
-          // notify parent overlay handler
-          widget.onBack?.call();
-          return false;
+          // If a parent overlay handler was provided, notify it and prevent
+          // the default pop so the parent can close the overlay.
+          if (widget.onBack != null) {
+            widget.onBack!.call();
+            return false;
+          }
+          // No parent callback provided (navigated via Navigator.push),
+          // allow the system to pop the route normally.
+          return true;
         },
         child: Scaffold(
           appBar: CustomAppBar(
