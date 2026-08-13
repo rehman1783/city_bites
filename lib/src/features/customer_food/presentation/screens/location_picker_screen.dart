@@ -14,6 +14,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   final TextEditingController _controller = TextEditingController();
   String _selectedLocation = '';
   late List<String> _filteredLocations;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -26,26 +27,45 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    Future<bool> onSystemBackPressed() async {
+      if (MediaQuery.of(context).viewInsets.bottom > 0) {
+        FocusScope.of(context).unfocus();
+        return false;
+      }
+      if (_scrollController.hasClients && _scrollController.offset > 0) {
+        setState(() {});
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+        return false;
+      }
+      return true;
+    }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Delivery Location'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+    return WillPopScope(
+      onWillPop: onSystemBackPressed,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Select Delivery Location'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             Text(
               'Enter or pick your delivery address',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -90,6 +110,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                       ),
                     )
                   : ListView(
+                      controller: _scrollController,
                       children: _filteredLocations.map((address) {
                         return ListTile(
                           leading: const Icon(Icons.location_city),
@@ -123,6 +144,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

@@ -20,6 +20,7 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
   int _selected = 0; // 0 = products, 1 = restaurants
+  final ScrollController _scrollController = ScrollController();
 
   Widget _buildSegmentItem({required String label, required int index}) {
     final theme = Theme.of(context);
@@ -59,13 +60,31 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> onSystemBackPressed() async {
+      if (MediaQuery.of(context).viewInsets.bottom > 0) {
+        FocusScope.of(context).unfocus();
+        return false;
+      }
+      if (_scrollController.hasClients && _scrollController.offset > 0) {
+        setState(() {});
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+        return false;
+      }
+      return true;
+    }
     final favSvc = FavoritesService.instance;
-
-    return Scaffold(
-      appBar: const CustomAppBar(title: 'Favorites'),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+    return WillPopScope(
+      onWillPop: onSystemBackPressed,
+      child: Scaffold(
+        appBar: const CustomAppBar(title: 'Favorites'),
+        body: SingleChildScrollView(
+          controller: _scrollController,
+          padding: const EdgeInsets.all(16),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Segmented control matching the auth screen's RoleToggleButton
@@ -387,6 +406,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               ),
           ],
         ),
+      ),
       ),
     );
   }

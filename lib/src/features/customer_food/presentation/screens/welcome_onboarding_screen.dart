@@ -55,13 +55,30 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    Future<bool> onSystemBackPressed() async {
+      if (MediaQuery.of(context).viewInsets.bottom > 0) {
+        FocusScope.of(context).unfocus();
+        return false;
+      }
+      if (_pageController.hasClients && (_pageController.page ?? 0) > 0) {
+        _pageController.animateToPage(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+        return false;
+      }
+      return true;
+    }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
-            child: Column(
+    return WillPopScope(
+      onWillPop: onSystemBackPressed,
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 600),
+              child: Column(
               children: [
                 // Top Header Bar
                 Padding(
@@ -173,6 +190,7 @@ class _WelcomeOnboardingScreenState extends State<WelcomeOnboardingScreen> {
           ),
         ),
       ),
-    );
+    ),
+    );   
   }
 }

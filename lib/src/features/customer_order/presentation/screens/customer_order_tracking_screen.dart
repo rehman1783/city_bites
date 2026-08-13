@@ -26,10 +26,32 @@ class CustomerOrderTrackingScreen extends StatefulWidget {
 
 class _CustomerOrderTrackingScreenState
     extends State<CustomerOrderTrackingScreen> {
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
     context.read<OrderTrackingBloc>().subscribeToOrderStream(widget.orderId);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> onSystemBackPressed() async {
+    if (_scrollController.hasClients && _scrollController.offset > 0) {
+      setState(() {});
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+      return false;
+    }
+    // if at top, call parent handler to go back to home
+    widget.onBackToHome();
+    return false;
   }
 
   void _showRatingDialog(BuildContext context) {

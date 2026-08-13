@@ -36,6 +36,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   }
 
   Future<bool> onSystemBackPressed() async {
+    if (MediaQuery.of(context).viewInsets.bottom > 0) {
+      FocusScope.of(context).unfocus();
+      return true;
+    }
     if (_scrollController.hasClients && _scrollController.offset > 0) {
       context.read<RestaurantDetailBloc>().loadRestaurant(widget.restaurant);
       _scrollController.animateTo(

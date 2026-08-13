@@ -43,6 +43,10 @@ class _CustomerCheckoutScreenState extends State<CustomerCheckoutScreen> {
   }
 
   Future<bool> onSystemBackPressed() async {
+    if (MediaQuery.of(context).viewInsets.bottom > 0) {
+      FocusScope.of(context).unfocus();
+      return true;
+    }
     if (_scrollController.hasClients && _scrollController.offset > 0) {
       // refresh lightly and scroll to top
       setState(() {});
