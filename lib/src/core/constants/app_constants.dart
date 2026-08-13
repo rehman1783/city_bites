@@ -34,4 +34,6 @@ class AppConstants {
     {'name': 'Desserts', 'icon': '🍰'},
     {'name': 'Drinks', 'icon': '🥤'},
   ];
+  // Search history storage key
+  static const String searchHistoryKey = 'search_history';
 }

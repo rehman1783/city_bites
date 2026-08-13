@@ -12,6 +12,8 @@ import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/responsive_wrapper.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/home_feed_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class ExploreScreen extends StatefulWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
@@ -80,17 +82,103 @@ class _ExploreScreenState extends State<ExploreScreen> {
   ];
 
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  List<String> _searchHistory = [];
+  List<Map<String, dynamic>> _currentSuggestions = [];
 
   @override
   void initState() {
     super.initState();
     context.read<HomeFeedBloc>().fetchHomeData();
+    _loadSearchHistory();
+    _searchController.addListener(_onSearchChanged);
+    _searchFocusNode.addListener(() {
+      if (!_searchFocusNode.hasFocus) {
+        _saveQueryToHistory(_searchController.text.trim());
+        setState(() {
+          _currentSuggestions = [];
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadSearchHistory() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = prefs.getStringList(AppConstants.searchHistoryKey) ?? [];
+      setState(() {
+        _searchHistory = list;
+      });
+    } catch (_) {
+      // ignore
+    }
+  }
+
+  Future<void> _saveQueryToHistory(String query) async {
+    if (query.isEmpty) return;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final list = prefs.getStringList(AppConstants.searchHistoryKey) ?? [];
+      final updated = List<String>.from(list);
+      // remove existing duplicate
+      updated.removeWhere((e) => e.toLowerCase() == query.toLowerCase());
+      updated.insert(0, query);
+      // limit history length
+      if (updated.length > 10) updated.removeRange(10, updated.length);
+      await prefs.setStringList(AppConstants.searchHistoryKey, updated);
+      setState(() {
+        _searchHistory = updated;
+      });
+    } catch (_) {
+      // ignore
+    }
+  }
+
+  void _onSearchChanged() {
+    final q = _searchController.text.trim();
+    _updateSuggestions(q);
+    context.read<HomeFeedBloc>().updateSearchQuery(q);
+  }
+
+  void _updateSuggestions(String query) {
+    final q = query.toLowerCase();
+    final matches = <Map<String, dynamic>>[];
+
+    if (q.isEmpty) {
+      // show recent history as simple string suggestions
+      for (final h in _searchHistory) {
+        matches.add({'type': 'history', 'text': h});
+      }
+    } else {
+      // product matches
+      for (final p in _productItems) {
+        final name = (p['name'] as String).toLowerCase();
+        final desc = (p['description'] as String).toLowerCase();
+        final category = (p['category'] as String).toLowerCase();
+        if (name.contains(q) || desc.contains(q) || category.contains(q)) {
+          matches.add({'type': 'product', 'product': p});
+        }
+      }
+      // also include matching history entries
+      for (final h in _searchHistory) {
+        if (h.toLowerCase().contains(q)) {
+          matches.insert(0, {'type': 'history', 'text': h});
+        }
+      }
+    }
+
+    setState(() {
+      _currentSuggestions = matches;
+    });
   }
 
   Future<bool> onSystemBackPressed() async {
@@ -192,21 +280,118 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: CustomTextField(
-                              labelText: '',
-                              hintText:
-                                  'Search items, cuisines, restaurants...',
-                              prefixIcon: Icons.search_rounded,
-                              isCompact: true,
-                              height: 52,
-                              onChanged: (query) {
-                                context.read<HomeFeedBloc>().updateSearchQuery(
-                                  query,
-                                );
-                              },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomTextField(
+                                  controller: _searchController,
+                                  focusNode: _searchFocusNode,
+                                  labelText: '',
+                                  hintText:
+                                      'Search items, cuisines, restaurants...',
+                                  prefixIcon: Icons.search_rounded,
+                                  isCompact: true,
+                                  height: 52,
+                                ),
+                                if (_currentSuggestions.isNotEmpty &&
+                                    _searchFocusNode.hasFocus)
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 8),
+                                    constraints: const BoxConstraints(
+                                      maxHeight: 220,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 8,
+                                        ),
+                                      ],
+                                    ),
+                                    child: ListView.separated(
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      itemCount: _currentSuggestions.length,
+                                      separatorBuilder: (_, __) =>
+                                          const Divider(height: 1),
+                                      itemBuilder: (context, i) {
+                                        final item = _currentSuggestions[i];
+                                        if (item['type'] == 'product') {
+                                          final prod =
+                                              item['product']
+                                                  as Map<String, dynamic>;
+                                          final img = prod['image'] as String?;
+                                          Widget leadingWidget = const SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                          );
+                                          if (img != null && img.isNotEmpty) {
+                                            if (img.startsWith('http')) {
+                                              leadingWidget = Image.network(
+                                                img,
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              );
+                                            } else {
+                                              leadingWidget = Image.asset(
+                                                img,
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              );
+                                            }
+                                          }
+
+                                          return ListTile(
+                                            leading: leadingWidget,
+                                            title: Text(prod['name']),
+                                            subtitle: Text(
+                                              prod['category'] ?? '',
+                                            ),
+                                            onTap: () {
+                                              _searchController.text =
+                                                  prod['name'];
+                                              context
+                                                  .read<HomeFeedBloc>()
+                                                  .updateSearchQuery(
+                                                    prod['name'],
+                                                  );
+                                              _saveQueryToHistory(prod['name']);
+                                              widget.onSelectDish(prod);
+                                              _searchFocusNode.unfocus();
+                                            },
+                                          );
+                                        }
+
+                                        // history item
+                                        return ListTile(
+                                          leading: const Icon(
+                                            Icons.history,
+                                            size: 20,
+                                          ),
+                                          title: Text(item['text'] ?? ''),
+                                          onTap: () {
+                                            final txt = item['text'] ?? '';
+                                            _searchController.text = txt;
+                                            context
+                                                .read<HomeFeedBloc>()
+                                                .updateSearchQuery(txt);
+                                            _saveQueryToHistory(txt);
+                                            _searchFocusNode.unfocus();
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                           const SizedBox(width: 12),
