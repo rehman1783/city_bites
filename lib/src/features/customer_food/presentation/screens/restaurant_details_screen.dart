@@ -67,7 +67,15 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        final handled = await onSystemBackPressed();
+        if (handled) return false; // we handled it (refresh/scroll-to-top) or will notify parent
+        // Notify parent to close this details view, but prevent default system pop
+        widget.onBack();
+        return false;
+      },
+      child: Scaffold(
       body: BlocBuilder<RestaurantDetailBloc, RestaurantDetailState>(
         builder: (context, state) {
           if (state is RestaurantLoading) {
@@ -232,6 +240,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
           return const SizedBox();
         },
+      ),
       ),
     );
   }
