@@ -7,7 +7,10 @@ import 'package:city_bites/src/features/customer_user/presentation/bloc/profile_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/profile_user_header_card.dart';
+import 'about_us_screen.dart';
+import 'contact_us_screen.dart';
 import 'favorites_screen.dart';
+import 'privacy_policy_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/order_history_screen.dart';
 import 'package:city_bites/src/features/customer_order/presentation/screens/order_status_screen.dart';
 
@@ -262,6 +265,66 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     content: Text(
                                       'Support Hotline: 040-1234567',
                                     ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const Divider(height: 1),
+                            ListTile(
+                              leading: _buildIconContainer(
+                                theme,
+                                icon: Icons.info_outline_rounded,
+                              ),
+                              title: const Text('About Us'),
+                              subtitle: const Text('Learn more about City Bites'),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 14,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const AboutUsScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                            const Divider(height: 1),
+                            ListTile(
+                              leading: _buildIconContainer(
+                                theme,
+                                icon: Icons.mail_outline_rounded,
+                              ),
+                              title: const Text('Contact Us'),
+                              subtitle: const Text('Reach our support team'),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 14,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const ContactUsScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                            const Divider(height: 1),
+                            ListTile(
+                              leading: _buildIconContainer(
+                                theme,
+                                icon: Icons.privacy_tip_outlined,
+                              ),
+                              title: const Text('Privacy & Policy'),
+                              subtitle: const Text('Read our privacy terms'),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 14,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const PrivacyPolicyScreen(),
                                   ),
                                 );
                               },
