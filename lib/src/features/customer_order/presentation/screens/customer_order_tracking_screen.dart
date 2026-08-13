@@ -40,6 +40,10 @@ class _CustomerOrderTrackingScreenState
   }
 
   Future<bool> onSystemBackPressed() async {
+    if (MediaQuery.of(context).viewInsets.bottom > 0) {
+      FocusScope.of(context).unfocus();
+      return false;
+    }
     if (_scrollController.hasClients && _scrollController.offset > 0) {
       setState(() {});
       _scrollController.animateTo(

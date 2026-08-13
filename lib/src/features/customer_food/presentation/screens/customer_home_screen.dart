@@ -16,6 +16,7 @@ import 'package:city_bites/src/features/customer_order/presentation/bloc/cart_bl
 import 'package:city_bites/src/features/customer_order/presentation/screens/customer_checkout_screen.dart';
 import 'package:city_bites/src/core/widgets/snackbar_helper.dart';
 import 'package:city_bites/src/core/constants/asset_paths.dart';
+import 'package:city_bites/src/features/customer_user/presentation/screens/notifications_screen.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   final Function(Map<String, dynamic> restaurant) onSelectRestaurant;
@@ -153,6 +154,13 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         HomeHeaderBar(
                           location: state.location,
                           onOpenCart: widget.onOpenCart,
+                          onOpenNotifications: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const NotificationsScreen(),
+                              ),
+                            );
+                          },
                           onLocationTap: () async {
                             final newLocation = await Navigator.of(context)
                                 .push<String?>(

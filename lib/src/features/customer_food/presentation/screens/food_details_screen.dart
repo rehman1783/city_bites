@@ -85,6 +85,10 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       create: (context) => FoodDetailCubit(sanitizedDish),
       child: WillPopScope(
         onWillPop: () async {
+          if (MediaQuery.of(context).viewInsets.bottom > 0) {
+            FocusScope.of(context).unfocus();
+            return false;
+          }
           if (_scrollController.hasClients && _scrollController.offset > 0) {
             await _performRefresh();
             _scrollController.animateTo(

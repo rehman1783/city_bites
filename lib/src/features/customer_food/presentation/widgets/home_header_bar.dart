@@ -5,6 +5,7 @@ import '../../../../core/widgets/custom_textfield.dart';
 class HomeHeaderBar extends StatelessWidget {
   final String location;
   final VoidCallback onOpenCart;
+  final VoidCallback? onOpenNotifications;
   final VoidCallback onLocationTap;
   final ValueChanged<String> onSearchChanged;
   final bool showSearch;
@@ -13,6 +14,7 @@ class HomeHeaderBar extends StatelessWidget {
     super.key,
     required this.location,
     required this.onOpenCart,
+    this.onOpenNotifications,
     required this.onLocationTap,
     required this.onSearchChanged,
     this.showSearch = false,
@@ -72,11 +74,11 @@ class HomeHeaderBar extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: onOpenCart,
+              onPressed: onOpenNotifications ?? onOpenCart,
               icon: Badge(
                 label: const Text('2'),
                 child: Icon(
-                  Icons.shopping_bag_outlined,
+                  Icons.notifications_outlined,
                   color: theme.colorScheme.onSurface,
                 ),
               ),
