@@ -98,7 +98,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
             );
             return false;
           }
-          return true;
+          // Call the provided onBack callback so parent routing logic handles
+          // closing the details view (avoids accidental double-pop that
+          // could exit the app).
+          widget.onBack();
+          return false;
         },
         child: Scaffold(
           body: SafeArea(

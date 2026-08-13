@@ -20,7 +20,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       6,
       (i) => {
         'title': 'Notification ${i + 1}',
-        'body': 'This is a sample notification message #${i + 1}.'
+        'body': 'This is a sample notification message #${i + 1}.',
       },
     );
   }
@@ -60,7 +60,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return WillPopScope(
       onWillPop: _onSystemBackPressed,
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'Notifications', showBackButton: true),
+        appBar: const CustomAppBar(
+          title: 'Notifications',
+          showBackButton: true,
+        ),
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: ListView.separated(
